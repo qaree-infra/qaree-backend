@@ -35,7 +35,7 @@
     "googleapis": "^126.0.1",
     "graphql": "^15.8.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.5.3",
+    "mongoose": "^7.4.2",
     "nodemailer": "^6.9.5",
     "ts-node": "^10.9.1"
   }
