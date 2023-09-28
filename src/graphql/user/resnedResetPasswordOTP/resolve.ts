@@ -12,8 +12,6 @@ const resendValidingOTP = async (parent, { email }) => {
 
 		const user = await User.findOne({ email });
 
-		if (user.valid) throw new Error("Your account has been already valid");
-
 		const randomOPT = Math.ceil(generateOTPCode());
 		const resetUrl = ``;
 		const emailResult = await sendMail(

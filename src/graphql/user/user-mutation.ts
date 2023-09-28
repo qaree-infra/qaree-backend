@@ -4,6 +4,7 @@ import resendValidatingOTPMutation from "./resendValidatingOTP/mutation.js";
 import signinMutation from "./signin/mutation.js";
 import forgetPasswordMutation from "./forgetPassword/mutation.js";
 import validateResetPasswordOTPMutation from "./validateResetPasswordOTP/mutation.js";
+import ResendResetPasswordOTPMutation from "./resnedResetPasswordOTP/mutation.js";
 
 const UserMutation = {
 	signup: signupMutation,
@@ -12,6 +13,7 @@ const UserMutation = {
 	signin: signinMutation,
 	forgetPassword: forgetPasswordMutation,
 	validateResetPasswordOTP: validateResetPasswordOTPMutation,
+	resendResetPasswordOTP: ResendResetPasswordOTPMutation,
 };
 
 export default UserMutation;

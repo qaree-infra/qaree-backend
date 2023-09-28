@@ -3,8 +3,8 @@ import resendResetPasswordOTPResolve from "./resolve.js";
 import ResendResetPasswordOTPInputs from "./args.js";
 
 const resendResetPasswordOTPType = new GraphQLObjectType({
-	name: "ResendValidatingOTPType",
-	description: "resend validating otp type",
+	name: "ResendResetPasswordOTPType",
+	description: "resend reset password otp type",
 	fields: {
 		message: {
 			type: GraphQLString,
