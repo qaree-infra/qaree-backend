@@ -2,11 +2,13 @@ import OTPCode from "../../../models/otpcode.js";
 import User from "../../../models/user.js";
 import sendMail from "../../../utils/sendMail.js";
 
-import { generateOTPCode } from "../../../utils/helper.js";
+import { generateOTPCode, validateEmail } from "../../../utils/helper.js";
 
 const resendValidingOTP = async (parent, { email }) => {
 	try {
-		// todo: validate the email
+		if (!email) throw new Error("The email is required");
+
+		if (!validateEmail(email)) throw new Error("Invalid email");
 
 		const user = await User.findOne({ email });
 

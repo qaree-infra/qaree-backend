@@ -1,5 +1,5 @@
 import { GraphQLBoolean, GraphQLObjectType, GraphQLString } from "graphql";
-import verifyAccountResolve from "./resolve.js";
+import validateResetPasswordResolve from "./resolve.js";
 import validateResetPasswordInputs from "./args.js";
 
 const validateResetPasswordType = new GraphQLObjectType({
@@ -18,5 +18,5 @@ const validateResetPasswordType = new GraphQLObjectType({
 export default {
 	type: validateResetPasswordType,
 	args:  validateResetPasswordInputs,
-	resolve: verifyAccountResolve,
+	resolve: validateResetPasswordResolve,
 };
