@@ -1,8 +1,8 @@
 import User from "../../../models/user.js";
-import OPTCode from "../../../models/otpcode.js";
+import OTPCode from "../../../models/otpcode.js";
 import bcrypt from "bcrypt";
 
-import { validateEmail } from "../../../utils/helper.js";
+import { validateEmail, generateOTPCode } from "../../../utils/helper.js";
 import sendMail from "../../../utils/sendMail.js";
 
 const signUpResolve = async (parent, { userData }) => {
@@ -29,7 +29,7 @@ const signUpResolve = async (parent, { userData }) => {
 		const addedUser = await User.create(newUser);
 
 		// send email with random number
-		const randomOPT = Math.ceil(Math.random() * 1000000);
+		const randomOPT = Math.ceil(generateOTPCode());
 		const resetUrl = ``;
 		const emailResult = await sendMail(
 			email,
@@ -39,7 +39,7 @@ const signUpResolve = async (parent, { userData }) => {
 		);
 
 		if (emailResult?.accepted[0] === email) {
-			await OPTCode.create({
+			await OTPCode.create({
 				type: "verify-account",
 				number: randomOPT.toString(),
 				userId: addedUser._id,

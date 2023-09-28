@@ -1,14 +1,10 @@
 import { GraphQLString, GraphQLInputObjectType } from "graphql";
 
-const verifyAccountInput = {
+const resendValidatingAccountInputs = {
 	email: {
 		type: GraphQLString,
 		description: "",
 	},
-	otp: {
-		type: GraphQLString,
-		description: "",
-	}
 };
 
-export default verifyAccountInput;
+export default resendValidatingAccountInputs;
