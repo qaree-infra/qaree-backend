@@ -1,4 +1,4 @@
-import { GraphQLString, GraphQLInputObjectType } from "graphql";
+import { GraphQLString } from "graphql";
 
 const resendValidatingAccountInputs = {
 	email: {
