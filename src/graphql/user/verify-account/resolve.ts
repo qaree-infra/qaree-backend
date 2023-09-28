@@ -9,7 +9,11 @@ const verifyAccount = async (parent, { otp, email }) => {
 
 		if (user.valid) throw new Error("Your account has been already valid");
 
-		const otpCode = await OTPCode.findOne({ userId: user._id, number: otp });
+		const otpCode = await OTPCode.findOne({
+			userId: user._id,
+			number: otp,
+			type: "verify-account",
+		});
 
 		if (!otpCode) throw new Error("Sorry, invalid otp code");
 

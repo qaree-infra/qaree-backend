@@ -6,6 +6,8 @@ import { generateOTPCode } from "../../../utils/helper.js";
 
 const resendValidingOTP = async (parent, { email }) => {
 	try {
+		// todo: validate the email
+
 		const user = await User.findOne({ email });
 
 		if (user.valid) throw new Error("Your account has been already valid");

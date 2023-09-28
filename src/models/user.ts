@@ -33,10 +33,6 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 		valid: {
 			type: Boolean,
 			default: false,
-			// index: {
-			// 	partialFilterExpression: { valid: false },
-			// 	expireAfterSeconds: 300,
-			// },
 		},
 	},
 	{
@@ -45,9 +41,9 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 );
 
 userSchema.index(
-	{ valid: 1 },
+	{ createdAt: 1 },
 	{
-		partialFilterExpression: { valid: false },
+		partialFilterExpression: { valid: true },
 		expireAfterSeconds: 300,
 	},
 );
