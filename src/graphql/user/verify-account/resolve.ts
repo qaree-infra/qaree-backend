@@ -1,8 +1,18 @@
 import OTPCode from "../../../models/otpcode.js";
 import User from "../../../models/user.js";
+import { validateEmail } from "../../../utils/helper.js";
 
 const verifyAccount = async (parent, { otp, email }) => {
 	try {
+		if (!email && !otp)
+			throw new Error("Invalid arguments, please enter the required data.");
+
+		if (!email) throw new Error("The email is required");
+		if (!otp) throw new Error("The otp is required");
+
+		if (!validateEmail(email)) throw new Error("Invalid email");
+		if (Number.isNaN(Number(otp))) throw new Error("Invalid otp");
+
 		const user = await User.findOne({ email });
 
 		if (!user) throw new Error("User not found.");
