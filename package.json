@@ -1,0 +1,41 @@
+{
+  "name": "publishingcompany-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "rimraf dist & npx tsc",
+    "prestart": "npm run build",
+    "start": "node dist/index.js",
+    "preserve": "npm run build",
+    "serve": "concurrently \"npx tsc -w\"  \"nodemon dist/index.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.6.5",
+    "nodemon": "^3.0.1",
+    "rimraf": "^5.0.2",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@types/body-parser": "^1.19.3",
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.18",
+    "@types/mongoose": "^5.11.97",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "concurrently": "^8.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "googleapis": "^126.0.1",
+    "graphql": "^15.8.0",
+    "mongoose": "^7.5.3",
+    "nodemailer": "^6.9.5",
+    "ts-node": "^10.9.1"
+  }
+}
