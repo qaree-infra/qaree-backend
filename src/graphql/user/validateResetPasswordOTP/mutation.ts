@@ -9,6 +9,9 @@ const validateResetPasswordType = new GraphQLObjectType({
 		message: {
 			type: GraphQLString,
 		},
+		reset_token: {
+			type: GraphQLString,
+		},
 		success: {
 			type: GraphQLBoolean,
 		},

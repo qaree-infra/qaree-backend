@@ -1,6 +1,7 @@
 import User from "../../../models/user.js";
 import OTPCode from "../../../models/otpcode.js";
-import { validateEmail } from "../../../utils/helper.js";
+import ResetId from '../../../models/resetId.js';
+import { validateEmail, createPasswordResetToken } from "../../../utils/helper.js";
 
 const validateResetPasswordOTP = async (parent, { otp, email }) => {
 	try {
@@ -27,9 +28,14 @@ const validateResetPasswordOTP = async (parent, { otp, email }) => {
 
 		await OTPCode.deleteOne({ _id: otpCode._id });
 
+		const token = createPasswordResetToken({ id: user._id }).split(".");
+
+		const createdToken = await ResetId.create({ partOne: token[0], partTwo: token[1], partThree: token[2] });
+
 		return {
 			message: "Your OTP is successful for reset password",
 			success: true,
+			reset_token: createdToken.partThree
 		};
 	} catch (error) {
 		throw new Error(error);

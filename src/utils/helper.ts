@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -18,13 +18,17 @@ export const generateOTPCode = () => {
 };
 
 export const createAcessToken = (payload) => {
-  return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "24h" });
+	return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+		expiresIn: "24h",
+	});
 };
 
-export const createPasswordResetPassword = (payload) => {
-  return jwt.sign(payload, process.env.RESET_TOKEN_SECRET, { expiresIn: '1h' });
-}
+export const createPasswordResetToken = (payload) => {
+	return jwt.sign(payload, process.env.RESET_TOKEN_SECRET, { expiresIn: "1h" });
+};
 
 export const createRefrishToken = (payload) => {
-  return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30d" })
-}
+	return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+		expiresIn: "30d",
+	});
+};
