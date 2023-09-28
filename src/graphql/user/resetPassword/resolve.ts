@@ -21,7 +21,6 @@ const resetPassword = async (
 	_,
 	{ oldPassword, newPassword },
 	context,
-	info,
 ) => {
 	const headers = convertArrayToObject(context.rawHeaders);
 	let token;

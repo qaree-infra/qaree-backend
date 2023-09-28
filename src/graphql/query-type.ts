@@ -1,14 +1,12 @@
-import {
-  GraphQLObjectType,
-  GraphQLList,
-  GraphQLID,
-} from 'graphql';
+import { GraphQLObjectType, GraphQLList, GraphQLID } from "graphql";
 import userType from "./user/user-type.js";
+import userQueries from "./user/user-queries.js";
 
 const queryType = new GraphQLObjectType({
 	name: "Query",
 	description: "This is the query type",
 	fields: {
+		...userQueries,
 		users: {
 			type: new GraphQLList(userType),
 			description: "This is the list of users returned",
@@ -22,7 +20,7 @@ const queryType = new GraphQLObjectType({
 			args: {
 				id: {
 					type: GraphQLID,
-          description: ''
+					description: "",
 				},
 			},
 			resolve: (_, args) => {
