@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import ResetId from "../../../models/resetId.js";
 import User from "../../../models/user.js";
 
-function convertArrayToObject(arr) {
+function convertArrayToObject(arr: string[]): object {
 	const result = {};
 
 	for (let i = 0; i < arr.length; i += 2) {
