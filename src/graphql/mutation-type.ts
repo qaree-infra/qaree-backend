@@ -6,7 +6,6 @@ const mutationType = new GraphQLObjectType({
 	description: "",
 	fields: {
 		...UserMutation,
-		// resetPassword: ,
 	},
 });
 
