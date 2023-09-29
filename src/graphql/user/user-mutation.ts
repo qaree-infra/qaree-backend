@@ -7,6 +7,7 @@ import validateResetPasswordOTPMutation from "./validateResetPasswordOTP/mutatio
 import ResendResetPasswordOTPMutation from "./resnedResetPasswordOTP/mutation.js";
 import ResetPasswordMutation from "./resetPassword/mutation.js";
 import updateAccountMutation from "./updateAccountInfo/mutation.js";
+import deleteAccountMutation from './deleteUser/mutation.js'
 
 const UserMutation = {
 	signup: signupMutation,
@@ -17,7 +18,8 @@ const UserMutation = {
 	validateResetPasswordOTP: validateResetPasswordOTPMutation,
 	resendResetPasswordOTP: ResendResetPasswordOTPMutation,
 	resetPassword: ResetPasswordMutation,
-	updateUser: updateAccountMutation
+	updateUser: updateAccountMutation,
+	deleteAccount: deleteAccountMutation
 };
 
 export default UserMutation;
