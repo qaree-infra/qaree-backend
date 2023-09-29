@@ -8,6 +8,7 @@ import ResendResetPasswordOTPMutation from "./resnedResetPasswordOTP/mutation.js
 import ResetPasswordMutation from "./resetPassword/mutation.js";
 import updateAccountMutation from "./updateAccountInfo/mutation.js";
 import deleteAccountMutation from './deleteUser/mutation.js'
+import googleLoginMutation from "./googleLogin/mutation.js";
 
 const UserMutation = {
 	signup: signupMutation,
@@ -19,7 +20,8 @@ const UserMutation = {
 	resendResetPasswordOTP: ResendResetPasswordOTPMutation,
 	resetPassword: ResetPasswordMutation,
 	updateUser: updateAccountMutation,
-	deleteAccount: deleteAccountMutation
+	deleteAccount: deleteAccountMutation,
+	googleLogin: googleLoginMutation
 };
 
 export default UserMutation;
