@@ -33,9 +33,9 @@ const signUpResolve = async (parent, { userData }) => {
 		const resetUrl = ``;
 		const emailResult = await sendMail(
 			email,
-			resetUrl,
+			randomOPT.toString(),
 			name,
-			"validate your account",
+			"validate"
 		);
 
 		if (emailResult?.accepted[0] === email) {

@@ -17,7 +17,7 @@ const forgetPassword =async (parent, {email}) => {
 		const resetUrl = ``;
 		const emailResult = await sendMail(
 			email,
-			resetUrl,
+			randomOPT.toString(),
 			user.name,
 			"reset password",
 		);

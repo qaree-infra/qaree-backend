@@ -16,9 +16,9 @@ const resendValidingOTP = async (parent, { email }) => {
 		const resetUrl = ``;
 		const emailResult = await sendMail(
 			email,
-			resetUrl,
+			randomOPT.toString(),
 			user.name,
-			"reset password",
+			"reset",
 		);
 
 		if (emailResult?.accepted[0] === email) {
