@@ -3,21 +3,24 @@ import signupInputs from "./signup-input.js";
 import signUpResolve from "./signup-resolver.js";
 
 const signupType = new GraphQLObjectType({
-	name: 'SignUp',
+	name: "SignUp",
 	description: "sign up type",
 	fields: {
 		message: {
-			type: GraphQLString
-		}
-	}
-})
+			type: GraphQLString,
+		},
+	},
+});
 
 export default {
-  type: signupType,
-  args: {
-    userData: {
-      type: signupInputs,
-    },
-  },
-  resolve: signUpResolve,
+	type: signupType,
+	args: {
+		userData: {
+			type: signupInputs,
+		},
+		lang: {
+			type: GraphQLString,
+		},
+	},
+	resolve: signUpResolve,
 };
