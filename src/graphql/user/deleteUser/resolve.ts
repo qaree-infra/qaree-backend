@@ -2,6 +2,7 @@ import User from "../../../models/user.js";
 import authMiddleware, { AuthInterface } from "../../middleware/auth.js";
 
 const deleteAccount = async (_, args, context) => {
+	const { lang } = context.query;
 	try {
 		const auth: AuthInterface = await authMiddleware(context);
 
@@ -12,7 +13,10 @@ const deleteAccount = async (_, args, context) => {
 			const user = await User.findByIdAndDelete(userId);
 
 			return {
-				message: "Deleted account successfully",
+				message:
+					lang === "ar"
+						? "تم حذف الحساب بنجاح"
+						: "Deleted account successfully",
 				deleted_id: user?._id.toString() || userId,
 				success: true,
 			};
