@@ -13,7 +13,7 @@ const validateResetPasswordOTP = async (parent, { otp, email }, context) => {
 			throw new Error(
 				lang === "ar"
 					? "الوسائط غير صالحة، يرجى إدخال البيانات المطلوبة."
-					: "Invalid arguments, please enter the required data.",
+					: "Invalid arguments, please enter the required data."
 			);
 
 		if (!email)
