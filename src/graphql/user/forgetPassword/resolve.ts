@@ -1,20 +1,27 @@
 import User from "../../../models/user.js";
-import OTPCode from '../../../models/otpcode.js';
+import OTPCode from "../../../models/otpcode.js";
 import { validateEmail, generateOTPCode } from "../../../utils/helper.js";
 import sendMail from "../../../utils/sendMail.js";
 
-const forgetPassword =async (parent, {email}) => {
-  try {
-    if (!email) throw new Error("The email is required");
+const forgetPassword = async (parent, { email }, context) => {
+	const { lang } = context.query;
+	try {
+		if (!email)
+			throw new Error(
+				lang === "ar" ? "البريد الإلكتروني مطلوب" : "The email is required",
+			);
 
-		if (!validateEmail(email)) throw new Error("Invalid email");
+		if (!validateEmail(email))
+			throw new Error(lang === "ar" ? "بريد إلكتروني خاطئ" : "Invalid email");
 
-    const user = await User.findOne({ email });
+		const user = await User.findOne({ email });
 
-    if (!user) throw new Error("User not found");
+		if (!user)
+			throw new Error(
+				lang === "ar" ? "هذا المستخدم غير موجود" : "User not found.",
+			);
 
-    const randomOPT = Math.ceil(generateOTPCode());
-		const resetUrl = ``;
+		const randomOPT = Math.ceil(generateOTPCode());
 		const emailResult = await sendMail(
 			email,
 			randomOPT.toString(),
@@ -30,17 +37,22 @@ const forgetPassword =async (parent, {email}) => {
 			});
 
 			return {
-				message: "The email has been send",
+				message:
+					lang === "ar"
+						? "تم ارسال البريد الالكترونى"
+						: "The email has been send",
 				success: true,
 			};
 		} else {
 			throw new Error(
-				"Sorry, an unexpected thing happened while sending a OPT email, please try again",
+				lang === "ar"
+					? "ناسف لقد حدث خطأ غير متوقع اثناء ارسال البريد الالكترونى حاول لاحقاً"
+					: "Sorry, an unexpected thing happened while sending a OPT email, please try again",
 			);
 		}
-  } catch (error) {
-    throw new Error(error);
-  }
-}
+	} catch (error) {
+		throw new Error(error);
+	}
+};
 
 export default forgetPassword;
