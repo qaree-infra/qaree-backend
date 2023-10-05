@@ -2,7 +2,8 @@ import OTPCode from "../../../models/otpcode.js";
 import User from "../../../models/user.js";
 import { validateEmail } from "../../../utils/helper.js";
 
-const verifyAccount = async (parent, { otp, email, lang }) => {
+const verifyAccount = async (parent, { otp, email }, context) => {
+	const { lang } = context.query;
 	try {
 		if (!email && !otp)
 			throw new Error(

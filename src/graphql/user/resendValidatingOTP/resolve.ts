@@ -4,7 +4,8 @@ import sendMail from "../../../utils/sendMail.js";
 
 import { generateOTPCode, validateEmail } from "../../../utils/helper.js";
 
-const resendValidingOTP = async (parent, { email, lang }) => {
+const resendValidingOTP = async (parent, { email }, context) => {
+	const { lang } = context.query;
 	try {
 		if (!email)
 			throw new Error(

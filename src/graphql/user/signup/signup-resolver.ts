@@ -5,7 +5,9 @@ import bcrypt from "bcrypt";
 import { validateEmail, generateOTPCode } from "../../../utils/helper.js";
 import sendMail from "../../../utils/sendMail.js";
 
-const signUpResolve = async (parent, { userData, lang }) => {
+const signUpResolve = async (parent, { userData }, context) => {
+	const { lang } = context.query;
+
 	try {
 		const { name, email, password } = userData;
 		if (!name && !email && !password)

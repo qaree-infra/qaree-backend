@@ -1,5 +1,5 @@
 import { GraphQLObjectType, GraphQLString } from "graphql";
-import resendValidingOTP from "./resolve.js";
+import signinResolve from "./resolve.js";
 import SigninArgs from "./args.js";
 
 const signinType = new GraphQLObjectType({
@@ -18,5 +18,5 @@ const signinType = new GraphQLObjectType({
 export default {
 	type: signinType,
 	args: SigninArgs,
-	resolve: resendValidingOTP,
+	resolve: signinResolve,
 };

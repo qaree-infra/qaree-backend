@@ -18,9 +18,6 @@ export default {
 		userData: {
 			type: signupInputs,
 		},
-		lang: {
-			type: GraphQLString,
-		},
 	},
 	resolve: signUpResolve,
 };
