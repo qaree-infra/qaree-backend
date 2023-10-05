@@ -8,6 +8,10 @@ const verifyAccountInput = {
 	otp: {
 		type: GraphQLString,
 		description: "",
+	},
+	lang: {
+		type: GraphQLString,
+		description: "",
 	}
 };
 
