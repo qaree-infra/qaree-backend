@@ -5,6 +5,10 @@ const resendValidatingAccountInputs = {
 		type: GraphQLString,
 		description: "",
 	},
+	lang: {
+		type: GraphQLString,
+		description: "",
+	}
 };
 
 export default resendValidatingAccountInputs;
