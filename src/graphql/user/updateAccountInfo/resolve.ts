@@ -9,6 +9,7 @@ const updateAccountInfo = async (
 	context,
 ) => {
 	try {
+		const { lang } = context.query;
 		const auth: AuthInterface = await authMiddleware(context);
 
 		if (auth?.error) {
@@ -17,9 +18,16 @@ const updateAccountInfo = async (
 			const oldUser = await User.findById(auth.user._id);
 
 			if (!name && !oldPassword && !newPassword)
-				throw new Error("Please enter the new data");
+				throw new Error(
+					lang === "ar"
+						? "من فضلك ادخل البيانات الجديدة"
+						: "Please enter the new data",
+				);
 
-			if (!oldUser) throw new Error("User not found");
+			if (!oldUser)
+				throw new Error(
+					lang === "ar" ? "هذا المستخدم غير موجود" : "User not found",
+				);
 
 			let newUser = oldUser;
 
@@ -30,11 +38,17 @@ const updateAccountInfo = async (
 				);
 
 				if (!isPasswordCorrect)
-					throw new Error("The old password does not match.");
+					throw new Error(
+						lang === "ar"
+							? "كلمة المرور القديمة غير متطابقة"
+							: "The old password does not match.",
+					);
 
 				if (newPassword.length < 8) {
 					throw new Error(
-						"The password shouldn't be less than 8 letter or numbers",
+						lang === "ar"
+							? "يجب أن تكون كلمة المرور مكونة من 8 أحرف وأرقام على الأقل"
+							: "The password must be at least 8 letters and numbers"
 					);
 				}
 

@@ -38,7 +38,7 @@ const resetPassword = async (_, { oldPassword, newPassword }, context) => {
 			throw new Error(
 				lang === "ar"
 					? "لقد انتهت صلاحية الرمز المميز، يرجى محاولة تعيين كلمة المرور مرة أخرى."
-					: "Expired token, please try set password again.",
+					: "Expired token, please try setting the password again",
 			);
 
 		const realToken =

@@ -23,18 +23,27 @@ function convertArrayToObject(arr: string[]): object {
 
 const auth = async (context) => {
 	try {
+		const { lang } = context.query;
 		const headers = convertArrayToObject(context.rawHeaders);
 		let token: string;
 
 		token = headers?.["Authorization"]?.split(" ")[1];
 
-		if (!token) return { error: "Invalid Authentication." };
+		if (!token)
+			return {
+				error: lang === "ar" ? "مصادقة غير صالحة." : "Invalid Authentication.",
+			};
 
 		const isCustomAuth = token.length < 500;
 
 		const tokenValidateion = jwt.decode(token);
 		if (tokenValidateion?.exp * 1000 < new Date().getTime())
-			return { error: "Invalid Authentication and jwt expired" };
+			return {
+				error:
+					lang === "ar"
+						? "مصادقة غير صالحة وانتهت صلاحية jwt"
+						: "Invalid Authentication and jwt expired",
+			};
 
 		let decodedData, userId;
 
@@ -49,13 +58,18 @@ const auth = async (context) => {
 		}
 
 		if (!mongoose.Types.ObjectId.isValid(userId))
-			return { error: "Invalid Authentication" };
+			return {
+				error: lang === "ar" ? "مصادقة غير صالحة." : "Invalid Authentication.",
+			};
 
 		const user: UserInterface | null =
 			(await User.findById(userId).select("-password")) ||
 			(await User.findOne({ email: decodedData.email }).select("-password"));
 
-		if (!user) return { error: "User not found" };
+		if (!user)
+			return {
+				error: lang === "ar" ? "هذا المستخدم غير موجود" : "User not found",
+			};
 
 		return { user: user, error: "" };
 	} catch (error) {
