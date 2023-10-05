@@ -64,7 +64,7 @@ const validateResetPasswordOTP = async (parent, { otp, email }, context) => {
 			message:
 				lang === "ar"
 					? "لقد نجح OTP الخاص بك في إعادة تعيين كلمة المرور"
-					: "Your OTP is successful for reset password",
+					: "Your OTP is successful for resetting the password",
 			success: true,
 			reset_token: createdToken.partThree,
 		};
