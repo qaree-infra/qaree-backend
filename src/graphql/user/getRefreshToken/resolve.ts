@@ -1,9 +1,9 @@
 import authMiddleware, { AuthInterface } from "../../middleware/auth.js";
 import { createAcessToken } from "../../../utils/helper.js";
-import { UserInterface } from "../../../models/user.js";
 
 const getRefreshToken = async (_, args, context) => {
 	try {
+		const { lang } = context.query;
 		const auth: AuthInterface = await authMiddleware(context);
 
 		if (auth?.error) {
@@ -15,7 +15,13 @@ const getRefreshToken = async (_, args, context) => {
 				id: user._id,
 			});
 
-			return { refresh_token, message: "You are logged in successfully" };
+			return {
+				refresh_token,
+				message:
+					lang === "ar"
+						? "تم تسجيل الدخول بنجاح"
+						: "You are logged in successfully",
+			};
 		}
 	} catch (error) {
 		throw new Error(error);
