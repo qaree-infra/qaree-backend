@@ -1,6 +1,7 @@
-import { GraphQLObjectType, GraphQLList, GraphQLID } from "graphql";
+import { GraphQLObjectType, GraphQLList, GraphQLID, buildSchema } from "graphql";
 import userType from "./user/user-type.js";
 import userQueries from "./user/user-queries.js";
+
 
 const queryType = new GraphQLObjectType({
 	name: "Query",
