@@ -10,6 +10,7 @@ export interface BookInterface {
 	categories: Array<string>;
 	completed: boolean;
 	avgRate: number;
+	price: number;
 	coverUrl: string;
 	fileUrl: string;
 	sampleUrl: string;
@@ -36,6 +37,7 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 		isbn: {
 			type: String,
 			trim: true,
+			default: ""
 		},
 		edition: {
 			type: Number,
@@ -89,19 +91,23 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			type: Boolean,
 			default: false,
 		},
+		price: {
+			type: Number,
+			default: 0,
+		},
 	},
 	{
 		timestamps: true,
-	}
+	},
 );
 
 bookSchema.index(
-	{createdAt: 1},
+	{ createdAt: 1 },
 	{
-		partialFilterExpression: {deleted: true},
-		expireAfterSeconds: 300
-	}
-)
+		partialFilterExpression: { deleted: true },
+		expireAfterSeconds: 300,
+	},
+);
 
 const Book = mongoose.model<BookInterface>("Book", bookSchema);
 
