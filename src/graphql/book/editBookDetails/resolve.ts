@@ -1,7 +1,8 @@
 import Book, { BookInterface } from "../../../models/book.js";
 import authMiddleware, { AuthInterface } from "../../middleware/auth.js";
+import verifyBookAuthor from "../../middleware/verifyBookAuthor.js";
 
-const addBookDetails = async (_, args, context) => {
+const editBookDetails = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 		const auth: AuthInterface = await authMiddleware(context);
@@ -10,6 +11,7 @@ const addBookDetails = async (_, args, context) => {
 			throw new Error(auth?.error);
 		} else {
 			const {
+				bookId,
 				name,
 				description,
 				isbn,
@@ -20,16 +22,23 @@ const addBookDetails = async (_, args, context) => {
 				price,
 			} = args;
 
-			// todo: fix it
+			const verifyBook = await verifyBookAuthor(
+				context,
+				bookId,
+				auth.user?._id,
+			);
+
+			if (verifyBook?.error) throw new Error(verifyBook?.error);
+
 			if (
-				!name &&
-				!description &&
-				!isbn &&
-				!edition &&
-				!language &&
-				!publishingRights &&
-				!categories &&
-				!price
+				name === undefined &&
+				description === undefined &&
+				isbn === undefined &&
+				edition === undefined &&
+				language === undefined &&
+				publishingRights === undefined &&
+				categories === undefined &&
+				price === undefined
 			)
 				throw new Error(
 					lang === "ar"
@@ -37,14 +46,14 @@ const addBookDetails = async (_, args, context) => {
 						: "please, enter the book details",
 				);
 
-			if (!name)
+			if (name !== undefined && name.length === 0)
 				throw new Error(
 					lang === "ar"
 						? "من فضلك ادخل اسم الكتاب"
 						: "please, enter the book name",
 				);
 
-			if (!description)
+			if (description !== undefined && description.length === 0)
 				throw new Error(
 					lang === "ar"
 						? "من فضلك ادخل وصف الكتاب"
@@ -59,7 +68,7 @@ const addBookDetails = async (_, args, context) => {
 				);
 			}
 
-			if (edition && edition > 1)
+			if (edition !== undefined && edition < 1)
 				throw new Error(
 					lang === "ar"
 						? "من فضلك ادخل اصدار صالح"
@@ -73,28 +82,7 @@ const addBookDetails = async (_, args, context) => {
 						: "please, enter a valid book price",
 				);
 
-			if (!publishingRights)
-				throw new Error(
-					lang === "ar"
-						? "من فضلك اخبرنا اذا كان لديك حقوق النشر ام لا"
-						: "please tell us if you have a publishing rights or not",
-				);
-
-			if (!categories || categories.length === 0)
-				throw new Error(
-					lang === "ar"
-						? "من فضلك ادخل تصنيف واحد على الاقل"
-						: "please, enter at least only one category",
-				);
-
-			if (!language)
-				throw new Error(
-					lang === "ar"
-						? "من فضلك ادخل لغة صالحة"
-						: "please, enter a valid language",
-				);
-
-			const addedBook: BookInterface = await Book.create({
+			let newBook = Object.assign(verifyBook.bookData, {
 				name,
 				description,
 				isbn,
@@ -103,14 +91,21 @@ const addBookDetails = async (_, args, context) => {
 				publishingRights,
 				categories,
 				price,
-        authorId: auth.user._id
 			});
 
-      return addedBook;
+			const updatedBook: BookInterface = await Book.findByIdAndUpdate(
+				verifyBook.bookData._id,
+				newBook,
+				{
+					new: true,
+				},
+			);
+
+			return updatedBook;
 		}
 	} catch (error) {
 		throw new Error(error);
 	}
 };
 
-export default addBookDetails;
+export default editBookDetails;
