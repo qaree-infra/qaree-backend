@@ -1,7 +1,7 @@
 import { GraphQLBoolean, GraphQLObjectType, GraphQLString } from "graphql";
 import resolve from "./resolve.js";
 
-const moveBookToRecycleType = new GraphQLObjectType({
+export const moveBookToRecycleType = new GraphQLObjectType({
   name: "MoveBookToRecycleType",
   description: "this is the moved book to recycle bin type",
   fields: {

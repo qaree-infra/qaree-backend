@@ -102,7 +102,7 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 );
 
 bookSchema.index(
-	{ createdAt: 1 },
+	{ updatedAt: 1 },
 	{
 		partialFilterExpression: { deleted: true },
 		expireAfterSeconds: 300,
