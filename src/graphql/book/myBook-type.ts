@@ -8,8 +8,8 @@ import {
   GraphQLFloat
 } from "graphql";
 
-const bookType = new GraphQLObjectType({
-	name: "Book",
+const userBookType = new GraphQLObjectType({
+	name: "UserBook",
 	description: "This book datails",
 	fields: {
 		_id: {
@@ -63,6 +63,14 @@ const bookType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
+		completed: {
+			type: GraphQLBoolean,
+			description: "",
+		},
+		inReview: {
+			type: GraphQLBoolean,
+			description: "",
+		},
     createdAt: {
       type: GraphQLString,
       description: "",
@@ -74,4 +82,4 @@ const bookType = new GraphQLObjectType({
 	},
 });
 
-export default bookType;
+export default userBookType;
