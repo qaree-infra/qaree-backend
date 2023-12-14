@@ -63,12 +63,8 @@ const userBookType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
-		completed: {
-			type: GraphQLBoolean,
-			description: "",
-		},
-		inReview: {
-			type: GraphQLBoolean,
+		status: {
+			type: GraphQLString,
 			description: "",
 		},
     createdAt: {

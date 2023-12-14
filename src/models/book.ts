@@ -1,5 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
+type bookStatus = "draft" | "inReview" | "publised" | "rejected";
+
 export interface BookInterface {
 	_id: string;
 	name: string;
@@ -8,7 +10,6 @@ export interface BookInterface {
 	edition: number;
 	publishingRights: boolean;
 	categories: Array<string>;
-	completed: boolean;
 	avgRate: number;
 	price: number;
 	coverUrl: string;
@@ -17,7 +18,7 @@ export interface BookInterface {
 	deleted: boolean;
 	language: string;
 	authorId: string;
-	valid: boolean;
+	status: bookStatus;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -52,11 +53,6 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			type: [String],
 			require: [true, "this field is required"],
 		},
-		completed: {
-			type: Boolean,
-			require: [true, "this field is required"],
-			default: false,
-		},
 		avgRate: {
 			type: Number,
 			default: 0,
@@ -87,9 +83,10 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			require: [true, "please enter book author!"],
 			trim: true,
 		},
-		valid: {
-			type: Boolean,
-			default: false,
+		status: {
+			type: String,
+			default: "draft",
+			trim: true
 		},
 		price: {
 			type: Number,

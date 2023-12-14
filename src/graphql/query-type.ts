@@ -1,33 +1,13 @@
-import { GraphQLObjectType, GraphQLList, GraphQLID, buildSchema } from "graphql";
-import userType from "./user/user-type.js";
+import { GraphQLObjectType } from "graphql";
 import userQueries from "./user/user-queries.js";
-
+import bookQueries from "./book/book-queries.js";
 
 const queryType = new GraphQLObjectType({
 	name: "Query",
 	description: "This is the query type",
 	fields: {
 		...userQueries,
-		users: {
-			type: new GraphQLList(userType),
-			description: "This is the list of users returned",
-			resolve: (_, args) => {
-				return [{}]; // use user module to get users
-			},
-		},
-		userById: {
-			type: userType,
-			description: "This is a single user returned",
-			args: {
-				id: {
-					type: GraphQLID,
-					description: "",
-				},
-			},
-			resolve: (_, args) => {
-				return [{}]; // use user module to get user by id
-			},
-		},
+		...bookQueries,
 	},
 });
 

@@ -14,7 +14,10 @@ const getUserBooksResolve = async (_, args, context) => {
 
 		if (auth?.error) throw new Error(auth?.error);
 
-		const { filterBy, sortBy, page, limit, keyword } = args;
+		const { filterBy, sortBy } = args;
+		const page = args?.page || 1;
+		const limit = args?.limit || 10;
+		const keyword = args?.keyword || "";
 
 		if (filterBy && !filterByValues.includes(filterBy)) {
 			throw new Error(
@@ -34,30 +37,28 @@ const getUserBooksResolve = async (_, args, context) => {
 
 		const sortFields = {};
 
-		if (sortBy) sortFields[sortBy] = 1;
+		if (sortBy) {
+			if (sortBy === "updatedAt") sortFields[sortBy] = -1;
+			else sortFields[sortBy] = 1;
+		}
 
-		const startIndex = (Number(page || 1) - 1) * (limit || 0);
-
+		const startIndex = (Number(page) - 1) * limit;
 		const keys = keyword
 			?.trim()
 			?.split(" ")
 			.map((e: string) => new RegExp(e, "gi"));
+
 		if (filterBy) {
 			/* todo: use status for filtering using status */
 			const totalBooks = await Book.countDocuments({
 				authorId: auth.user._id,
-				$or: [
-					{ name: { $in: keys } },
-					// { status: { $in: keys } }, // uncommet after adding status
-				],
+				status: filterBy,
+				$or: [{ name: { $in: keys } }],
 			});
 			const books = await Book.find({
 				authorId: auth.user._id,
-				// status: filterBy,
-				$or: [
-					{ name: { $in: keys } },
-					// { status: { $in: keys } }, // uncommet after adding status
-				],
+				status: filterBy,
+				$or: [{ name: { $in: keys } }],
 			})
 				.sort(sortFields)
 				.limit(limit || 10)
@@ -70,13 +71,13 @@ const getUserBooksResolve = async (_, args, context) => {
 				total: totalBooks,
 			};
 		} else {
-			const totalBooks = await Book.countDocuments({ authorId: auth.user._id });
+			const totalBooks = await Book.countDocuments({
+				authorId: auth.user._id,
+				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
+			});
 			const books = await Book.find({
 				authorId: auth.user._id,
-				$or: [
-					{ name: { $in: keys } },
-					// { status: { $in: keys } }, // uncommet after adding status
-				],
+				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
 			})
 				.sort(sortFields)
 				.limit(limit || 10)

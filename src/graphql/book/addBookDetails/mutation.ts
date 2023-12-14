@@ -1,9 +1,9 @@
 import bookDetailsInputs from "./args.js";
-import bookType from "../myBook-type.js";
+import userBookType from "../myBook-type.js";
 import addBookDetails from "./resolve.js";
 
 export default {
-  type: bookType,
+  type: userBookType,
   args: bookDetailsInputs,
   resolve: addBookDetails,
 }
