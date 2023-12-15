@@ -1,10 +1,10 @@
 import Book from "../../../models/book.js";
 import verifyBookAuthor from "../../middleware/verifyBookAuthor.js";
-import authMiddleware, { AuthInterface } from "../../middleware/auth.js";
+import { auth } from "../../../middleware/auth.js";
 
 const getUserBookResolve = async (_, args, context) => {
   try {
-		const auth: AuthInterface = await authMiddleware(context);
+    const auth: auth = context.auth;
 
 		if (auth?.error) throw new Error(auth?.error);
 

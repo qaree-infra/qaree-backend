@@ -1,5 +1,5 @@
 import Book from "../../../models/book.js";
-import authMiddleware, { AuthInterface } from "../../middleware/auth.js";
+import { auth } from "../../../middleware/auth.js";
 
 const filterByValues = ["draft", "inReview", "published", "rejected"];
 const sortByValues = ["updatedAt", "name", "price"];
@@ -10,7 +10,7 @@ const sortByValues = ["updatedAt", "name", "price"];
 const getUserBooksResolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
-		const auth: AuthInterface = await authMiddleware(context);
+		const auth: auth = context.auth;
 
 		if (auth?.error) throw new Error(auth?.error);
 

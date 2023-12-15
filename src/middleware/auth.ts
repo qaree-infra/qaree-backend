@@ -1,36 +1,27 @@
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { Request, Response, NextFunction } from "express";
+import User, { UserInterface } from "../models/user.js";
 
-import User, { UserInterface } from "../../models/user.js";
-
-export interface AuthInterface {
+export type auth = {
 	error?: string;
 	user?: UserInterface;
+};
+
+interface AuthRequest extends Request {
+	auth: auth;
 }
 
-function convertArrayToObject(arr: string[]): object {
-	const result = {};
-
-	for (let i = 0; i < arr.length; i += 2) {
-		const key = arr[i];
-		const value = arr[i + 1];
-
-		result[key] = value;
-	}
-
-	return result;
-}
-
-const auth = async (context) => {
+const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 	try {
-		const { lang } = context.query;
-		const headers = convertArrayToObject(context.rawHeaders);
+		const { lang } = req.query;
 		let token: string;
 
-		token = headers?.["Authorization"]?.split(" ")[1];
+		if (req?.headers?.authorization)
+			token = req.headers?.authorization?.split(" ")[1];
 
 		if (!token)
-			return {
+			req.auth = {
 				error: lang === "ar" ? "مصادقة غير صالحة." : "Invalid Authentication.",
 			};
 
@@ -38,14 +29,15 @@ const auth = async (context) => {
 
 		const tokenValidateion = jwt.decode(token);
 		if (tokenValidateion?.exp * 1000 < new Date().getTime())
-			return {
+			req.auth = {
 				error:
 					lang === "ar"
 						? "مصادقة غير صالحة وانتهت صلاحية jwt"
 						: "Invalid Authentication and jwt expired",
 			};
 
-		let decodedData, userId;
+		let decodedData: { id?: string; sub?: string; email: string },
+			userId: string;
 
 		if (token && isCustomAuth) {
 			decodedData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -58,7 +50,7 @@ const auth = async (context) => {
 		}
 
 		if (!mongoose.Types.ObjectId.isValid(userId))
-			return {
+			req.auth = {
 				error: lang === "ar" ? "مصادقة غير صالحة." : "Invalid Authentication.",
 			};
 
@@ -67,13 +59,15 @@ const auth = async (context) => {
 			(await User.findOne({ email: decodedData.email }).select("-password"));
 
 		if (!user)
-			return {
+			req.auth = {
 				error: lang === "ar" ? "هذا المستخدم غير موجود" : "User not found",
 			};
 
-		return { user: user, error: "" };
+		req.auth = { user: user, error: "" };
+
+    next();
 	} catch (error) {
-		return { error: error?.message };
+		req.auth = { error: error?.message };
 	}
 };
 
