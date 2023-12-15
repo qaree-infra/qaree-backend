@@ -15,26 +15,32 @@ interface AuthRequest extends Request {
 const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 	try {
 		const { lang } = req.query;
-		let token: string;
+		let token: string = "";
 
 		if (req?.headers?.authorization)
-			token = req.headers?.authorization?.split(" ")[1];
+			token = req.headers?.authorization?.split("Bearer ")[1];
 
-		if (!token)
+		if (!token) {
 			req.auth = {
 				error: lang === "ar" ? "مصادقة غير صالحة." : "Invalid Authentication.",
 			};
 
-		const isCustomAuth = token.length < 500;
+			next();
+		}
+
+		const isCustomAuth = token?.length < 500;
 
 		const tokenValidateion = jwt.decode(token);
-		if (tokenValidateion?.exp * 1000 < new Date().getTime())
+		if (tokenValidateion?.exp * 1000 < new Date().getTime()) {
 			req.auth = {
 				error:
 					lang === "ar"
 						? "مصادقة غير صالحة وانتهت صلاحية jwt"
 						: "Invalid Authentication and jwt expired",
 			};
+
+			next();
+		}
 
 		let decodedData: { id?: string; sub?: string; email: string },
 			userId: string;
@@ -49,23 +55,29 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 			userId = decodedData?.sub;
 		}
 
-		if (!mongoose.Types.ObjectId.isValid(userId))
+		if (!mongoose.Types.ObjectId.isValid(userId)) {
 			req.auth = {
 				error: lang === "ar" ? "مصادقة غير صالحة." : "Invalid Authentication.",
 			};
+
+			next();
+		}
 
 		const user: UserInterface | null =
 			(await User.findById(userId).select("-password")) ||
 			(await User.findOne({ email: decodedData.email }).select("-password"));
 
-		if (!user)
+		if (!user) {
 			req.auth = {
 				error: lang === "ar" ? "هذا المستخدم غير موجود" : "User not found",
 			};
 
+			next();
+		}
+
 		req.auth = { user: user, error: "" };
 
-    next();
+		next();
 	} catch (error) {
 		req.auth = { error: error?.message };
 	}
