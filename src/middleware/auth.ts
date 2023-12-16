@@ -8,7 +8,7 @@ export type auth = {
 	user?: UserInterface;
 };
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
 	auth: auth;
 }
 

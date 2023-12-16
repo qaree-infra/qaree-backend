@@ -4,6 +4,7 @@ import cors from "cors";
 import { graphqlHTTP } from "express-graphql";
 import schema from "./graphql/graphql-schema.js";
 import auth from "./middleware/auth.js";
+import uploadRoute from "./upload/route.js";
 
 const app: express.Application = express();
 
@@ -25,5 +26,7 @@ app.use(
 		graphiql: true,
 	}),
 );
+
+app.use("/upload", uploadRoute);
 
 export default app;
