@@ -25,7 +25,7 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 				error: lang === "ar" ? "مصادقة غير صالحة." : "Invalid Authentication.",
 			};
 
-			next();
+			return next();
 		}
 
 		const isCustomAuth = token?.length < 500;
@@ -39,7 +39,7 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 						: "Invalid Authentication and jwt expired",
 			};
 
-			next();
+			return next();
 		}
 
 		let decodedData: { id?: string; sub?: string; email: string },
@@ -60,7 +60,7 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 				error: lang === "ar" ? "مصادقة غير صالحة." : "Invalid Authentication.",
 			};
 
-			next();
+			return next();
 		}
 
 		const user: UserInterface | null =
@@ -72,7 +72,7 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 				error: lang === "ar" ? "هذا المستخدم غير موجود" : "User not found",
 			};
 
-			next();
+			return next();
 		}
 
 		req.auth = { user: user, error: "" };
@@ -80,6 +80,7 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 		next();
 	} catch (error) {
 		req.auth = { error: error?.message };
+		next();
 	}
 };
 
