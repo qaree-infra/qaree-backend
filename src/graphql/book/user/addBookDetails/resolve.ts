@@ -1,5 +1,5 @@
-import { auth } from "../../../middleware/auth.js";
-import Book, { BookInterface } from "../../../models/book.js";
+import { auth } from "../../../../middleware/auth.js";
+import Book, { BookInterface } from "../../../../models/book.js";
 
 const addBookDetails = async (_, args, context) => {
 	try {

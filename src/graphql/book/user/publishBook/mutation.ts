@@ -1,5 +1,5 @@
 import { GraphQLObjectType, GraphQLString, GraphQLBoolean } from "graphql"
-import myBook from '../myBook-type.js';
+import myBook from '../../myBook-type.js';
 import publishBookResolve from './resolve.js'
 
 const publishBookToType = new GraphQLObjectType({

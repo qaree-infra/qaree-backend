@@ -1,5 +1,5 @@
-import Book from "../../../models/book.js";
-import { auth } from "../../../middleware/auth.js";
+import Book from "../../../../models/book.js";
+import { auth } from "../../../../middleware/auth.js";
 
 const filterByValues = ["draft", "inReview", "published", "rejected"];
 const sortByValues = ["updatedAt", "name", "price"];

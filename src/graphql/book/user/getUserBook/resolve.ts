@@ -1,6 +1,6 @@
-import Book from "../../../models/book.js";
-import verifyBookAuthor from "../../middleware/verifyBookAuthor.js";
-import { auth } from "../../../middleware/auth.js";
+import Book from "../../../../models/book.js";
+import verifyBookAuthor from "../../../middleware/verifyBookAuthor.js";
+import { auth } from "../../../../middleware/auth.js";
 
 const getUserBookResolve = async (_, args, context) => {
   try {

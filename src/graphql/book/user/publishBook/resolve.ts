@@ -1,7 +1,7 @@
-import { auth } from "../../../middleware/auth.js";
-import File from "../../../models/file.js";
-import Book, { BookInterface } from "../../../models/book.js";
-import verifyBookAuthor from "../../middleware/verifyBookAuthor.js";
+import { auth } from "../../../../middleware/auth.js";
+import File from "../../../../models/file.js";
+import Book, { BookInterface } from "../../../../models/book.js";
+import verifyBookAuthor from "../../../middleware/verifyBookAuthor.js";
 
 const publishBookResolve = async (_, args: { bookId: string }, context) => {
 	try {

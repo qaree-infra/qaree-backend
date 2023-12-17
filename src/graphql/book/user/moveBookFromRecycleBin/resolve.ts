@@ -1,6 +1,6 @@
-import { auth } from "../../../middleware/auth.js";
-import verifyBookAuthor from "../../middleware/verifyBookAuthor.js";
-import Book, { BookInterface } from "../../../models/book.js";
+import { auth } from "../../../../middleware/auth.js";
+import verifyBookAuthor from "../../../middleware/verifyBookAuthor.js";
+import Book, { BookInterface } from "../../../../models/book.js";
 
 const deleteBookResolve = async (_, args, context) => {
 	try {
@@ -17,7 +17,7 @@ const deleteBookResolve = async (_, args, context) => {
 
 		const updatedBook: BookInterface = await Book.findByIdAndUpdate(
 			verifyBook.bookData._id,
-			{ deleted: true },
+			{ deleted: false },
 			{
 				new: true,
 			},
@@ -26,8 +26,8 @@ const deleteBookResolve = async (_, args, context) => {
 		return {
 			message:
 				lang === "ar"
-					? "تم نقل الكتاب الى سلة المحذوفات بنجاح"
-					: "the book moved to recycle bin successfully",
+					? "تم نقل الكتاب من سلة المحذوفات بنجاح"
+					: "the book moved from recycle bin successfully",
 			deleted_id: updatedBook._id,
 			success: true,
 		};

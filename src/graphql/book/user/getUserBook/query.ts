@@ -1,5 +1,5 @@
 import { GraphQLString } from "graphql";
-import myBook from "../myBook-type.js";
+import myBook from "../../myBook-type.js";
 import getUserBookResolve from "./resolve.js";
 
 const userBookArgs = {

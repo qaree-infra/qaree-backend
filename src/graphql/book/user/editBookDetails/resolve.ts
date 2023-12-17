@@ -1,6 +1,6 @@
-import Book, { BookInterface } from "../../../models/book.js";
-import { auth } from "../../../middleware/auth.js";
-import verifyBookAuthor from "../../middleware/verifyBookAuthor.js";
+import Book, { BookInterface } from "../../../../models/book.js";
+import { auth } from "../../../../middleware/auth.js";
+import verifyBookAuthor from "../../../middleware/verifyBookAuthor.js";
 
 const editBookDetails = async (_, args, context) => {
 	try {
