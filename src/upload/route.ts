@@ -8,8 +8,16 @@ import VerifyBook from "./middlewares/verifyBook.js";
 const router = Router();
 
 const upload = multer({
-	storage: multer.diskStorage({})
+	storage: multer.diskStorage({}),
 });
+
+router.post(
+	"/user/avatar",
+	Auth,
+	upload.single("avatar"),
+	VerifyFile,
+	controller,
+);
 
 router.post(
 	"/book/cover/:id",

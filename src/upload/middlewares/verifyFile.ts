@@ -17,6 +17,15 @@ const VerifyFile = async (req: Request, res: Response, next: NextFunction) => {
 			});
 		}
 
+		if (fileType.includes("avatar")) {
+			if (!file.mimetype.includes('image')) {
+				return res.status(400).json({
+					message:
+						lang === "ar" ? "هذا الملف ليس صورة" : "This is not image file",
+				});
+			}
+		}
+
 		if (fileType.includes("cover")) {
 			if (file.mimetype !== "image/png" && file.mimetype !== "image/jpeg") {
 				return res.status(400).json({
@@ -30,14 +39,12 @@ const VerifyFile = async (req: Request, res: Response, next: NextFunction) => {
 			const rate: number = dimentions.height / dimentions.width;
 
 			if (parseFloat(rate.toFixed(1)) !== 1.6) {
-				return res
-					.status(400)
-					.json({
-						message:
-							lang === "ar"
-								? "ابعاد الصورة غير صالحة من فضلك استخدم صورة ذات نسبة 1.6:1"
-								: "Invalid image dimentions, please use 1.6:1 aspect rate",
-					});
+				return res.status(400).json({
+					message:
+						lang === "ar"
+							? "ابعاد الصورة غير صالحة من فضلك استخدم صورة ذات نسبة 1.6:1"
+							: "Invalid image dimentions, please use 1.6:1 aspect rate",
+				});
 			}
 		}
 
