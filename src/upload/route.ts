@@ -7,7 +7,9 @@ import VerifyBook from "./middlewares/verifyBook.js";
 
 const router = Router();
 
-const upload = multer({});
+const upload = multer({
+	storage: multer.diskStorage({})
+});
 
 router.post(
 	"/book/cover/:id",

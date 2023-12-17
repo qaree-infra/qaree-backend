@@ -25,7 +25,7 @@ const VerifyFile = async (req: Request, res: Response, next: NextFunction) => {
 				});
 			}
 
-			const dimentions = imageSize(file.buffer);
+			const dimentions = imageSize(file.path);
 
 			const rate: number = dimentions.height / dimentions.width;
 
@@ -53,6 +53,7 @@ const VerifyFile = async (req: Request, res: Response, next: NextFunction) => {
 
 		next();
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({ message: error?.message });
 	}
 };

@@ -7,6 +7,10 @@ export interface FileInterface {
 	path: string;
 	type: string;
 	userId: string;
+	for: {
+		_id: string;
+		type: string;
+	};
 }
 
 const fileSchema = new mongoose.Schema<FileInterface>(
@@ -34,6 +38,10 @@ const fileSchema = new mongoose.Schema<FileInterface>(
 			type: String,
 			require: [true, "please enter the userId"],
 			trim: true,
+		},
+		for: {
+			type: Object,
+			require: [true, "please tell us the file ref id and ref type"]
 		},
 	},
 	{
