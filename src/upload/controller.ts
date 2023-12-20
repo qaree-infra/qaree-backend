@@ -44,10 +44,6 @@ const uploadBookRelatedFile = async (
 		size: result.bytes,
 		path: result.secure_url,
 		userId: user._id.toString(),
-		for: {
-			type: "book",
-			_id: book._id,
-		},
 	});
 
 	await Book.findByIdAndUpdate(book._id, { [fileType]: newFileData.path });
@@ -121,10 +117,6 @@ const uploadController = async (req: AuthRequest, res: Response) => {
 				size: result.bytes,
 				path: result.secure_url,
 				userId: user._id.toString(),
-				for: {
-					type: "user",
-					_id: user._id,
-				},
 			});
 
 			return res.status(200).json(savedAvatar);
