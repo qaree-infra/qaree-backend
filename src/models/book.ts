@@ -21,6 +21,8 @@ export interface BookInterface {
 	status: bookStatus;
 	createdAt: Date;
 	updatedAt: Date;
+	publishionDate: Date;
+	rejectionReasons: string;
 }
 
 const bookSchema: Schema = new mongoose.Schema<BookInterface>(
@@ -92,6 +94,13 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			type: Number,
 			default: 0,
 		},
+		publishionDate: {
+			type: Date
+		},
+		rejectionReasons: {
+			type: String,
+			default: "",
+		}
 	},
 	{
 		timestamps: true,
