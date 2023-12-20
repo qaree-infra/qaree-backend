@@ -23,6 +23,12 @@ export const createAcessToken = (payload) => {
 	});
 };
 
+export const createAdminAccessToken = (payload) => {
+	return jwt.sign(payload, process.env.ADMIN_ACCESS_TOKEN_SECRET, {
+		expiresIn: "24h",
+	});
+};
+
 export const createPasswordResetToken = (payload) => {
 	return jwt.sign(payload, process.env.RESET_TOKEN_SECRET, { expiresIn: "1h" });
 };
