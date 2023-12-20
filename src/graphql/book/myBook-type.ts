@@ -63,6 +63,10 @@ const userBookType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
+		fileUrl: {
+			type: GraphQLString,
+			description: "",
+		},
 		status: {
 			type: GraphQLString,
 			description: "",
@@ -74,7 +78,15 @@ const userBookType = new GraphQLObjectType({
     updatedAt: {
       type: GraphQLString,
       description: "",
-    }
+    },
+		publishionDate: {
+			type: GraphQLString,
+			description: "",
+		},
+		rejectionReasons: {
+			type: GraphQLString,
+			description: "",
+		},
 	},
 });
 
