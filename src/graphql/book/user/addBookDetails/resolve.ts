@@ -102,7 +102,7 @@ const addBookDetails = async (_, args, context) => {
 			publishingRights,
 			categories,
 			price,
-			authorId: auth.user._id,
+			author: auth.user._id,
 		});
 
 		return addedBook;

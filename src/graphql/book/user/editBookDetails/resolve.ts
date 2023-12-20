@@ -94,7 +94,11 @@ const editBookDetails = async (_, args, context) => {
 			{
 				new: true,
 			},
-		);
+		)
+			.populate("author")
+			.populate("cover")
+			.populate("file")
+			.populate("sample");
 
 		return updatedBook;
 	} catch (error) {

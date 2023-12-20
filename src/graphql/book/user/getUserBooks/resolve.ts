@@ -51,18 +51,22 @@ const getUserBooksResolve = async (_, args, context) => {
 		if (filterBy) {
 			/* todo: use status for filtering using status */
 			const totalBooks = await Book.countDocuments({
-				authorId: auth.user._id,
+				author: auth.user._id,
 				status: filterBy,
 				$or: [{ name: { $in: keys } }],
 			});
 			const books = await Book.find({
-				authorId: auth.user._id,
+				author: auth.user._id,
 				status: filterBy,
 				$or: [{ name: { $in: keys } }],
 			})
 				.sort(sortFields)
 				.limit(limit || 10)
-				.skip(startIndex);
+				.skip(startIndex)
+				.populate("author")
+				.populate("cover")
+				.populate("file")
+				.populate("sample");
 
 			return {
 				books,
@@ -72,16 +76,20 @@ const getUserBooksResolve = async (_, args, context) => {
 			};
 		} else {
 			const totalBooks = await Book.countDocuments({
-				authorId: auth.user._id,
+				author: auth.user._id,
 				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
 			});
 			const books = await Book.find({
-				authorId: auth.user._id,
+				author: auth.user._id,
 				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
 			})
 				.sort(sortFields)
 				.limit(limit || 10)
-				.skip(startIndex);
+				.skip(startIndex)
+				.populate("author")
+				.populate("cover")
+				.populate("file")
+				.populate("sample");
 
 			return {
 				books,

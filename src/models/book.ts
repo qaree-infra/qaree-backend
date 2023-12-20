@@ -12,12 +12,12 @@ export interface BookInterface {
 	categories: Array<string>;
 	avgRate: number;
 	price: number;
-	coverUrl: string;
-	fileUrl: string;
-	sampleUrl: string;
+	cover: Schema.Types.ObjectId;
+	file: Schema.Types.ObjectId;
+	sample: Schema.Types.ObjectId;
 	deleted: boolean;
 	language: string;
-	authorId: string;
+	author: Schema.Types.ObjectId;
 	status: bookStatus;
 	createdAt: Date;
 	updatedAt: Date;
@@ -40,7 +40,7 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 		isbn: {
 			type: String,
 			trim: true,
-			default: ""
+			default: "",
 		},
 		edition: {
 			type: Number,
@@ -59,17 +59,17 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			type: Number,
 			default: 0,
 		},
-		coverUrl: {
-			type: String,
-			trim: true,
+		cover: {
+			type: Schema.Types.ObjectId,
+			ref: "File",
 		},
-		fileUrl: {
-			type: String,
-			trim: true,
+		file: {
+			type: Schema.Types.ObjectId,
+			ref: "File",
 		},
-		sampleUrl: {
-			type: String,
-			trim: true,
+		sample: {
+			type: Schema.Types.ObjectId,
+			ref: "File",
 		},
 		deleted: {
 			type: Boolean,
@@ -80,27 +80,27 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			require: [true, "please enter book language!"],
 			trim: true,
 		},
-		authorId: {
-			type: String,
+		author: {
+			type: Schema.Types.ObjectId,
 			require: [true, "please enter book author!"],
-			trim: true,
+			ref: "User"
 		},
 		status: {
 			type: String,
 			default: "draft",
-			trim: true
+			trim: true,
 		},
 		price: {
 			type: Number,
 			default: 0,
 		},
 		publishionDate: {
-			type: Date
+			type: Date,
 		},
 		rejectionReasons: {
 			type: String,
 			default: "",
-		}
+		},
 	},
 	{
 		timestamps: true,
