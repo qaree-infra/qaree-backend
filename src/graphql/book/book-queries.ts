@@ -3,6 +3,7 @@ import getUserBook from './user/getUserBook/query.js';
 import getBooks from "./user/getBooks/query.js";
 import getBook from "./user/getBookInfo/query.js";
 import getBookReviews from "./user/getBookReviews/query.js";
+import getBookReview from "./user/getBookReview/query.js";
 
 export default {
   getUserBook: getUserBook,
@@ -10,4 +11,5 @@ export default {
   getBooks: getBooks,
   getBook: getBook,
   getBookReviews: getBookReviews,
+  getBookReview: getBookReview,
 }
