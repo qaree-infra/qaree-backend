@@ -11,6 +11,15 @@ const verifyBook = async (bookId: string, context: ContextInterface) => {
 	try {
 		const { lang } = context.query;
 
+		if (!bookId)
+			return {
+				error:
+					lang === "ar"
+						? "من فضلك ادخل معرف الكتاب"
+						: "please, enter the book id",
+				bookData: null,
+			};
+
 		if (!mongoose.Types.ObjectId.isValid(bookId)) {
 			return {
 				error: lang === "ar" ? "معرف الكتاب غير صالح" : "Invalid book id.",
