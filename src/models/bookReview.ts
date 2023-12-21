@@ -1,17 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 
-export interface BookReview {
+export interface BookReviewInterface {
 	_id: Schema.Types.ObjectId;
 	user: Schema.Types.ObjectId;
 	bookId: string;
 	rate: number;
 	content: string;
-	likes: [Schema.Types.ObjectId];
+	likes: [string];
 	createdAt: Date;
 	updatedAt: Date;
 }
 
-const bookReviewSchema: Schema = new mongoose.Schema<BookReview>(
+const bookReviewSchema: Schema = new mongoose.Schema<BookReviewInterface>(
 	{
 		user: {
 			type: Schema.Types.ObjectId,
@@ -30,7 +30,7 @@ const bookReviewSchema: Schema = new mongoose.Schema<BookReview>(
 			trim: true,
 		},
 		likes: {
-			type: [{ type: Schema.Types.ObjectId, ref: "User" }],
+			type: [{ type: String }],
 		},
 	},
 	{
@@ -38,6 +38,6 @@ const bookReviewSchema: Schema = new mongoose.Schema<BookReview>(
 	},
 );
 
-const BookReview = mongoose.model<BookReview>("BookReview", bookReviewSchema);
+const BookReview = mongoose.model<BookReviewInterface>("BookReview", bookReviewSchema);
 
 export default BookReview;
