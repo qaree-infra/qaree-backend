@@ -33,7 +33,7 @@ const reviewBookResolve = async (_, args, context) => {
 					: "please, enter the review content",
 			);
 
-		const oldReview = await BookReview.findOne({ user: user._id });
+		const oldReview = await BookReview.findOne({ user: user._id, bookId });
 
 		if (oldReview) {
 			const review = await BookReview.findByIdAndUpdate(oldReview._id, {
