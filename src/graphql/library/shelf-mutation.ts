@@ -1,7 +1,9 @@
-import createShelf from './createShelf/mutation.js'
-import addBookToShelf from './addBookToShelf/mutation.js'
+import createShelf from "./createShelf/mutation.js";
+import addBookToShelf from "./addBookToShelf/mutation.js";
+import removeBookFromShelf from "./removeBookFromShelf/mutation.js";
 
 export default {
-  createShelf,
-  addBookToShelf
-}
+	createShelf,
+	addBookToShelf,
+	removeBookFromShelf,
+};
