@@ -4,7 +4,7 @@ export interface ShelfInterface {
 	_id: Schema.Types.ObjectId;
 	name: string;
 	userId: string;
-	books: [Schema.Types.ObjectId];
+	books: Array<Schema.Types.ObjectId>;
 	createdAt: Date;
 	updatedAt: Date;
 }
