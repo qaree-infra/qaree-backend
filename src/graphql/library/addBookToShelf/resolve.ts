@@ -37,6 +37,7 @@ const addBookDetailsResolve = async (_, args, context) => {
 		if (shelfData) {
 			if (String(bookShelf?._id) === String(shelfData._id)) {
 				return {
+					success: true,
 					shelf: shelfData,
 					message:
 						lang === "ar" ? "تم اضافة الكتاب بنجاح" : "book added successfully",
@@ -57,6 +58,7 @@ const addBookDetailsResolve = async (_, args, context) => {
 
 			console.log("updatedShelf");
 			return {
+				success: true,
 				shelf: updatedShelf,
 				message:
 					lang === "ar" ? "تم اضافة الكتاب بنجاح" : "book added successfully",
@@ -75,6 +77,7 @@ const addBookDetailsResolve = async (_, args, context) => {
 			newShelf.books = [bookVerification.bookData];
 
 			return {
+				success: true,
 				shelf: newShelf,
 				message:
 					lang === "ar" ? "تم اضافة الكتاب بنجاح" : "book added successfully",
