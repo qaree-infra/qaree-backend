@@ -83,7 +83,7 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 		author: {
 			type: Schema.Types.ObjectId,
 			require: [true, "please enter book author!"],
-			ref: "User"
+			ref: "User",
 		},
 		status: {
 			type: String,
@@ -111,7 +111,7 @@ bookSchema.index(
 	{ updatedAt: 1 },
 	{
 		partialFilterExpression: { deleted: true },
-		expireAfterSeconds: 300,
+		expireAfterSeconds: 300, // real value: 2592000, The TTL index expireAfterSeconds value must be within 0 and 2147483647 inclusive.
 	},
 );
 

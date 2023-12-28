@@ -1,6 +1,7 @@
 import { auth } from "../../../../middleware/auth.js";
 import verifyBookAuthor from "../../../middleware/verifyBookAuthor.js";
 import Book, { BookInterface } from "../../../../models/book.js";
+import File, { FileInterface } from "../../../../models/file.js";
 
 const deleteBookResolve = async (_, args, context) => {
 	try {
@@ -21,6 +22,30 @@ const deleteBookResolve = async (_, args, context) => {
 			{
 				new: true,
 			},
+		);
+
+		await File.findByIdAndUpdate(
+			verifyBook.bookData.cover,
+			{
+				deleted: true,
+			},
+			{ new: true },
+		);
+
+		await File.findByIdAndUpdate(
+			verifyBook.bookData.file,
+			{
+				deleted: true,
+			},
+			{ new: true },
+		);
+
+		await File.findByIdAndUpdate(
+			verifyBook.bookData.sample,
+			{
+				deleted: true,
+			},
+			{ new: true },
 		);
 
 		return {

@@ -46,7 +46,11 @@ const uploadBookRelatedFile = async (
 		userId: user._id.toString(),
 	});
 
-	await Book.findByIdAndUpdate(book._id, { [fileType]: newFileData.path });
+	const updatedBook = await Book.findByIdAndUpdate(
+		book._id,
+		{ [fileType]: newFileData._id },
+		{ new: true },
+	);
 
 	return newFileData;
 };
@@ -70,7 +74,7 @@ const uploadController = async (req: AuthRequest, res: Response) => {
 
 				const newCover = await uploadBookRelatedFile(
 					file,
-					"coverUrl",
+					"cover",
 					options,
 					user,
 					book,
@@ -80,7 +84,7 @@ const uploadController = async (req: AuthRequest, res: Response) => {
 			} else if (folder === "file") {
 				const newBookFile = await uploadBookRelatedFile(
 					file,
-					"fileUrl",
+					"file",
 					options,
 					user,
 					book,
@@ -90,7 +94,7 @@ const uploadController = async (req: AuthRequest, res: Response) => {
 			} else {
 				const newBookFile = await uploadBookRelatedFile(
 					file,
-					"sampleUrl",
+					"sample",
 					options,
 					user,
 					book,
