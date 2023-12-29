@@ -4,6 +4,8 @@ import moveBookToRecycleBin from "./user/moveBookToRecycleBin/mutation.js";
 import moveBookFromRecycleBin from "./user/moveBookFromRecycleBin/mutation.js";
 import publishBook from "./user/publishBook/mutation.js";
 import adminReviewBookData from './admin/reviewBook/mutation.js';
+import reviewBook from "./user/reviewBook/mutation.js";
+import likeReview from "./user/likeReview/mutation.js";
 
 export default {
 	addBookDetails,
@@ -12,4 +14,6 @@ export default {
 	moveBookFromRecycleBin,
 	publishBook,
 	adminReviewBookData,
+	reviewBook,
+	likeReview
 };

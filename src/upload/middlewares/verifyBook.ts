@@ -20,7 +20,7 @@ const VerifyBook = async (
 
 		const bookData: BookInterface | null = await Book.findOne({
 			_id: id,
-			authorId: _id.toString(),
+			author: _id.toString(),
 		});
 
 		if (bookData === null) {

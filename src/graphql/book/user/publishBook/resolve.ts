@@ -48,7 +48,11 @@ const publishBookResolve = async (_, args: { bookId: string }, context) => {
 		const updatedBook: BookInterface = await Book.findByIdAndUpdate(
 			bookData._id,
 			{ status: "inReview" },
-		);
+		)
+			.populate("author")
+			.populate("cover")
+			.populate("file")
+			.populate("sample");
 
 		return { message: "published successfully", book: updatedBook };
 	} catch (error) {

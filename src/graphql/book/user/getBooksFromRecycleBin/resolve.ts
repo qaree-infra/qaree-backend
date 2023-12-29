@@ -7,7 +7,7 @@ const sortByValues = ["updatedAt", "name", "price"];
 /**
  * use population method on
  */
-const getUserBooksResolve = async (_, args, context) => {
+const getBooksFromRecycleBin = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 		const auth: auth = context.auth;
@@ -34,7 +34,7 @@ const getUserBooksResolve = async (_, args, context) => {
 					: "invalid sort by value",
 			);
 		}
-
+		//  Add the updatedAt equal 1
 		const sortFields = {};
 
 		if (sortBy) {
@@ -56,6 +56,7 @@ const getUserBooksResolve = async (_, args, context) => {
 				$or: [{ name: { $in: keys } }],
 			});
 			const books = await Book.find({
+				deleted: true,
 				author: auth.user._id,
 				status: filterBy,
 				$or: [{ name: { $in: keys } }],
@@ -80,6 +81,7 @@ const getUserBooksResolve = async (_, args, context) => {
 				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
 			});
 			const books = await Book.find({
+				deleted: true,
 				author: auth.user._id,
 				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
 			})
@@ -103,4 +105,4 @@ const getUserBooksResolve = async (_, args, context) => {
 	}
 };
 
-export default getUserBooksResolve;
+export default getBooksFromRecycleBin;

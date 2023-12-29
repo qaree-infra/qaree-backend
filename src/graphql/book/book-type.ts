@@ -7,49 +7,10 @@ import {
 	GraphQLList,
 	GraphQLFloat,
 } from "graphql";
+import { authorType, fileType } from "./myBook-type.js";
 
-export const authorType = new GraphQLObjectType({
-	name: "Author",
-	description: "this is book author type",
-	fields: {
-		_id: {
-			type: GraphQLID,
-		},
-		name: {
-			type: GraphQLString,
-			description: "",
-		},
-		avatar: {
-			type: GraphQLString,
-			description: "",
-		},
-	},
-});
-
-export const fileType = new GraphQLObjectType({
-	name: "File",
-	description: "this is book file type",
-	fields: {
-		_id: {
-			type: GraphQLID,
-		},
-		name: {
-			type: GraphQLString,
-			description: "",
-		},
-		size: {
-			type: GraphQLFloat,
-			description: "",
-		},
-		path: {
-			type: GraphQLString,
-			description: "",
-		},
-	},
-});
-
-const userBookType = new GraphQLObjectType({
-	name: "UserBook",
+const bookInfoType = new GraphQLObjectType({
+	name: "BookInfo",
 	description: "This book datails",
 	fields: {
 		_id: {
@@ -103,14 +64,6 @@ const userBookType = new GraphQLObjectType({
 			type: fileType,
 			description: "",
 		},
-		file: {
-			type: fileType,
-			description: "",
-		},
-		status: {
-			type: GraphQLString,
-			description: "",
-		},
 		createdAt: {
 			type: GraphQLString,
 			description: "",
@@ -123,11 +76,7 @@ const userBookType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
-		rejectionReasons: {
-			type: GraphQLString,
-			description: "",
-		},
 	},
 });
 
-export default userBookType;
+export default bookInfoType;

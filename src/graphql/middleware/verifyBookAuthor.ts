@@ -13,8 +13,12 @@ const verifyBookAuthor = async (context, bookId, userId) => {
 
 		const bookData: BookInterface | null = await Book.findOne({
 			_id: bookId,
-			authorId: userId,
-		});
+			author: userId,
+		})
+			.populate("author")
+			.populate("cover")
+			.populate("file")
+			.populate("sample");
 
 		if (bookData === null) {
 			return {
