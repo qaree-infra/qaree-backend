@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { auth } from "../../../middleware/auth.js";
 import verifyBook from "../../middleware/verifyBook.js";
 import Shelf, { ShelfInterface } from "../../../models/shelf.js";
+import { ShelfData } from "../shelf-type.js";
 
 const removeBookFromShelfResolve = async (_, args, context) => {
 	try {
@@ -31,13 +32,18 @@ const removeBookFromShelfResolve = async (_, args, context) => {
 
 		if (!shelfData) throw new Error(lang ? "رف غير صالح" : "Invalid shelf");
 		else {
-			const updatedShelf = await Shelf.findByIdAndUpdate(
+			const updatedShelf: ShelfData = await Shelf.findByIdAndUpdate(
 				shelfData._id,
 				{
 					books: shelfData.books.filter((book) => String(book) !== bookId),
 				},
 				{ new: true },
-			).populate("books");
+			).populate({
+				path: "books",
+				options: { limit: 3, skip: 0 },
+			});
+
+			updatedShelf.totalBooks = shelfData.books.length - 1;
 
 			return {
 				shelf: updatedShelf,

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import Shelf, { ShelfInterface } from "../../../models/shelf.js";
+import Shelf from "../../../models/shelf.js";
+import { ShelfData } from "../shelf-type.js";
 import { auth } from "../../../middleware/auth.js";
 
 interface Args {
@@ -7,12 +8,6 @@ interface Args {
 	user?: string;
 	booksLimit?: number;
 	booksPage?: number;
-}
-
-interface ShelfData extends ShelfInterface {
-	totalBooks?: number;
-	numberOfBooksPages?: number;
-	currentBooksPage?: number;
 }
 
 const getShelfResolve = async (_, args: Args, context) => {
