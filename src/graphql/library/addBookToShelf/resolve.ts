@@ -55,10 +55,9 @@ const addBookDetailsResolve = async (_, args, context) => {
 				});
 			}
 
-			// fix priority: [bookVerification.bookData._id].concat(shelfData.books) }
 			const updatedShelf: ShelfData = await Shelf.findByIdAndUpdate(
 				shelfData._id,
-				{ books: shelfData.books.concat([bookVerification.bookData._id]) },
+				{ books: [bookVerification.bookData._id].concat(shelfData.books) },
 				{ new: true },
 			).populate({
 				path: "books",
