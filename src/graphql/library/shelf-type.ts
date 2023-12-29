@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } from "graphql";
+import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList, GraphQLInt } from "graphql";
 
 import bookInfoType from "../book/book-type.js";
 
@@ -17,6 +17,18 @@ const shelfType = new GraphQLObjectType({
       type: new GraphQLList(bookInfoType),
       description: "",
     },
+		totalBooks: {
+			type: GraphQLInt,
+			description: "",
+		},
+		numberOfBooksPages: {
+			type: GraphQLInt,
+			description: "",
+		},
+		currentBooksPage: {
+			type: GraphQLInt,
+			description: "",
+		},
     createdAt: {
 			type: GraphQLString,
 			description: "",
