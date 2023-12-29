@@ -1,14 +1,33 @@
-import resolve from "./resolve.js";
+import { GraphQLObjectType, GraphQLString, GraphQLBoolean } from "graphql";
 import shelfType from "../shelf-type.js";
-import { GraphQLString } from "graphql";
+import resolve from "./resolve.js";
 
-export default {
-  type: shelfType,
-  args: {
-    name: {
+const type = new GraphQLObjectType({
+	name: "CreateShelfType",
+	description: "this is create shelf type",
+	fields: {
+		shelf: {
+      type: shelfType,
+      description: ""
+    },
+    message: {
       type: GraphQLString,
       description: ""
+    },
+    success: {
+      type: GraphQLBoolean,
+      description: ""
     }
-  },
-  resolve
-}
+	},
+});
+
+export default {
+	type: type,
+	args: {
+		name: {
+			type: GraphQLString,
+			description: "",
+		},
+	},
+	resolve,
+};

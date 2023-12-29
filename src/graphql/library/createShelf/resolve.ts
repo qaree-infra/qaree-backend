@@ -5,7 +5,7 @@ interface Args {
 	name: string;
 }
 
-const resolve = async (_, args, context) => {
+const resolve = async (_, args: Args, context) => {
 	try {
 		const { lang } = context.query;
 
@@ -33,7 +33,14 @@ const resolve = async (_, args, context) => {
 			userId: auth.user._id,
 		});
 
-    return newShelf;
+		return {
+			shelf: newShelf,
+			success: true,
+			message:
+				lang === "ar"
+					? "تم انشاء الرف بنجاح"
+					: "The shelf has been created successfully",
+		};
 	} catch (error) {
 		console.error(error);
 		throw new Error(error);
