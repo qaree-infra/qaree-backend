@@ -15,6 +15,14 @@ const resolve = async (_, args: Args, context) => {
 
 		const { name } = args;
 
+		if (!name) {
+			throw new Error(
+				lang === "ar"
+					? "من فضلك ادخل اسم الرف"
+					: "please, enter the shelf name",
+			);
+		}
+
 		const createdShelf: ShelfInterface = await Shelf.findOne({
 			name,
 			userId: auth.user._id,
