@@ -54,6 +54,7 @@ const getBooksFromRecycleBin = async (_, args, context) => {
 				author: auth.user._id,
 				status: filterBy,
 				$or: [{ name: { $in: keys } }],
+				deleted: true,
 			});
 			const books = await Book.find({
 				deleted: true,
@@ -79,6 +80,7 @@ const getBooksFromRecycleBin = async (_, args, context) => {
 			const totalBooks = await Book.countDocuments({
 				author: auth.user._id,
 				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
+				deleted: true,
 			});
 			const books = await Book.find({
 				deleted: true,
