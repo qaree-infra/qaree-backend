@@ -1,9 +1,9 @@
-import User from "../../../models/user.js";
-import OTPCode from "../../../models/otpcode.js";
+import User from "../../../../models/user.js";
+import OTPCode from "../../../../models/otpcode.js";
 import bcrypt from "bcrypt";
 
-import { validateEmail, generateOTPCode } from "../../../utils/helper.js";
-import sendMail from "../../../utils/sendMail.js";
+import { validateEmail, generateOTPCode } from "../../../../utils/helper.js";
+import sendMail from "../../../../utils/sendMail.js";
 
 const signUpResolve = async (parent, { userData }, context) => {
 	const { lang } = context.query;

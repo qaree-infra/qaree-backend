@@ -1,10 +1,10 @@
-import User from "../../../models/user.js";
-import OTPCode from "../../../models/otpcode.js";
-import ResetId from "../../../models/resetId.js";
+import User from "../../../../models/user.js";
+import OTPCode from "../../../../models/otpcode.js";
+import ResetId from "../../../../models/resetId.js";
 import {
 	validateEmail,
 	createPasswordResetToken,
-} from "../../../utils/helper.js";
+} from "../../../../utils/helper.js";
 
 const validateResetPasswordOTP = async (parent, { otp, email }, context) => {
 	const { lang } = context.query;

@@ -1,4 +1,4 @@
-import userType from "../user-type.js";
+import userType from "../../../types/user-type.js";
 import userInfoResolve from './resolve.js';
 
 export default {

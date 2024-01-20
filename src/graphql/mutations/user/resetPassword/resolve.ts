@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-import ResetId from "../../../models/resetId.js";
-import User from "../../../models/user.js";
+import ResetId from "../../../../models/resetId.js";
+import User from "../../../../models/user.js";
 
 function convertArrayToObject(arr: string[]): object {
 	const result = {};

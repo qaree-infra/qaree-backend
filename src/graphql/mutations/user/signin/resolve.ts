@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import User from "../../../models/user.js";
-import { validateEmail, createAcessToken } from "../../../utils/helper.js";
+import User from "../../../../models/user.js";
+import { validateEmail, createAcessToken } from "../../../../utils/helper.js";
 
 const signIn = async (parent, args, context) => {
 	const { lang } = context.query;

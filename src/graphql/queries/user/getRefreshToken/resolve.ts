@@ -1,5 +1,5 @@
-import { auth } from "../../../middleware/auth.js";
-import { createAcessToken } from "../../../utils/helper.js";
+import { auth } from "../../../../middleware/auth.js";
+import { createAcessToken } from "../../../../utils/helper.js";
 
 const getRefreshToken = async (_, args, context) => {
 	try {

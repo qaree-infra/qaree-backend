@@ -2,8 +2,8 @@ import { google } from "googleapis";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 
-import User from "../../../models/user.js";
-import { createAcessToken } from "../../../utils/helper.js";
+import User from "../../../../models/user.js";
+import { createAcessToken } from "../../../../utils/helper.js";
 
 dotenv.config();
 

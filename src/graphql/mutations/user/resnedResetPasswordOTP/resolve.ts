@@ -1,8 +1,8 @@
-import OTPCode from "../../../models/otpcode.js";
-import User from "../../../models/user.js";
-import sendMail from "../../../utils/sendMail.js";
+import OTPCode from "../../../../models/otpcode.js";
+import User from "../../../../models/user.js";
+import sendMail from "../../../../utils/sendMail.js";
 
-import { generateOTPCode, validateEmail } from "../../../utils/helper.js";
+import { generateOTPCode, validateEmail } from "../../../../utils/helper.js";
 
 const resendValidingOTP = async (parent, { email }, context) => {
 	const { lang } = context.query;
@@ -17,11 +17,9 @@ const resendValidingOTP = async (parent, { email }, context) => {
 
 		const user = await User.findOne({ email });
 
-		if (user.valid)
+		if (!user)
 			throw new Error(
-				lang === "ar"
-					? "هذا الحساب تم توثيقه من قبل"
-					: "Your account has been already valid",
+				lang === "ar" ? "هذا المستخدم غير موجود" : "User not found.",
 			);
 
 		const randomOPT = Math.ceil(generateOTPCode());
@@ -29,12 +27,17 @@ const resendValidingOTP = async (parent, { email }, context) => {
 			email,
 			randomOPT.toString(),
 			user.name,
-			"validate",
+			"reset password",
 		);
 
 		if (emailResult?.accepted[0] === email) {
+			await OTPCode.deleteMany({
+				type: "reset-password",
+				userId: user._id,
+			});
+
 			await OTPCode.create({
-				type: "verify-account",
+				type: "reset-password",
 				number: randomOPT.toString(),
 				userId: user._id,
 			});

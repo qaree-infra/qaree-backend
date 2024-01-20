@@ -1,7 +1,7 @@
-import User from "../../../models/user.js";
-import OTPCode from "../../../models/otpcode.js";
-import { validateEmail, generateOTPCode } from "../../../utils/helper.js";
-import sendMail from "../../../utils/sendMail.js";
+import User from "../../../../models/user.js";
+import OTPCode from "../../../../models/otpcode.js";
+import { validateEmail, generateOTPCode } from "../../../../utils/helper.js";
+import sendMail from "../../../../utils/sendMail.js";
 
 const forgetPassword = async (parent, { email }, context) => {
 	const { lang } = context.query;

@@ -1,4 +1,4 @@
-import { auth } from "../../../middleware/auth.js";
+import { auth } from "../../../../middleware/auth.js";
 
 const userInfo = async (_, args, context) => {
 	try {

@@ -10,7 +10,7 @@ import updateAccountMutation from "./updateAccountInfo/mutation.js";
 import deleteAccountMutation from './deleteUser/mutation.js'
 import googleLoginMutation from "./googleLogin/mutation.js";
 
-const UserMutation = {
+export default {
 	signup: signupMutation,
 	verifyAccount: VerifyAccountMutation,
 	resendValidatingOTP: resendValidatingOTPMutation,
@@ -23,5 +23,3 @@ const UserMutation = {
 	deleteAccount: deleteAccountMutation,
 	googleLogin: googleLoginMutation
 };
-
-export default UserMutation;
