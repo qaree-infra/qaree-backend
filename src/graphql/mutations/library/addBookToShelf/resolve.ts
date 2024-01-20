@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { auth } from "../../../middleware/auth.js";
-import verifyBook from "../../middleware/verifyBook.js";
-import Shelf, { ShelfInterface } from "../../../models/shelf.js";
-import { ShelfData } from "../shelf-type.js";
+import { auth } from "../../../../middleware/auth.js";
+import verifyBook from "../../../middleware/verifyBook.js";
+import Shelf, { ShelfInterface } from "../../../../models/shelf.js";
+import { ShelfData } from "../../../types/shelf-type.js";
 
 const addBookDetailsResolve = async (_, args, context) => {
 	try {

@@ -1,6 +1,6 @@
-import { auth } from "../../../middleware/auth.js";
-import Shelf from "../../../models/shelf.js";
-import { ShelfData } from "../shelf-type.js";
+import { auth } from "../../../../middleware/auth.js";
+import Shelf from "../../../../models/shelf.js";
+import { ShelfData } from "../../../types/shelf-type.js";
 
 interface Args {
 	user?: string;

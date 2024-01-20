@@ -1,6 +1,6 @@
 import { GraphQLInt, GraphQLString } from "graphql";
 import resolve from "./resolve.js";
-import shelfType from "../shelf-type.js";
+import shelfType from "../../../types/shelf-type.js";
 
 const type = shelfType;
 const args = {

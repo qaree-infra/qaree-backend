@@ -1,5 +1,5 @@
-import { auth } from "../../../middleware/auth.js";
-import Shelf, { ShelfInterface } from "../../../models/shelf.js";
+import { auth } from "../../../../middleware/auth.js";
+import Shelf, { ShelfInterface } from "../../../../models/shelf.js";
 
 interface Args {
 	name: string;

@@ -1,6 +1,6 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList, GraphQLInt } from "graphql";
 
-import bookInfoType from "../types/book-type.js";
+import bookInfoType from "./book-type.js";
 import { ShelfInterface } from "../../models/shelf.js";
 
 export interface ShelfData extends ShelfInterface {
