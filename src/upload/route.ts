@@ -3,6 +3,7 @@ import controller from "./controller.js";
 import multer from "multer";
 import VerifyFile from "./middlewares/verifyFile.js";
 import Auth from "./middlewares/Auth.js";
+import AdminAuth from "./middlewares/AdminAuth.js";
 import VerifyBook from "./middlewares/verifyBook.js";
 
 const router = Router();
@@ -10,6 +11,14 @@ const router = Router();
 const upload = multer({
 	storage: multer.diskStorage({}),
 });
+
+router.post(
+	"/category/icon/:id",
+	AdminAuth,
+	upload.single("icon"),
+	VerifyFile,
+	controller,
+);
 
 router.post(
 	"/user/avatar",

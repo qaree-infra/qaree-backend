@@ -17,8 +17,8 @@ const VerifyFile = async (req: Request, res: Response, next: NextFunction) => {
 			});
 		}
 
-		if (fileType.includes("avatar")) {
-			if (!file.mimetype.includes('image')) {
+		if (fileType.includes("avatar") || fileType.includes("category-icon")) {
+			if (!file.mimetype.includes("image")) {
 				return res.status(400).json({
 					message:
 						lang === "ar" ? "هذا الملف ليس صورة" : "This is not image file",
