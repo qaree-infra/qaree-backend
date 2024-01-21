@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { adminAuth } from "../../../../../middleware/adminAuth.js";
 import Category, { CategoryInterface } from "../../../../../models/category.js";
+import validateCategoryName from "../../../../middleware/validateCategory.js";
 
 const editCategoryResolve = async (_, args, context) => {
 	try {
@@ -31,17 +32,10 @@ const editCategoryResolve = async (_, args, context) => {
 				lang === "ar" ? "هذا التصنيف غير موجود" : "This category is nonfound",
 			);
 
-		if (!name_ar && !name_en)
-			throw new Error(lang === "ar" ? "تصنيف غير صالح" : "Invalid category");
+		const validateArgs: { error: string; valid: boolean } =
+			await validateCategoryName(args, context, "update");
 
-		const arabicRegex = /[\u0600-\u06FF]/;
-
-		if (!arabicRegex.test(name_ar))
-			throw new Error(
-				lang === "ar"
-					? "اسم التصنيف بالعربية غير صالح"
-					: "Invalid category arabic name",
-			);
+		if (!validateArgs.valid) throw new Error(validateArgs.error);
 
 		const updatedCateogory: CategoryInterface =
 			await Category.findByIdAndUpdate(
