@@ -1,5 +1,7 @@
-import addCategroy from "./admin/addCategory/mutation.js"
+import addCategory from "./admin/addCategory/mutation.js";
+import editCategory from "./admin/editCategory/mutation.js";
 
 export default {
-  addCategory: addCategroy,
-}
+	addCategory: addCategory,
+	editCategory: editCategory,
+};
