@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface CategoryInterface {
+export interface CategoryInterface {
 	_id: string;
 	name_ar: string;
 	name_en: string;
@@ -37,6 +37,6 @@ const categorySchema = new mongoose.Schema<CategoryInterface>(
 	},
 );
 
-const Category = mongoose.model<CategoryInterface>("File", categorySchema);
+const Category = mongoose.model<CategoryInterface>("Category", categorySchema);
 
 export default Category;
