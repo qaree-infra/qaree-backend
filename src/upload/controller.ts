@@ -165,7 +165,6 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 				});
 
 			const category: CategoryInterface = await Category.findById(id);
-			console.log(category);
 
 			if (!category)
 				return res.status(400).json({
@@ -176,12 +175,10 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 				});
 
 			const oldIcon = await File.findById(category.icon);
-			console.log(oldIcon);
 
 			if (category.icon) cloudinary.api.delete_resources([oldIcon?.name]);
 
 			const result = await cloudinary.uploader.upload(file.path, options);
-			console.log(result);
 
 			const savedFile = await File.create({
 				name: result.public_id,
@@ -190,7 +187,6 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 				path: result.secure_url,
 				userId: admin._id.toString(),
 			});
-			console.log(savedFile);
 
 			await Category.findByIdAndUpdate(
 				category._id,
