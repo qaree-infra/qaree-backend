@@ -2,6 +2,7 @@ import { GraphQLObjectType } from "graphql";
 import userQueries from "./user/user-queries.js";
 import bookQueries from "../queries/book/book-queries.js";
 import libraryQueries from './library/shelf-queries.js';
+import categoriesQueries from "./categories/categories-query.js";
 
 const queryType = new GraphQLObjectType({
 	name: "Query",
@@ -10,6 +11,7 @@ const queryType = new GraphQLObjectType({
 		...userQueries,
 		...bookQueries,
 		...libraryQueries,
+		...categoriesQueries
 	},
 });
 
