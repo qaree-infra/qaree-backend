@@ -3,7 +3,7 @@ import { Response, Request } from "express";
 import cloudinarySdk, { UploadApiOptions } from "cloudinary";
 import Book, { BookInterface } from "../models/book.js";
 import File, { FileInterface } from "../models/file.js";
-import { UserInterface } from "../models/user.js";
+import User, { UserInterface } from "../models/user.js";
 import Category, { CategoryInterface } from "../models/category.js";
 import { AdminInterface } from "../models/admin.js";
 
@@ -119,7 +119,7 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 
 				return res.status(200).json(newBookFile);
 			}
-		} else if (fileRef === "avatar") {
+		} else if (fileRef === "user") {
 			options.width = 200;
 			options.height = 200;
 			options.crop = "fill";
@@ -139,6 +139,12 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 				path: result.secure_url,
 				userId: user._id.toString(),
 			});
+
+			await User.findByIdAndUpdate(
+				user._id,
+				{ avatar: savedAvatar._id },
+				{ new: true },
+			);
 
 			return res.status(200).json(savedAvatar);
 		} else if (fileRef === "category") {
