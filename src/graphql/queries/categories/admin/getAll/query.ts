@@ -3,7 +3,7 @@ import getAllResolve from "./resolve.js"
 import categoryType from "../../../../types/category-type.js"
 
 const getAllCategories = new GraphQLObjectType({
-  name: "GetAllCategories",
+  name: "AdminGetAllCategories",
   description: "This is get all categories type",
   fields: {
     categories: {

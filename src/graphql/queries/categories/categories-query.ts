@@ -1,6 +1,7 @@
-import adminGetAll from './admin/getAll/query.js';
+import adminGetAll from "./admin/getAll/query.js";
+import getAll from "./user/getAll/query.js";
 
 export default {
-  adminGetAllCategories: adminGetAll,
-  
-}
+	adminGetAllCategories: adminGetAll,
+	getAllCategories: getAll,
+};
