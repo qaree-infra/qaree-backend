@@ -5,7 +5,7 @@ export interface UserInterface {
 	name: string;
 	email: string;
 	password: string;
-	avatar?: string;
+	avatar?: Schema.Types.ObjectId;
 	valid: boolean;
 }
 
@@ -28,8 +28,8 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 			require: [true, "please enter your password!"],
 		},
 		avatar: {
-			type: String,
-			trim: true,
+			type: Schema.Types.ObjectId,
+			ref: "File"
 		},
 		valid: {
 			type: Boolean,
