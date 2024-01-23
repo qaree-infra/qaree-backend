@@ -57,18 +57,32 @@ const addOfferResolve = async (_, args, context) => {
 					: "Sorry, this offer will expire in less than one hour",
 			);
 
-		console.log(expireAt);
-		console.log(expireAtDate);
+		const oldOffer = await Offer.findOne({ book: bookId });
 
-		const offer: OfferInterface = await Offer.create({
-			percent,
-			book: bookId,
-			expireAt: expireAtDate,
-		});
+		if (oldOffer) {
+			const updatedOffer: OfferInterface = await Offer.findByIdAndUpdate(
+				{ _id: oldOffer._id },
+				{
+					percent,
+					expireAt: expireAtDate,
+				},
+				{ new: true },
+			);
 
-		offer.book = bookVerification.bookData;
+			updatedOffer.book = bookVerification.bookData;
 
-		return offer;
+			return updatedOffer;
+		} else {
+			const offer: OfferInterface = await Offer.create({
+				percent,
+				book: bookId,
+				expireAt: expireAtDate,
+			});
+
+			offer.book = bookVerification.bookData;
+
+			return offer;
+		}
 	} catch (error) {
 		console.log(error);
 		throw new Error(error);

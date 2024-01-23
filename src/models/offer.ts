@@ -29,10 +29,10 @@ const offerSchema: Schema = new Schema<OfferInterface>(
 );
 
 offerSchema.index(
-	{ createdAt: 1 },
+	{ expireAt: 1 },
 	{
 		expireAfterSeconds: 0,
-		partialFilterExpression: { expireAt: { $eq: new Date() } },
+		// partialFilterExpression: { expireAt: { $eq: new Date() } },
 	},
 );
 
