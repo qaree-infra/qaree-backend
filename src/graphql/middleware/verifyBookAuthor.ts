@@ -15,6 +15,7 @@ const verifyBookAuthor = async (context, bookId, userId) => {
 			_id: bookId,
 			author: userId,
 		})
+			.populate("categories")
 			.populate("author")
 			.populate("cover")
 			.populate("file")

@@ -49,6 +49,7 @@ const publishBookResolve = async (_, args: { bookId: string }, context) => {
 			bookData._id,
 			{ status: "inReview" },
 		)
+			.populate("categories")
 			.populate("author")
 			.populate("cover")
 			.populate("file")

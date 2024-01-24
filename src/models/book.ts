@@ -9,7 +9,7 @@ export interface BookInterface {
 	isbn: string;
 	edition: number;
 	publishingRights: boolean;
-	categories: Array<string>;
+	categories: Array<Schema.Types.ObjectId>;
 	avgRate: number;
 	price: number;
 	cover: Schema.Types.ObjectId;
@@ -52,7 +52,8 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			trim: true,
 		},
 		categories: {
-			type: [String],
+			type: [Schema.Types.ObjectId],
+			ref: "Category",
 			require: [true, "this field is required"],
 		},
 		avgRate: {

@@ -7,6 +7,8 @@ import {
 	GraphQLList,
 	GraphQLFloat,
 } from "graphql";
+import categoryType from "./category-type.js";
+import fileType from "./file-type.js";
 
 export const authorType = new GraphQLObjectType({
 	name: "Author",
@@ -20,28 +22,6 @@ export const authorType = new GraphQLObjectType({
 			description: "",
 		},
 		avatar: {
-			type: GraphQLString,
-			description: "",
-		},
-	},
-});
-
-export const fileType = new GraphQLObjectType({
-	name: "File",
-	description: "this is book file type",
-	fields: {
-		_id: {
-			type: GraphQLID,
-		},
-		name: {
-			type: GraphQLString,
-			description: "",
-		},
-		size: {
-			type: GraphQLFloat,
-			description: "",
-		},
-		path: {
 			type: GraphQLString,
 			description: "",
 		},
@@ -76,7 +56,7 @@ const userBookType = new GraphQLObjectType({
 			description: "",
 		},
 		categories: {
-			type: new GraphQLList(GraphQLString),
+			type: new GraphQLList(categoryType),
 			description: "",
 		},
 		avgRate: {

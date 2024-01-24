@@ -1,4 +1,4 @@
-import Book from "../../../../../models/book.js";
+import Book, { BookInterface } from "../../../../../models/book.js";
 
 const sortByValues = { readers: -1, publishionDate: -1, avgRate: -1 };
 
@@ -39,7 +39,7 @@ const getBooksResolve = async (_, args: ArgsInterface, context) => {
 			categories: { $in: [category] },
 		});
 
-		const books = await Book.find({
+		const books: BookInterface[] = await Book.find({
 			status: "published",
 			categories: {
 				$in: [category],
@@ -48,6 +48,7 @@ const getBooksResolve = async (_, args: ArgsInterface, context) => {
 			.sort(sortFields)
 			.limit(limit || 10)
 			.skip(startIndex)
+			.populate("categories")
 			.populate("author")
 			.populate("cover")
 			.populate("sample");

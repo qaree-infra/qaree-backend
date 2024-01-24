@@ -1,5 +1,6 @@
 import { auth } from "../../../../../middleware/auth.js";
 import Book, { BookInterface } from "../../../../../models/book.js";
+import Category, { CategoryInterface } from "../../../../../models/category.js";
 
 const addBookDetails = async (_, args, context) => {
 	try {
@@ -84,6 +85,17 @@ const addBookDetails = async (_, args, context) => {
 				lang === "ar"
 					? "من فضلك ادخل تصنيف واحد على الاقل"
 					: "please, enter at least only one category",
+			);
+
+		const categoriesDate: CategoryInterface[] = await Category.find({
+			_id: { $in: categories },
+		});
+
+		if (categories.length !== categoriesDate.length)
+			throw new Error(
+				lang == "ar"
+					? "عذرًا، معرفات الفئات غير صالحة"
+					: "Sorry, invalid category ids",
 			);
 
 		if (!language)

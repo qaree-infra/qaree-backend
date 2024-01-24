@@ -1,6 +1,7 @@
 import Book, { BookInterface } from "../../../../../models/book.js";
 import { auth } from "../../../../../middleware/auth.js";
 import verifyBookAuthor from "../../../../middleware/verifyBookAuthor.js";
+import Category, { CategoryInterface } from "../../../../../models/category.js";
 
 const editBookDetails = async (_, args, context) => {
 	try {
@@ -77,6 +78,19 @@ const editBookDetails = async (_, args, context) => {
 					: "please, enter a valid book price",
 			);
 
+		if (categories && categories.length > 0) {
+			const categoriesDate: CategoryInterface[] = await Category.find({
+				_id: { $in: categories },
+			});
+
+			if (categories.length !== categoriesDate.length)
+				throw new Error(
+					lang == "ar"
+						? "عذرًا، معرفات الفئات غير صالحة"
+						: "Sorry, invalid category ids",
+				);
+		}
+
 		let newBook = Object.assign(verifyBook.bookData, {
 			name,
 			description,
@@ -95,6 +109,7 @@ const editBookDetails = async (_, args, context) => {
 				new: true,
 			},
 		)
+			.populate("categories")
 			.populate("author")
 			.populate("cover")
 			.populate("file")

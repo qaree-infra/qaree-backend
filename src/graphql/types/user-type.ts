@@ -3,7 +3,7 @@ import {
   GraphQLID,
   GraphQLString,
 } from 'graphql';
-import { fileType } from './myBook-type.js';
+import fileType from './file-type.js';
 
 const userType = new GraphQLObjectType({
 	name: "User",

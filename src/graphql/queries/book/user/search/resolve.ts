@@ -47,6 +47,7 @@ const bookSearch = async (_, args, context) => {
 			.sort(sortFields)
 			.limit(limit || 10)
 			.skip(startIndex)
+			.populate("categories")
 			.populate("author")
 			.populate("cover")
 			.populate("sample");

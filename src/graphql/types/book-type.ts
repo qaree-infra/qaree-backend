@@ -7,7 +7,9 @@ import {
 	GraphQLList,
 	GraphQLFloat,
 } from "graphql";
-import { authorType, fileType } from "./myBook-type.js";
+import { authorType } from "./myBook-type.js";
+import categoryType from "./category-type.js";
+import fileType from "./file-type.js";
 
 const bookInfoType = new GraphQLObjectType({
 	name: "BookInfo",
@@ -37,7 +39,7 @@ const bookInfoType = new GraphQLObjectType({
 			description: "",
 		},
 		categories: {
-			type: new GraphQLList(GraphQLString),
+			type: new GraphQLList(categoryType),
 			description: "",
 		},
 		avgRate: {
