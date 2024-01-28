@@ -58,8 +58,9 @@ const reviewBookResolve = async (_, args, context) => {
 
 		if (status === "approved") {
 			await Book.findByIdAndUpdate(bookId, {
-				status: "published",
+				status: status === "approved"? "published" : "rejected",
 				publishionDate: new Date().toISOString(),
+				reviewer: adminAuth.admin._id
 			});
 
 			return { success: true, message: "reviewed successfully" };
@@ -67,6 +68,7 @@ const reviewBookResolve = async (_, args, context) => {
 			await Book.findByIdAndUpdate(bookId, {
 				status: "rejected",
 				rejectionReasons: content,
+				reviewer: adminAuth.admin._id
 			});
 
 			return { success: true, message: "reviewed successfully" };

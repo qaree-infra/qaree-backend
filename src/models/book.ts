@@ -18,6 +18,7 @@ export interface BookInterface {
 	deleted: boolean;
 	language: string;
 	author: Schema.Types.ObjectId;
+	reviewer: Schema.Types.ObjectId;
 	status: bookStatus;
 	createdAt: Date;
 	updatedAt: Date;
@@ -85,6 +86,10 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			type: Schema.Types.ObjectId,
 			require: [true, "please enter book author!"],
 			ref: "User",
+		},
+		reviewer: {
+			type: Schema.Types.ObjectId,
+			ref: "Admin",
 		},
 		status: {
 			type: String,

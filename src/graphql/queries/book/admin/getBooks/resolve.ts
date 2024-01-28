@@ -59,6 +59,7 @@ const getBooks = async (_, args, context) => {
 				.sort(sortFields)
 				.limit(limit || 10)
 				.skip(startIndex)
+				.populate("reviewer")
 				.populate("categories")
 				.populate("author")
 				.populate("cover")
@@ -73,16 +74,17 @@ const getBooks = async (_, args, context) => {
 			};
 		} else {
 			const totalBooks = await Book.countDocuments({
-        $or: [{ name: { $in: keys } }, { status: { $in: keys } }],
-        status: {$ne: "draft"},
+				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
+				status: { $ne: "draft" },
 			});
 			const books = await Book.find({
-        $or: [{ name: { $in: keys } }, { status: { $in: keys } }],
-        status: {$ne: "draft"},
+				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
+				status: { $ne: "draft" },
 			})
 				.sort(sortFields)
 				.limit(limit || 10)
 				.skip(startIndex)
+				.populate("reviewer")
 				.populate("categories")
 				.populate("author")
 				.populate("cover")

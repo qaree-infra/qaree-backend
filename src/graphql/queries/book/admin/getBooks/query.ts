@@ -4,8 +4,8 @@ import {
 	GraphQLString,
 	GraphQLObjectType,
 } from "graphql";
-import myBook from "../../../../types/myBook-type.js";
 import getUserBooksResolve from "./resolve.js";
+import adminBookType from "../../../../types/adminBook-type.js";
 
 const booksArgs = {
 	sortBy: {
@@ -35,7 +35,7 @@ const getBooksType = new GraphQLObjectType({
 	description: "This is the user books type",
 	fields: {
 		books: {
-			type: new GraphQLList(myBook),
+			type: new GraphQLList(adminBookType),
 			description: "",
 		},
 		currentPage: {
