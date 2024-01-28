@@ -5,7 +5,7 @@ export interface AdminInterface {
 	name: string;
 	email: string;
 	password: string;
-	avatar?: string;
+	avatar?: Schema.Types.ObjectId;
 }
 
 const adminSchema: Schema = new mongoose.Schema<AdminInterface>(
@@ -27,8 +27,8 @@ const adminSchema: Schema = new mongoose.Schema<AdminInterface>(
 			require: [true, "please enter your password!"],
 		},
 		avatar: {
-			type: String,
-			trim: true,
+			type: Schema.Types.ObjectId,
+			ref: "File"
 		},
 	},
 	{
