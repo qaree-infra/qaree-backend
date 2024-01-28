@@ -8,8 +8,6 @@ const publishBookResolve = async (_, args: { bookId: string }, context) => {
 		const { lang } = context.query;
 		const auth: auth = context.auth;
 
-		console.log(auth);
-
 		if (auth?.error) throw new Error(auth?.error);
 
 		const { bookId } = args;
@@ -23,12 +21,8 @@ const publishBookResolve = async (_, args: { bookId: string }, context) => {
 		if (error) throw new Error(error);
 
 		const bookFiles = await File.find({
-			userId: auth.user._id,
-			"for._id": bookData._id,
-			"for.type": "book",
+			_id: { $in: [bookData.file, bookData.sample, bookData.cover] },
 		});
-
-		console.log(bookData);
 
 		if (
 			!bookData.name ||
@@ -48,6 +42,7 @@ const publishBookResolve = async (_, args: { bookId: string }, context) => {
 		const updatedBook: BookInterface = await Book.findByIdAndUpdate(
 			bookData._id,
 			{ status: "inReview" },
+			{ new: true },
 		)
 			.populate("categories")
 			.populate("author")
