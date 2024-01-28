@@ -73,7 +73,7 @@ const addBookDetails = async (_, args, context) => {
 					: "please, enter a valid book price",
 			);
 
-		if (!publishingRights)
+		if (publishingRights === null)
 			throw new Error(
 				lang === "ar"
 					? "من فضلك اخبرنا اذا كان لديك حقوق النشر ام لا"
