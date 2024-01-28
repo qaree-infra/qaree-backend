@@ -5,7 +5,7 @@ import Book, { BookInterface } from "../models/book.js";
 import File, { FileInterface } from "../models/file.js";
 import User, { UserInterface } from "../models/user.js";
 import Category, { CategoryInterface } from "../models/category.js";
-import { AdminInterface } from "../models/admin.js";
+import Admin, { AdminInterface } from "../models/admin.js";
 
 const cloudinary = cloudinarySdk.v2;
 
@@ -201,6 +201,35 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 			);
 
 			return res.status(200).json(savedFile);
+		} else if (fileRef === "admin") {
+			const admin = req.adminAuth.admin;
+			options.width = 200;
+			options.height = 200;
+			options.crop = "fill";
+
+			const oldAvatar = await File.findOne({ path: admin?.avatar });
+			if (admin.avatar) {
+				await File.findByIdAndDelete(oldAvatar?._id);
+				cloudinary.api.delete_resources([oldAvatar?.name]);
+			}
+
+			const result = await cloudinary.uploader.upload(file.path, options);
+
+			const savedAvatar = await File.create({
+				name: result.public_id,
+				type: result.format,
+				size: result.bytes,
+				path: result.secure_url,
+				userId: admin._id.toString(),
+			});
+
+			await Admin.findByIdAndUpdate(
+				admin._id,
+				{ avatar: savedAvatar._id },
+				{ new: true },
+			);
+
+			return res.status(200).json(savedAvatar);
 		}
 	} catch (error) {
 		console.log(error);

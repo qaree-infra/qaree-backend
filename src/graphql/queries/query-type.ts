@@ -4,6 +4,7 @@ import bookQueries from "../queries/book/book-queries.js";
 import libraryQueries from './library/shelf-queries.js';
 import categoriesQueries from "./categories/categories-query.js";
 import offerQueries from "./offer/offer-queries.js";
+import adminQueries from "./admin/admin-queries.js";
 
 const queryType = new GraphQLObjectType({
 	name: "Query",
@@ -13,7 +14,8 @@ const queryType = new GraphQLObjectType({
 		...bookQueries,
 		...libraryQueries,
 		...categoriesQueries,
-		...offerQueries
+		...offerQueries,
+		...adminQueries,
 	},
 });
 
