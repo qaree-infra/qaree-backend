@@ -23,6 +23,7 @@ export interface BookInterface {
 	createdAt: Date;
 	updatedAt: Date;
 	publishionDate: Date;
+	previousPublishingData: Date;
 	rejectionReasons: string;
 }
 
@@ -99,6 +100,9 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 		price: {
 			type: Number,
 			default: 0,
+		},
+		previousPublishingData: {
+			type: Date,
 		},
 		publishionDate: {
 			type: Date,

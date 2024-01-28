@@ -31,6 +31,10 @@ const bookDetailsInputs = {
     type: GraphQLBoolean,
     description: "",
 	},
+	previousPublishingData: {
+		type: GraphQLString,
+		description: "",
+	},
 	categories: {
     type: new GraphQLList(GraphQLString),
     description: "",

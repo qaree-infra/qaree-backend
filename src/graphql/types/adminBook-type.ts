@@ -87,6 +87,10 @@ const adminBookType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
+		previousPublishingData: {
+			type: GraphQLString,
+			description: "",
+		},
 		rejectionReasons: {
 			type: GraphQLString,
 			description: "",

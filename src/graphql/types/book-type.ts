@@ -78,6 +78,10 @@ const bookInfoType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
+		previousPublishingData: {
+			type: GraphQLString,
+			description: "",
+		},
 	},
 });
 

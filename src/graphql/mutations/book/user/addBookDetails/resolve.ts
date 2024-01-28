@@ -18,6 +18,7 @@ const addBookDetails = async (_, args, context) => {
 			publishingRights,
 			categories,
 			price,
+			previousPublishingData,
 		} = args;
 
 		// todo: fix it
@@ -105,6 +106,17 @@ const addBookDetails = async (_, args, context) => {
 					: "please, enter a valid language",
 			);
 
+		const previousPublishingDataObj = new Date(
+			String(parseInt(previousPublishingData)) === previousPublishingData
+				? parseInt(previousPublishingData)
+				: previousPublishingData,
+		);
+
+		if (previousPublishingData && isNaN(previousPublishingDataObj.getDate()))
+			throw new Error(
+				lang == "ar" ? "تاريخ انتهاء العرض غير صالح" : "invalid expire date",
+			);
+
 		const addedBook: BookInterface = await Book.create({
 			name,
 			description,
@@ -115,6 +127,7 @@ const addBookDetails = async (_, args, context) => {
 			categories,
 			price,
 			author: auth.user._id,
+			previousPublishingData: previousPublishingDataObj,
 		});
 
 		return addedBook;

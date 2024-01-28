@@ -1,8 +1,10 @@
 
-import getRefreshTokenQuery from './getRefreshToken/query.js';
-import userInfoQuery from './getUserInfo/query.js';
+import getRefreshTokenQuery from './user/getRefreshToken/query.js';
+import userInfoQuery from './user/getUserInfo/query.js';
+import adminGetAllUsers from './admin/getAllUsers/query.js'
 
 export default {
   userInfo: userInfoQuery,
   refreshToken: getRefreshTokenQuery,
+  adminGetAllUsers
 }

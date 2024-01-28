@@ -20,6 +20,7 @@ const editBookDetails = async (_, args, context) => {
 			publishingRights,
 			categories,
 			price,
+			previousPublishingData,
 		} = args;
 
 		const verifyBook = await verifyBookAuthor(context, bookId, auth.user?._id);
@@ -91,6 +92,17 @@ const editBookDetails = async (_, args, context) => {
 				);
 		}
 
+		const previousPublishingDataObj = new Date(
+			String(parseInt(previousPublishingData)) === previousPublishingData
+				? parseInt(previousPublishingData)
+				: previousPublishingData,
+		);
+
+		if (previousPublishingData && isNaN(previousPublishingDataObj.getDate()))
+			throw new Error(
+				lang == "ar" ? "تاريخ انتهاء العرض غير صالح" : "invalid expire date",
+			);
+
 		let newBook = Object.assign(verifyBook.bookData, {
 			name,
 			description,
@@ -100,6 +112,9 @@ const editBookDetails = async (_, args, context) => {
 			publishingRights,
 			categories,
 			price,
+			previousPublishingData: previousPublishingData
+				? previousPublishingDataObj
+				: verifyBook.bookData.previousPublishingData,
 		});
 
 		const updatedBook: BookInterface = await Book.findByIdAndUpdate(
