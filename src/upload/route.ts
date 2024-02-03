@@ -1,5 +1,6 @@
 import { Router } from "express";
 import controller from "./controller.js";
+import uploadAvatarController from "./controller/Avatar/admin.js";
 import multer from "multer";
 import VerifyFile from "./middlewares/verifyFile.js";
 import Auth from "./middlewares/Auth.js";
@@ -33,7 +34,7 @@ router.post(
 	AdminAuth,
 	upload.single("avatar"),
 	VerifyFile,
-	controller,
+	uploadAvatarController,
 );
 
 router.post(
