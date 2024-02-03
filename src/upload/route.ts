@@ -2,6 +2,7 @@ import { Router } from "express";
 import controller from "./controller.js";
 import uploadAdminAvatarController from "./controller/Avatar/admin.js";
 import uploadUserAvatarController from "./controller/Avatar/user.js";
+import uploadBookCoverController from './controller/book/uploadCover.js';
 import multer from "multer";
 import VerifyFile from "./middlewares/verifyFile.js";
 import Auth from "./middlewares/Auth.js";
@@ -44,7 +45,7 @@ router.post(
 	VerifyBook,
 	upload.single("cover"),
 	VerifyFile,
-	controller,
+	uploadBookCoverController,
 );
 
 router.post(
