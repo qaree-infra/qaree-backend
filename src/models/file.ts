@@ -8,6 +8,7 @@ export interface FileInterface {
 	type: string;
 	userId: string;
 	deleted: boolean;
+	assets?: Array<string>;
 }
 
 const fileSchema = new mongoose.Schema<FileInterface>(
@@ -38,8 +39,11 @@ const fileSchema = new mongoose.Schema<FileInterface>(
 		},
 		deleted: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
+		assets: {
+			type: [{ type: String }],
+		},
 	},
 	{
 		timestamps: true,
