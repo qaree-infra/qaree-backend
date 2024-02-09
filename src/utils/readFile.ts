@@ -30,4 +30,196 @@ const parseXML = (data: Buffer) => {
 	return parsedData;
 };
 
+interface EPubFileMetadata {
+	publisher?: string;
+	language?: string;
+	title?: string;
+	subject?: string;
+	description?: string;
+	creator?: string;
+	creatorFileAs?: string;
+	date?: string;
+	ISBN?: string;
+	UUID?: string;
+	generator?: string;
+	cover?: string;
+	specifiedFonts?: string;
+	modified?: string;
+}
+
+export const parseMetadata = (metadata) => {
+	const keys = Object.keys(metadata);
+	const result: EPubFileMetadata = {};
+
+	console.log(keys);
+
+	for (let i = 0, len = keys.length; i < len; i++) {
+		const keyparts = keys[i].split(":"),
+			key = (keyparts.pop() || "").toLowerCase().trim();
+		switch (key) {
+			case "publisher":
+				if (Array.isArray(metadata[keys[i]])) {
+					result.publisher = String(
+						(metadata[keys[i]][0] && metadata[keys[i]][0]["#"]) ||
+							metadata[keys[i]][0] ||
+							"",
+					).trim();
+				} else {
+					result.publisher = String(
+						metadata[keys[i]]["#"] || metadata[keys[i]] || "",
+					).trim();
+				}
+				break;
+			case "language":
+				if (Array.isArray(metadata[keys[i]])) {
+					result.language = String(
+						(metadata[keys[i]][0] && metadata[keys[i]][0]["#"]) ||
+							metadata[keys[i]][0] ||
+							"",
+					)
+						.toLowerCase()
+						.trim();
+				} else {
+					result.language = String(
+						metadata[keys[i]]["#"] || metadata[keys[i]] || "",
+					)
+						.toLowerCase()
+						.trim();
+				}
+				break;
+			case "title":
+				if (Array.isArray(metadata[keys[i]])) {
+					result.title = String(
+						(metadata[keys[i]][0] && metadata[keys[i]][0]["#"]) ||
+							metadata[keys[i]][0] ||
+							"",
+					).trim();
+				} else {
+					result.title = String(
+						metadata[keys[i]]["#"] || metadata[keys[i]] || "",
+					).trim();
+				}
+				break;
+			case "subject":
+				if (Array.isArray(metadata[keys[i]])) {
+					result.subject = String(
+						(metadata[keys[i]][0] && metadata[keys[i]][0]["#"]) ||
+							metadata[keys[i]][0] ||
+							"",
+					).trim();
+				} else {
+					result.subject = String(
+						metadata[keys[i]]["#"] || metadata[keys[i]] || "",
+					).trim();
+				}
+				break;
+			case "description":
+				if (Array.isArray(metadata[keys[i]])) {
+					result.description = String(
+						(metadata[keys[i]][0] && metadata[keys[i]][0]["#"]) ||
+							metadata[keys[i]][0] ||
+							"",
+					).trim();
+				} else {
+					result.description = String(
+						metadata[keys[i]]["#"] || metadata[keys[i]] || "",
+					).trim();
+				}
+				break;
+			case "creator":
+				if (Array.isArray(metadata[keys[i]])) {
+					result.creator = String(
+						(metadata[keys[i]][0] && metadata[keys[i]][0]["#"]) ||
+							metadata[keys[i]][0] ||
+							"",
+					).trim();
+					result.creatorFileAs = String(
+						(metadata[keys[i]][0] &&
+							metadata[keys[i]][0]["@"] &&
+							metadata[keys[i]][0]["@"]["opf:file-as"]) ||
+							result.creator,
+					).trim();
+				} else {
+					result.creator = String(
+						metadata[keys[i]]["#"] || metadata[keys[i]] || "",
+					).trim();
+					result.creatorFileAs = String(
+						(metadata[keys[i]]["@"] && metadata[keys[i]]["@"]["opf:file-as"]) ||
+							result.creator,
+					).trim();
+				}
+				break;
+			case "date":
+				if (Array.isArray(metadata[keys[i]])) {
+					result.date = String(
+						(metadata[keys[i]][0] && metadata[keys[i]][0]["#"]) ||
+							metadata[keys[i]][0] ||
+							"",
+					).trim();
+				} else {
+					result.date = String(
+						metadata[keys[i]]["#"] || metadata[keys[i]] || "",
+					).trim();
+				}
+				break;
+			case "identifier":
+				if (
+					metadata[keys[i]]["@"] &&
+					metadata[keys[i]]["@"]["opf:scheme"] == "ISBN"
+				) {
+					result.ISBN = String(metadata[keys[i]]["#"] || "").trim();
+				} else if (
+					metadata[keys[i]]["@"] &&
+					metadata[keys[i]]["@"].id &&
+					metadata[keys[i]]["@"].id.match(/uuid/i)
+				) {
+					result.UUID = String(metadata[keys[i]]["#"] || "")
+						.replace("urn:uuid:", "")
+						.toUpperCase()
+						.trim();
+				} else if (Array.isArray(metadata[keys[i]])) {
+					for (let j = 0; j < metadata[keys[i]].length; j++) {
+						if (metadata[keys[i]][j]["@"]) {
+							if (metadata[keys[i]][j]["@"]["opf:scheme"] == "ISBN") {
+								result.ISBN = String(metadata[keys[i]][j]["#"] || "").trim();
+							} else if (
+								metadata[keys[i]][j]["@"].id &&
+								metadata[keys[i]][j]["@"].id.match(/uuid/i)
+							) {
+								result.UUID = String(metadata[keys[i]][j]["#"] || "")
+									.replace("urn:uuid:", "")
+									.toUpperCase()
+									.trim();
+							}
+						}
+					}
+				}
+				break;
+		}
+	}
+
+	const metas = metadata["meta"] || {};
+	console.log("metas: ", metas);
+	Object.keys(metas).forEach(function (key) {
+		const meta = metas[key];
+		if (meta["@"] && meta["@"].name) {
+			const name = meta["@"].name;
+			result[name] = meta["@"].content;
+		}
+		if (meta["#"] && meta["@"].property) {
+			if (meta["@"].property === "dcterms:modified")
+				result["modified"] = meta["#"];
+			else if (meta["@"].property.includes("specified-fonts"))
+				result["specifiedFonts"] = meta["#"];
+			else result[meta["@"].property] = meta["#"];
+		}
+
+		if (meta.name && meta.name == "cover") {
+			result[meta.name] = meta.content;
+		}
+	}, this);
+
+	return result;
+};
+
 export default readFile;
