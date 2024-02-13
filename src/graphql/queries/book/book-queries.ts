@@ -8,6 +8,7 @@ import getBooksFromRecycleBin from "./user/getBooksFromRecycleBin/query.js";
 import search from "./user/search/query.js";
 import adminGetBooks from "./admin/getBooks/query.js";
 import getBookEPubMetadata from "./admin/getBookEPubMetadata/query.js";
+import getBookEPubManifest from "./admin/getBookEPubManifest/query.js";
 
 export default {
 	getUserBook: getUserBook,
@@ -20,4 +21,5 @@ export default {
 	search: search,
 	adminGetBooks: adminGetBooks,
 	getBookEPubMetadata: getBookEPubMetadata,
+	getBookEPubManifest: getBookEPubManifest,
 };

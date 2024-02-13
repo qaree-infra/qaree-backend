@@ -222,4 +222,31 @@ export const parseMetadata = (metadata) => {
 	return result;
 };
 
+export const parseManifest = (rootFile: string, manifest) => {
+	const path = rootFile.slice(0, -23).split("/");
+	const path_str = path.join("/");
+	console.log(path_str);
+
+	const result = {};
+
+	if (manifest.item) {
+		for (let i = 0, len = manifest.item.length; i < len; i++) {
+			if (manifest.item[i]["@"]) {
+				const element = manifest.item[i]["@"];
+
+				if (
+					element.href &&
+					element.href.substr(0, path_str.length) != path_str
+				) {
+					element.href = path.concat([element.href]).join("/");
+				}
+
+				result[manifest.item[i]["@"].id] = element;
+			}
+		}
+	}
+
+	return result;
+};
+
 export default readFile;
