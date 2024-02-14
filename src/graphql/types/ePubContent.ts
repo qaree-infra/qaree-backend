@@ -4,10 +4,36 @@ import {
 	GraphQLObjectType,
 	GraphQLString,
 } from "graphql";
-import resolve from "./resolve.js";
 
 const contentRaw = new GraphQLObjectType({
 	name: "ContentRaw",
+	description: "This is content raw",
+	fields: {
+		id: {
+			type: GraphQLString,
+			description: "",
+		},
+		mediaType: {
+			type: GraphQLString,
+			description: "",
+		},
+		title: {
+			type: GraphQLString,
+			description: "",
+		},
+		order: {
+			type: GraphQLInt,
+			description: "",
+		},
+		level: {
+			type: GraphQLInt,
+			description: "",
+		},
+	},
+});
+
+const adminContentRaw = new GraphQLObjectType({
+	name: "AdminContentRaw",
 	description: "This is content raw",
 	fields: {
 		href: {
@@ -37,7 +63,7 @@ const contentRaw = new GraphQLObjectType({
 	},
 });
 
-const type = new GraphQLObjectType({
+export const bookContent = new GraphQLObjectType({
 	name: "BookContent",
 	description: "this is book content time",
 	fields: {
@@ -45,15 +71,10 @@ const type = new GraphQLObjectType({
 	},
 });
 
-const args = {
-	bookId: {
-		type: GraphQLString,
-		description: "",
+export const adminBookContent = new GraphQLObjectType({
+	name: "AdminBookContent",
+	description: "this is book content for admin",
+	fields: {
+		content: { type: new GraphQLList(adminContentRaw), description: "" },
 	},
-};
-
-export default {
-	type,
-	args,
-	resolve,
-};
+});

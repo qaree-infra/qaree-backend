@@ -7,10 +7,10 @@ import getBookReview from "./user/getBookReview/query.js";
 import getBooksFromRecycleBin from "./user/getBooksFromRecycleBin/query.js";
 import search from "./user/search/query.js";
 import adminGetBooks from "./admin/getBooks/query.js";
-import getBookEPubMetadata from "./admin/getBookEPubMetadata/query.js";
+import getBookEPubMetadata from "./admin/fileContent/getBookEPubMetadata/query.js";
 import getBookEPubManifest from "./admin/getBookEPubManifest/query.js";
 import getBookEPubContent from "./admin/getBookEPubContent/query.js";
-import getBookContent from "./user/getBookContent/query.js";
+import getBookContent from "./user/fileContent/getBookContent/query.js";
 
 export default {
 	getUserBook: getUserBook,

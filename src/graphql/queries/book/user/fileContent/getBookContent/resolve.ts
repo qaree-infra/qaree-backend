@@ -1,13 +1,14 @@
 import cloudinarySdk from "cloudinary";
-import verifyBook from "../../../../middleware/verifyBook.js";
-import { BookInterface } from "../../../../../models/book.js";
-import File, { FileInterface } from "../../../../../models/file.js";
+import verifyBook from "../../../../../middleware/verifyBook.js";
+import { BookInterface } from "../../../../../../models/book.js";
+import File, { FileInterface } from "../../../../../../models/file.js";
 import readFile, {
+	getBookFiles,
 	getEPubRootFile,
 	parseManifest,
 	parseSpain,
 	parseTOC,
-} from "../../../../../utils/readFile.js";
+} from "../../../../../../utils/readFile.js";
 
 const cloudinary = cloudinarySdk.v2;
 
@@ -28,16 +29,7 @@ const getBookContent = async (_, args, context) => {
 			throw new Error(error);
 		}
 
-		const bookFile: FileInterface = await File.findById(bookData.file);
-
-		const allAssets = await cloudinary.api
-			.resources({
-				type: "upload",
-				prefix: `book/file/${bookId}`,
-				resource_type: "raw",
-				max_results: 500,
-			})
-			.then((res) => res.resources.map((resource) => resource.secure_url));
+		const allAssets = await getBookFiles(bookData);
 
 		const bookContainerURL = allAssets.find((asset) =>
 			asset.toLowerCase().includes("meta-inf/container.xml"),

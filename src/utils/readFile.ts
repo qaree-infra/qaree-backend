@@ -1,7 +1,30 @@
 import axios from "axios";
 import xml2js from "xml2js";
+import cloudinarySdk from "cloudinary";
+import File, { FileInterface } from "../models/file.js";
+import { BookInterface } from "../models/book.js";
 
 const xml2jsOptions = xml2js.defaults["0.1"];
+
+export const getBookFiles = async (bookData: BookInterface) => {
+	const cloudinary = cloudinarySdk.v2;
+	try {
+		const bookFile: FileInterface = await File.findById(bookData.file);
+
+		const allAssets = await cloudinary.api
+			.resources({
+				type: "upload",
+				prefix: `book/file/${bookData._id}`,
+				resource_type: "raw",
+				max_results: 500,
+			})
+			.then((res) => res.resources.map((resource) => resource.secure_url));
+
+		return allAssets;
+	} catch (error) {
+		throw new Error(error);
+	}
+};
 
 const readFile = async (fileUrl: string, lower?: boolean) => {
 	try {
