@@ -45,7 +45,7 @@ const resolve = async (_, args, context) => {
 			asset.toLowerCase().includes(filename),
 		);
 
-		const bookContentFileData = await readFile(contentFile);
+		const bookContentFileData = await readFile(contentFile, true);
 		const metadata = parseMetadata(bookContentFileData.parsedData.metadata);
 
 		return metadata;

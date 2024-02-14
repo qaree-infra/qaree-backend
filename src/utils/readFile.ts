@@ -1,15 +1,13 @@
 import axios from "axios";
 import xml2js from "xml2js";
-import File, { FileInterface } from "../models/file.js";
 
 const xml2jsOptions = xml2js.defaults["0.1"];
 
-const readFile = async (fileUrl: string) => {
+const readFile = async (fileUrl: string, lower?: boolean) => {
 	try {
 		const { data } = await axios.get(fileUrl);
-		console.log("File content: ", data);
 
-		const parseData = parseXML(data);
+		const parseData = parseXML(data, lower);
 
 		return { content: data, parsedData: parseData };
 	} catch (error) {
@@ -17,10 +15,12 @@ const readFile = async (fileUrl: string) => {
 	}
 };
 
-const parseXML = (data: Buffer) => {
+const parseXML = (data: Buffer, lower?: boolean) => {
 	let parsedData;
 
-	const xml = data.toString("utf-8").toLowerCase().trim();
+	const xml = lower
+		? data.toString("utf-8").toLowerCase().trim()
+		: data.toString("utf-8").trim();
 
 	xml2js.parseString(xml, xml2jsOptions, function (err, result) {
 		if (err) throw new Error(err);
@@ -51,8 +51,6 @@ interface EPubFileMetadata {
 export const parseMetadata = (metadata) => {
 	const keys = Object.keys(metadata);
 	const result: EPubFileMetadata = {};
-
-	console.log(keys);
 
 	for (let i = 0, len = keys.length; i < len; i++) {
 		const keyparts = keys[i].split(":"),
@@ -200,7 +198,6 @@ export const parseMetadata = (metadata) => {
 	}
 
 	const metas = metadata["meta"] || {};
-	console.log("metas: ", metas);
 	Object.keys(metas).forEach(function (key) {
 		const meta = metas[key];
 		if (meta["@"] && meta["@"].name) {
@@ -226,7 +223,6 @@ export const parseMetadata = (metadata) => {
 export const parseManifest = (rootFile: string, manifest) => {
 	const path = rootFile.slice(0, -23).split("/");
 	const path_str = path.join("/");
-	console.log(path_str);
 
 	const result = {};
 
@@ -252,7 +248,7 @@ export const parseManifest = (rootFile: string, manifest) => {
 
 export const getEPubRootFile = async (bookContainerURL: string) => {
 	try {
-		const bookContainerData = await readFile(bookContainerURL);
+		const bookContainerData = await readFile(bookContainerURL, true);
 
 		if (
 			!bookContainerData.parsedData.rootfiles ||
@@ -293,6 +289,144 @@ export const getEPubRootFile = async (bookContainerURL: string) => {
 	} catch (error) {
 		throw new Error(error);
 	}
+};
+
+export const parseSpain = async (spine, rootFile, manifest) => {
+	try {
+		const result = { toc: {}, contents: [] };
+
+		if (spine["@"] && spine["@"].toc) {
+			result.toc = manifest[spine["@"].toc] || false;
+		}
+
+		if (spine.itemref) {
+			if (!Array.isArray(spine.itemref)) {
+				spine.itemref = [spine.itemref];
+			}
+			for (let i = 0, len = spine.itemref.length; i < len; i++) {
+				if (spine.itemref[i]["@"]) {
+					let element;
+					if ((element = manifest[spine.itemref[i]["@"].idref])) {
+						result.contents.push(element);
+					}
+				}
+			}
+		}
+
+		return result;
+	} catch (error) {
+		throw new Error(error);
+	}
+};
+
+export const parseTOC = async (spine, manifest) => {
+	try {
+		const path = spine.toc.href.split("/"),
+			id_list = {};
+		path.pop();
+
+		const keys = Object.keys(manifest);
+
+		for (let i = 0, len = keys.length; i < len; i++) {
+			id_list[manifest[keys[i]].href] = keys[i];
+		}
+
+		const { parsedData, content } = await readFile(spine.toc.href);
+
+		let toc = [];
+
+		if (parsedData.navMap && parsedData.navMap.navPoint) {
+			toc = walkNavMap(manifest, parsedData.navMap.navPoint, path, id_list);
+		}
+
+		return toc;
+	} catch (error) {
+		throw new Error(error);
+	}
+};
+
+const walkNavMap = (manifest, branch, path, id_list, level?: number) => {
+	level = level || 0;
+
+	// don't go too far
+	if (level > 7) {
+		return [];
+	}
+
+	let output = [];
+
+	if (!Array.isArray(branch)) {
+		branch = [branch];
+	}
+
+	for (let i = 0; i < branch.length; i++) {
+		if (branch[i].navLabel) {
+			let title = "";
+			if (branch[i].navLabel && typeof branch[i].navLabel.text == "string") {
+				title =
+					(branch[i].navLabel && branch[i].navLabel.text) ||
+					(branch[i].navLabel === branch[i].navLabel &&
+						branch[i].navLabel.text.length > 0)
+						? (
+								(branch[i].navLabel && branch[i].navLabel.text) ||
+								branch[i].navLabel ||
+								""
+						  ).trim()
+						: "";
+			}
+			let order = Number((branch[i]["@"] && branch[i]["@"].playOrder) || 0);
+			if (isNaN(order)) {
+				order = 0;
+			}
+			let href = "";
+			if (
+				branch[i].content &&
+				branch[i].content["@"] &&
+				typeof branch[i].content["@"].src == "string"
+			) {
+				href = branch[i].content["@"].src.trim();
+			}
+
+			interface Element {
+				level: number;
+				order: number;
+				title: string;
+				href?: string;
+				id?: string;
+			}
+
+			let element: Element = {
+				level: level,
+				order: order,
+				title: title,
+			};
+
+			if (href) {
+				href = path.concat([href]).join("/");
+				element.href = href;
+
+				if (id_list[element.href]) {
+					// link existing object
+					element = manifest[id_list[element.href]];
+					element.title = title;
+					element.order = order;
+					element.level = level;
+				} else {
+					// use new one
+					element.href = href;
+					element.id = ((branch[i]["@"] && branch[i]["@"].id) || "").trim();
+				}
+
+				output.push(element);
+			}
+		}
+		if (branch[i].navPoint) {
+			output = output.concat(
+				walkNavMap(manifest, branch[i].navPoint, path, id_list, level + 1),
+			);
+		}
+	}
+	return output;
 };
 
 export default readFile;

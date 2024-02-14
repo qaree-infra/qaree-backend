@@ -3,8 +3,10 @@ import { adminAuth } from "../../../../../middleware/adminAuth.js";
 import adminVerifyBook from "../../../../middleware/adminVerifyBook.js";
 import File, { FileInterface } from "../../../../../models/file.js";
 import readFile, {
+	parseSpain,
 	parseManifest,
 	getEPubRootFile,
+	parseTOC,
 } from "../../../../../utils/readFile.js";
 
 const cloudinary = cloudinarySdk.v2;
@@ -45,20 +47,19 @@ const resolve = async (_, args, context) => {
 			asset.toLowerCase().includes(filename),
 		);
 
-		const bookContentFileData = await readFile(contentFile, true);
-		const manifest = parseManifest(
+		const { parsedData } = await readFile(contentFile);
+
+		const manifest = parseManifest(bookContainerURL, parsedData.manifest);
+
+		const { contents, toc } = await parseSpain(
+			parsedData.spine,
 			bookContainerURL,
-			bookContentFileData.parsedData.manifest,
+			manifest,
 		);
 
-		const result = Object.values(manifest).map((file) => {
-			file["mediaType"] = file["media-type"];
-			delete file["media-type"];
+		const realTOC = await parseTOC({ toc, contents }, manifest);
 
-			return file;
-		});
-
-		return { files: result, total: result.length };
+		return { content: realTOC };
 	} catch (error) {
 		throw new Error(error);
 	}
