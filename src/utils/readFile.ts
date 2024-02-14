@@ -307,6 +307,7 @@ export const parseSpain = async (spine, rootFile, manifest) => {
 				if (spine.itemref[i]["@"]) {
 					let element;
 					if ((element = manifest[spine.itemref[i]["@"].idref])) {
+						element.mediaType = element["media-type"] || element.mediaType;
 						result.contents.push(element);
 					}
 				}

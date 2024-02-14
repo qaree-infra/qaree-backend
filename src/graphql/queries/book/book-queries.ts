@@ -10,6 +10,7 @@ import adminGetBooks from "./admin/getBooks/query.js";
 import getBookEPubMetadata from "./admin/getBookEPubMetadata/query.js";
 import getBookEPubManifest from "./admin/getBookEPubManifest/query.js";
 import getBookEPubContent from "./admin/getBookEPubContent/query.js";
+import getBookContent from "./user/getBookContent/query.js";
 
 export default {
 	getUserBook: getUserBook,
@@ -24,4 +25,5 @@ export default {
 	getBookEPubMetadata: getBookEPubMetadata,
 	getBookEPubManifest: getBookEPubManifest,
 	getBookEPubContent: getBookEPubContent,
+	getBookContent: getBookContent,
 };
