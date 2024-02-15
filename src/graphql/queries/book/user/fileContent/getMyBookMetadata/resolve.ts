@@ -1,7 +1,7 @@
-import { adminAuth } from "../../../../../../middleware/adminAuth.js";
-import adminVerifyBook from "../../../../../middleware/adminVerifyBook.js";
+import { auth } from "../../../../../../middleware/auth.js";
+import verifyBookAuthor from "../../../../../middleware/verifyBookAuthor.js";
 import readFile, {
-	parseManifest,
+	parseMetadata,
 	getEPubRootFile,
 	getBookFiles,
 } from "../../../../../../utils/readFile.js";
@@ -9,13 +9,17 @@ import readFile, {
 const resolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { bookId } = args;
 
-		const { error, bookData } = await adminVerifyBook(bookId, context);
+		const { error, bookData } = await verifyBookAuthor(
+			context,
+			bookId,
+			auth.user._id,
+		);
 
 		if (error) {
 			throw new Error(error);
@@ -34,19 +38,9 @@ const resolve = async (_, args, context) => {
 		);
 
 		const bookContentFileData = await readFile(contentFile, true);
-		const manifest = parseManifest(
-			bookContainerURL,
-			bookContentFileData.parsedData.manifest,
-		);
+		const metadata = parseMetadata(bookContentFileData.parsedData.metadata);
 
-		const result = Object.values(manifest).map((file) => {
-			file["mediaType"] = file["media-type"];
-			delete file["media-type"];
-
-			return file;
-		});
-
-		return { files: result, total: result.length };
+		return metadata;
 	} catch (error) {
 		throw new Error(error);
 	}

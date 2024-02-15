@@ -1,21 +1,27 @@
-import { adminAuth } from "../../../../../../middleware/adminAuth.js";
-import adminVerifyBook from "../../../../../middleware/adminVerifyBook.js";
+import { auth } from "../../../../../../middleware/auth.js";
+import verifyBookAuthor from "../../../../../middleware/verifyBookAuthor.js";
 import readFile, {
+	getBookFiles,
+	parseSpain,
 	parseManifest,
 	getEPubRootFile,
-	getBookFiles,
+	parseTOC,
 } from "../../../../../../utils/readFile.js";
 
 const resolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { bookId } = args;
 
-		const { error, bookData } = await adminVerifyBook(bookId, context);
+		const { error, bookData } = await verifyBookAuthor(
+			context,
+			bookId,
+			auth.user._id,
+		);
 
 		if (error) {
 			throw new Error(error);
@@ -33,20 +39,19 @@ const resolve = async (_, args, context) => {
 			asset.toLowerCase().includes(filename),
 		);
 
-		const bookContentFileData = await readFile(contentFile, true);
-		const manifest = parseManifest(
+		const { parsedData } = await readFile(contentFile);
+
+		const manifest = parseManifest(bookContainerURL, parsedData.manifest);
+
+		const { contents, toc } = await parseSpain(
+			parsedData.spine,
 			bookContainerURL,
-			bookContentFileData.parsedData.manifest,
+			manifest,
 		);
 
-		const result = Object.values(manifest).map((file) => {
-			file["mediaType"] = file["media-type"];
-			delete file["media-type"];
+		const realTOC = await parseTOC({ toc, contents }, manifest);
 
-			return file;
-		});
-
-		return { files: result, total: result.length };
+		return { content: realTOC };
 	} catch (error) {
 		throw new Error(error);
 	}

@@ -1,5 +1,5 @@
-import { adminAuth } from "../../../../../../middleware/adminAuth.js";
-import adminVerifyBook from "../../../../../middleware/adminVerifyBook.js";
+import { auth } from "../../../../../../middleware/auth.js";
+import verifyBookAuthor from "../../../../../middleware/verifyBookAuthor.js";
 import readFile, {
 	parseManifest,
 	getEPubRootFile,
@@ -9,13 +9,18 @@ import readFile, {
 const resolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
-		const adminAuth: adminAuth = context.adminAuth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		const auth: auth = context.auth;
+
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { bookId } = args;
 
-		const { error, bookData } = await adminVerifyBook(bookId, context);
+		const { error, bookData } = await verifyBookAuthor(
+			context,
+			bookId,
+			auth.user._id,
+		);
 
 		if (error) {
 			throw new Error(error);
