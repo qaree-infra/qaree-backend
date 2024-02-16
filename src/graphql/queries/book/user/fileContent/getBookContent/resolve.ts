@@ -53,8 +53,14 @@ const getBookContent = async (_, args, context) => {
 
 		const realTOC = await parseTOC({ toc, contents }, manifest);
 
+		const extention = "application/xhtml+xml";
+
 		return {
 			content: realTOC,
+			allHTML: Object.values(manifest).filter(
+				(f) =>
+					f?.["media-type"] === extention || f?.["mediaType"] === extention,
+			),
 		};
 	} catch (error) {
 		throw new Error(error.message);

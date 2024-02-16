@@ -68,6 +68,10 @@ export const bookContent = new GraphQLObjectType({
 	description: "this is book content time",
 	fields: {
 		content: { type: new GraphQLList(contentRaw), description: "" },
+		allHTML: {
+			type: new GraphQLList(contentRaw),
+			description: "",
+		},
 	},
 });
 
@@ -76,5 +80,9 @@ export const adminBookContent = new GraphQLObjectType({
 	description: "this is book content for admin",
 	fields: {
 		content: { type: new GraphQLList(adminContentRaw), description: "" },
+		allHTML: {
+			type: new GraphQLList(contentRaw),
+			description: "",
+		},
 	},
 });
