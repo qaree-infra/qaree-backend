@@ -10,7 +10,7 @@ interface RequestWithBookData extends AuthRequest {
 	bookData: BookInterface;
 }
 
-const readChapterForAdmin = async (req: RequestWithBookData, res) => {
+const readChapterForAuthor = async (req: RequestWithBookData, res) => {
 	try {
 		const { lang } = req.query;
 		const { chId } = req.params;
@@ -62,4 +62,4 @@ const readChapterForAdmin = async (req: RequestWithBookData, res) => {
 	}
 };
 
-export default readChapterForAdmin;
+export default readChapterForAuthor;
