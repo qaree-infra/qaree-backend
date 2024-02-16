@@ -1,5 +1,5 @@
 import { auth } from "../../../../../middleware/general/auth.js";
-import verifyBookAuthor from "../../../../middleware/verifyBookAuthor.js";
+import verifyBookAuthor from "../../../../../middleware/general/verifyBookAuthor.js";
 import Book, { BookInterface } from "../../../../../models/book.js";
 import File, { FileInterface } from "../../../../../models/file.js";
 

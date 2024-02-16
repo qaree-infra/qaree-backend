@@ -8,7 +8,7 @@ import multer from "multer";
 import VerifyFile from "../middleware/verifyFile.js";
 import Auth from "../middleware/Auth.js";
 import AdminAuth from "../middleware/AdminAuth.js";
-import VerifyBook from "../middleware/verifyBook.js";
+import { VerifyBookAuthor } from "../middleware/VerifyBook.js";
 
 const router = Router();
 
@@ -43,7 +43,7 @@ router.post(
 router.post(
 	"/book/cover/:id",
 	Auth,
-	VerifyBook,
+	VerifyBookAuthor,
 	upload.single("cover"),
 	VerifyFile,
 	uploadBookCoverController,
@@ -52,7 +52,7 @@ router.post(
 router.post(
 	"/book/file/:id",
 	Auth,
-	VerifyBook,
+	VerifyBookAuthor,
 	upload.single("file"),
 	VerifyFile,
 	uploadBookFileController,
@@ -61,7 +61,7 @@ router.post(
 router.post(
 	"/book/sample/:id",
 	Auth,
-	VerifyBook,
+	VerifyBookAuthor,
 	upload.single("sample"),
 	VerifyFile,
 	controller,

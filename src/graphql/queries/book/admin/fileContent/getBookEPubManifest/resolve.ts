@@ -1,5 +1,5 @@
 import { adminAuth } from "../../../../../../middleware/general/adminAuth.js";
-import adminVerifyBook from "../../../../../middleware/adminVerifyBook.js";
+import adminVerifyBook from "../../../../../../middleware/general/adminVerifyBook.js";
 import readFile, {
 	parseManifest,
 	getEPubRootFile,

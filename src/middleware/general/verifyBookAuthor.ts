@@ -8,6 +8,8 @@ const verifyBookAuthor = async (context, bookId, userId) => {
 		if (!mongoose.Types.ObjectId.isValid(bookId)) {
 			return {
 				error: lang === "ar" ? "معرف الكتاب غير صالح" : "Invalid book id.",
+				bookData: null,
+				statusCode: 400,
 			};
 		}
 
@@ -27,10 +29,12 @@ const verifyBookAuthor = async (context, bookId, userId) => {
 					lang === "ar"
 						? "غير مسموح لك اى عمليات على هذه البيانات"
 						: "You are not allowed to show this book data",
+				bookData: null,
+				statusCode: 404,
 			};
 		}
 
-		return { error: "", bookData };
+		return { error: "", bookData, statusCode: 200 };
 	} catch (error) {
 		throw new Error(error);
 	}

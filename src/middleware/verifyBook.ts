@@ -1,36 +1,33 @@
 import { Response, NextFunction } from "express";
-import mongoose from "mongoose";
-import Book, { BookInterface } from "../models/book.js";
+import { BookInterface } from "../models/book.js";
 import { AuthRequest } from "./general/auth.js";
+import verifyBook from "./general/verifyBook.js";
+import verifyBookAuthor from "./general/verifyBookAuthor.js";
+import adminVerifyBook from "./general/adminVerifyBook.js";
 
-const VerifyBook = async (
-	req: AuthRequest,
+interface VerifyBook extends AuthRequest {
+	bookData: BookInterface;
+}
+
+export const VerifyBook = async (
+	req: VerifyBook,
 	res: Response,
 	next: NextFunction,
 ) => {
 	try {
 		const { id } = req.params;
 		const { lang } = req.query;
-		const { _id } = req.auth.user;
 
-		if (!mongoose.Types.ObjectId.isValid(id))
-			return res.status(400).json({
-				message: lang === "ar" ? "معرف الكتاب غير صالح" : "Invalid book id.",
-			});
+		const {
+			error,
+			bookData,
+			statusCode,
+		}: { error?: string; bookData?: BookInterface; statusCode: number } =
+			await verifyBook(id, { query: { lang: lang === "ar" ? "ar" : "en" } });
 
-		const bookData: BookInterface | null = await Book.findOne({
-			_id: id,
-			author: _id.toString(),
-		});
+		if (error) return res.status(statusCode).json({ message: error });
 
-		if (bookData === null) {
-			return res.status(400).json({
-				message:
-					lang === "ar"
-						? "غير مسموح لك اى عمليات على هذه البيانات"
-						: "You are not allowed to show this book data",
-			});
-		}
+		req.bookData = bookData;
 
 		next();
 	} catch (error) {
@@ -38,4 +35,60 @@ const VerifyBook = async (
 	}
 };
 
-export default VerifyBook;
+export const VerifyBookAuthor = async (
+	req: VerifyBook,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const { id } = req.params;
+		const { lang } = req.query;
+
+		const {
+			error,
+			bookData,
+			statusCode,
+		}: { error?: string; bookData?: BookInterface; statusCode: number } =
+			await verifyBookAuthor(
+				{ query: { lang: lang === "ar" ? "ar" : "en" } },
+				id,
+				req.auth.user._id,
+			);
+
+		if (error) return res.status(statusCode).json({ message: error });
+
+		req.bookData = bookData;
+
+		next();
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+};
+
+export const VerifyBookAdmin = async (
+	req: VerifyBook,
+	res: Response,
+	next: NextFunction,
+) => {
+	try {
+		const { id } = req.params;
+		const { lang } = req.query;
+
+		const {
+			error,
+			bookData,
+			statusCode,
+		}: { error?: string; bookData?: BookInterface; statusCode: number } =
+			await adminVerifyBook(id, {
+				query: { lang: lang === "ar" ? "ar" : "en" },
+			});
+
+		if (error) return res.status(statusCode).json({ message: error });
+
+		req.bookData = bookData;
+
+		next();
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+};

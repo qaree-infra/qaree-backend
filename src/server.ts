@@ -5,6 +5,7 @@ import { graphqlHTTP } from "express-graphql";
 import schema from "./graphql/graphql-schema.js";
 import auth from "./middleware/general/auth.js";
 import uploadRoute from "./upload/route.js";
+// import readChapter from "./readChapter/route.js";
 import adminAuth from "./middleware/general/adminAuth.js";
 
 const app: express.Application = express();
@@ -31,5 +32,7 @@ app.use(
 );
 
 app.use("/upload", uploadRoute);
+
+// app.use("/read", readChapter);
 
 export default app;
