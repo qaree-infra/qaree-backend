@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import { adminAuth } from "../../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
 
 import Offer, { OfferInterface } from "../../../../../models/offer.js";
 

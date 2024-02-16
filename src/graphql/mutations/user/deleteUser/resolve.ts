@@ -1,5 +1,5 @@
 import User from "../../../../models/user.js";
-import { auth } from "../../../../middleware/auth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 
 const deleteAccount = async (_, args, context) => {
 	const { lang } = context.query;

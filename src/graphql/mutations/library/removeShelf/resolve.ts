@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { auth } from "../../../../middleware/auth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 import Shelf, { ShelfInterface } from "../../../../models/shelf.js";
 
 const removeShelfResolve = async (_, args, context) => {

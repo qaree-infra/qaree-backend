@@ -1,4 +1,4 @@
-import { adminAuth } from "../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../middleware/general/adminAuth.js";
 import { validateEmail } from "../../../../utils/helper.js";
 import Admin from "../../../../models/admin.js";
 import bcrypt from "bcrypt";

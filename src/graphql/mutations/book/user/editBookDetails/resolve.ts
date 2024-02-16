@@ -1,5 +1,5 @@
 import Book, { BookInterface } from "../../../../../models/book.js";
-import { auth } from "../../../../../middleware/auth.js";
+import { auth } from "../../../../../middleware/general/auth.js";
 import verifyBookAuthor from "../../../../middleware/verifyBookAuthor.js";
 import Category, { CategoryInterface } from "../../../../../models/category.js";
 

@@ -1,4 +1,4 @@
-import { adminAuth } from "../../../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../../../middleware/general/adminAuth.js";
 import adminVerifyBook from "../../../../../middleware/adminVerifyBook.js";
 import readFile, {
 	parseManifest,

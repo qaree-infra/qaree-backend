@@ -1,4 +1,4 @@
-import { adminAuth } from "../../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
 import verifyBook from "../../../../middleware/verifyBook.js";
 import Offer, { OfferInterface } from "../../../../../models/offer.js";
 

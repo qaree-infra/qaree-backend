@@ -1,5 +1,5 @@
 import Book from "../../../../../models/book.js";
-import { adminAuth } from "../../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
 
 const filterByValues = ["inReview", "published", "rejected"];
 const sortByValues = ["updatedAt", "name", "price"];

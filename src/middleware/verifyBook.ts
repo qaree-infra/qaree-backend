@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import mongoose from "mongoose";
-import Book, { BookInterface } from "../../models/book.js";
-import { AuthRequest } from "../../middleware/auth.js";
+import Book, { BookInterface } from "../models/book.js";
+import { AuthRequest } from "./general/auth.js";
 
 const VerifyBook = async (
 	req: AuthRequest,

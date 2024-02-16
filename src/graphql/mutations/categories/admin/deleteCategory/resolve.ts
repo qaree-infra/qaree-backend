@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Category, { CategoryInterface } from "../../../../../models/category.js";
-import { adminAuth } from "../../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
 
 const deleteCategory = async (_, args, context) => {
 	try {

@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { auth } from "../../../../middleware/auth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 import User from "../../../../models/user.js";
 
 const updateAccountInfo = async (

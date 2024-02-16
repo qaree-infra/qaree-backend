@@ -1,4 +1,4 @@
-import { adminAuth } from "../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../middleware/general/adminAuth.js";
 import Admin from "../../../../models/admin.js";
 
 const deleteAccountResolve = async (_, args, context) => {

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import Shelf from "../../../../models/shelf.js";
 import { ShelfData } from "../../../types/shelf-type.js";
-import { auth } from "../../../../middleware/auth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 
 interface Args {
 	shelf: string;

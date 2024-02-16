@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { adminAuth } from "../../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
 import Category, { CategoryInterface } from "../../../../../models/category.js";
 import validateCategoryName from "../../../../middleware/validateCategory.js";
 

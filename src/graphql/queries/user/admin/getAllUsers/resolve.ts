@@ -1,4 +1,4 @@
-import { adminAuth } from "../../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
 import User from "../../../../../models/user.js";
 
 const sortByValues = { updatedAt: -1, name: 1, createdAt: -1 };

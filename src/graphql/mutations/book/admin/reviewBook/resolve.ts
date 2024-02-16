@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Book, { BookInterface } from "../../../../../models/book.js";
-import { adminAuth } from "../../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
 
 const reviewBookResolve = async (_, args, context) => {
 	try {

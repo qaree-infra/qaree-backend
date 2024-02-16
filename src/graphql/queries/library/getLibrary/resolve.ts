@@ -1,4 +1,4 @@
-import { auth } from "../../../../middleware/auth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 import Shelf from "../../../../models/shelf.js";
 import { ShelfData } from "../../../types/shelf-type.js";
 

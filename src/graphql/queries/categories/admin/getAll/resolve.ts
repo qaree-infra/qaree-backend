@@ -1,5 +1,5 @@
 import Category, {CategoryInterface} from "../../../../../models/category.js";
-import { adminAuth } from "../../../../../middleware/adminAuth.js";
+import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
 
 const getAllResolve = async (_, args, context) => {
 	try {

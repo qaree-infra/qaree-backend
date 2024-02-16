@@ -5,10 +5,10 @@ import uploadUserAvatarController from "./controller/Avatar/user.js";
 import uploadBookCoverController from "./controller/book/uploadCover.js";
 import uploadBookFileController from "./controller/book/uploadFile.js";
 import multer from "multer";
-import VerifyFile from "./middlewares/verifyFile.js";
-import Auth from "./middlewares/Auth.js";
-import AdminAuth from "./middlewares/AdminAuth.js";
-import VerifyBook from "./middlewares/verifyBook.js";
+import VerifyFile from "../middleware/verifyFile.js";
+import Auth from "../middleware/Auth.js";
+import AdminAuth from "../middleware/AdminAuth.js";
+import VerifyBook from "../middleware/verifyBook.js";
 
 const router = Router();
 

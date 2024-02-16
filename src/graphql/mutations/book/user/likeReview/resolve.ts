@@ -1,4 +1,4 @@
-import { auth } from "../../../../../middleware/auth.js";
+import { auth } from "../../../../../middleware/general/auth.js";
 import BookReview, {
 	BookReviewInterface,
 } from "../../../../../models/bookReview.js";

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { auth } from "../../../../middleware/auth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 import verifyBook from "../../../middleware/verifyBook.js";
 import Shelf, { ShelfInterface } from "../../../../models/shelf.js";
 import { ShelfData } from "../../../types/shelf-type.js";
