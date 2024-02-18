@@ -10,7 +10,7 @@ export interface UserInterface {
 	followers?: Array<Schema.Types.ObjectId>;
 	following?: Array<Schema.Types.ObjectId>;
 	books?: Array<Schema.Types.ObjectId>;
-	bookReads: number;
+	bookReads: Array<Schema.Types.ObjectId>;
 	bio: string;
 }
 
@@ -53,7 +53,8 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 			ref: "Book",
 		},
 		bookReads: {
-			type: Number,
+			type: [Schema.Types.ObjectId],
+			// todo: 
 		},
 		bio: {
 			type: String,
