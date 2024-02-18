@@ -7,6 +7,11 @@ export interface UserInterface {
 	password: string;
 	avatar?: Schema.Types.ObjectId;
 	valid: boolean;
+	followers?: Array<Schema.Types.ObjectId>;
+	following?: Array<Schema.Types.ObjectId>;
+	books?: Array<Schema.Types.ObjectId>;
+	bookReads: number;
+	bio: string;
 }
 
 const userSchema: Schema = new mongoose.Schema<UserInterface>(
@@ -29,11 +34,30 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 		},
 		avatar: {
 			type: Schema.Types.ObjectId,
-			ref: "File"
+			ref: "File",
 		},
 		valid: {
 			type: Boolean,
 			default: false,
+		},
+		followers: {
+			type: [Schema.Types.ObjectId],
+			ref: "User",
+		},
+		following: {
+			type: [Schema.Types.ObjectId],
+			ref: "User",
+		},
+		books: {
+			type: [Schema.Types.ObjectId],
+			ref: "Book",
+		},
+		bookReads: {
+			type: Number,
+		},
+		bio: {
+			type: String,
+			default: "",
 		},
 	},
 	{
