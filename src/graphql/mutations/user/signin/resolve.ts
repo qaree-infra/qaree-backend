@@ -34,6 +34,9 @@ const signIn = async (parent, args, context) => {
 				lang === "ar" ? "هذا المستخدم غير موجود" : "User not found.",
 			);
 
+		if (!existingUser.valid)
+			throw new Error(lang === "ar" ? "مستخدم غير صالح" : "Invalid user");
+
 		const isPasswordCorrect = await bcrypt.compare(
 			password,
 			existingUser.password,
