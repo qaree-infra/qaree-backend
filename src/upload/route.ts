@@ -4,6 +4,7 @@ import uploadAdminAvatarController from "./controller/Avatar/admin.js";
 import uploadUserAvatarController from "./controller/Avatar/user.js";
 import uploadBookCoverController from "./controller/book/uploadCover.js";
 import uploadBookFileController from "./controller/book/uploadFile.js";
+import uploadCategoryIcon from './controller/uploadCategoryIcon.js';
 import multer from "multer";
 import VerifyFile from "../middleware/verifyFile.js";
 import Auth from "../middleware/Auth.js";
@@ -21,7 +22,7 @@ router.post(
 	AdminAuth,
 	upload.single("icon"),
 	VerifyFile,
-	controller,
+	uploadCategoryIcon,
 );
 
 router.post(
