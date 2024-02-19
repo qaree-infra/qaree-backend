@@ -42,6 +42,14 @@ router.post(
 );
 
 router.post(
+	"/admin/avatar",
+	AdminAuth,
+	upload.single("avatar"),
+	VerifyFile,
+	controller,
+);
+
+router.post(
 	"/book/cover/:id",
 	Auth,
 	VerifyBookAuthor,
