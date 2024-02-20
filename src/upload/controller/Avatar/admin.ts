@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { Response, Request } from "express";
 import cloudinarySdk, { UploadApiOptions } from "cloudinary";
 import File, { FileInterface } from "../../../models/file.js";
@@ -25,8 +24,6 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 	try {
 		const admin = req.adminAuth.admin;
 		const file = req.file;
-		const folder = req.url.split("/")[2];
-		const fileRef = req.url.split("/")[1];
 		const options: UploadApiOptions = {
 			folder: `admin/avatar`,
 			width: 200,
