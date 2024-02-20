@@ -7,9 +7,9 @@ import uploadBookFileController from "./controller/book/uploadFile.js";
 import uploadCategoryIcon from "./controller/uploadCategoryIcon.js";
 import multer from "multer";
 import VerifyFile from "../middleware/verifyFile.js";
-import Auth from "../middleware/Auth.js";
-import AdminAuth from "../middleware/AdminAuth.js";
-import { VerifyBookAuthor } from "../middleware/VerifyBook.js";
+import Auth from "../middleware/ForRoutes/Auth.js";
+import AdminAuth from "../middleware/ForRoutes/AdminAuth.js";
+import { VerifyBookAuthor } from "../middleware/ForRoutes/VerifyBook.js";
 
 const router = Router();
 

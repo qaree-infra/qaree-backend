@@ -1,9 +1,9 @@
 import { Router } from "express";
-import Auth from "../middleware/Auth.js";
-import AdminAuth from "../middleware/AdminAuth.js";
+import Auth from "../middleware/ForRoutes/Auth.js";
+import AdminAuth from "../middleware/ForRoutes/AdminAuth.js";
 // import readChapter from "./controller/readChapter.js";
 // import adminAuth from "../middleware/general/adminAuth.js";
-import { VerifyBookAdmin, VerifyBookAuthor } from "../middleware/VerifyBook.js";
+import { VerifyBookAdmin, VerifyBookAuthor } from "../middleware/ForRoutes/VerifyBook.js";
 import readChapterForAdmin from "./controller/readChapterForAdmin.js";
 import readChapterForAuthor from "./controller/readChapterForAuthor.js";
 

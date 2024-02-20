@@ -1,9 +1,9 @@
 import { Response, NextFunction } from "express";
-import { BookInterface } from "../models/book.js";
-import { AuthRequest } from "./general/auth.js";
-import verifyBook from "./general/verifyBook.js";
-import verifyBookAuthor from "./general/verifyBookAuthor.js";
-import adminVerifyBook from "./general/adminVerifyBook.js";
+import { BookInterface } from "../../models/book.js";
+import { AuthRequest } from "../general/auth.js";
+import verifyBook from "../general/verifyBook.js";
+import verifyBookAuthor from "../general/verifyBookAuthor.js";
+import adminVerifyBook from "../general/adminVerifyBook.js";
 
 interface VerifyBook extends AuthRequest {
 	bookData: BookInterface;
