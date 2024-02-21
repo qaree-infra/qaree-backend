@@ -5,8 +5,13 @@ export interface UserInterface {
 	name: string;
 	email: string;
 	password: string;
-	avatar?: string;
+	avatar?: Schema.Types.ObjectId;
 	valid: boolean;
+	followers?: Array<Schema.Types.ObjectId>;
+	following?: Array<Schema.Types.ObjectId>;
+	books?: Array<Schema.Types.ObjectId>;
+	bookReads: Array<Schema.Types.ObjectId>;
+	bio: string;
 }
 
 const userSchema: Schema = new mongoose.Schema<UserInterface>(
@@ -28,12 +33,32 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 			require: [true, "please enter your password!"],
 		},
 		avatar: {
-			type: String,
-			trim: true,
+			type: Schema.Types.ObjectId,
+			ref: "File",
 		},
 		valid: {
 			type: Boolean,
 			default: false,
+		},
+		followers: {
+			type: [Schema.Types.ObjectId],
+			ref: "User",
+		},
+		following: {
+			type: [Schema.Types.ObjectId],
+			ref: "User",
+		},
+		books: {
+			type: [Schema.Types.ObjectId],
+			ref: "Book",
+		},
+		bookReads: {
+			type: [Schema.Types.ObjectId],
+			// todo: 
+		},
+		bio: {
+			type: String,
+			default: "",
 		},
 	},
 	{

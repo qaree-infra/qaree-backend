@@ -9,7 +9,7 @@ export interface BookInterface {
 	isbn: string;
 	edition: number;
 	publishingRights: boolean;
-	categories: Array<string>;
+	categories: Array<Schema.Types.ObjectId>;
 	avgRate: number;
 	price: number;
 	cover: Schema.Types.ObjectId;
@@ -18,10 +18,12 @@ export interface BookInterface {
 	deleted: boolean;
 	language: string;
 	author: Schema.Types.ObjectId;
+	reviewer: Schema.Types.ObjectId;
 	status: bookStatus;
 	createdAt: Date;
 	updatedAt: Date;
 	publishionDate: Date;
+	previousPublishingData: Date;
 	rejectionReasons: string;
 }
 
@@ -52,7 +54,8 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			trim: true,
 		},
 		categories: {
-			type: [String],
+			type: [Schema.Types.ObjectId],
+			ref: "Category",
 			require: [true, "this field is required"],
 		},
 		avgRate: {
@@ -85,6 +88,10 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			require: [true, "please enter book author!"],
 			ref: "User",
 		},
+		reviewer: {
+			type: Schema.Types.ObjectId,
+			ref: "Admin",
+		},
 		status: {
 			type: String,
 			default: "draft",
@@ -93,6 +100,9 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 		price: {
 			type: Number,
 			default: 0,
+		},
+		previousPublishingData: {
+			type: Date,
 		},
 		publishionDate: {
 			type: Date,
