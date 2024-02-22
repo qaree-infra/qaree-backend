@@ -1,4 +1,5 @@
 # Qaree
+
 Qaree is a mobile app for e-book reading, with the ability to communicate with readers and authors in one-to-one chats or book communities (such as simple chat groups).
 
 ## Table of content
@@ -19,7 +20,6 @@ Qaree is a mobile app for e-book reading, with the ability to communicate with r
 - You can use this app to buy books, then read them, or review them, create your own library, chat with others, or on books communityes.
 - This repository contains Entagk backend only, Publishing services repository [here](https://github.com/MohamedAli00949/entagk-fontend), Mobile app [here]().
 
-
 ## Built With
 
 - [Node.js](https://nodejs.org/en/) - Node.js is an open-source, cross-platform, back-end JavaScript runtime environment.
@@ -34,39 +34,14 @@ Qaree is a mobile app for e-book reading, with the ability to communicate with r
 
 ```
 ├── src
-|   ├── setting.test.js
-|   ├── task.test.js
-|   ├── templates.test.js
-|   └── user.test.js
-├── build
-├── controllers
-|   ├── sendMail.js
-|   ├── setting.js
-|   ├── task.js
-|   ├── template.js
-|   └── user.js
-├── middlewares
-|   ├── auth.js
-|   ├── valdiateTimeAndAudioData.js
-|   ├── validatePrivateTemplate.js
-|   ├── validateTask.js
-|   ├── validateTaskData.js
-|   ├── validateTemplate.js
-|   ├── validateTemplateData.js
-|   └── VerifyResetToken.js
-├── models
-|   ├── resetId.js
-|   ├── setting.js
-|   ├── task.js
-|   ├── template.js
-|   └── user.js
-├── routers
-|   ├── setting.js
-|   ├── task.js
-|   ├── template.js
-|   └── user.js
-├── utils
-|   └── helper.js
+|   ├── graphql
+|   ├── middeleware
+|   ├── models
+|   ├── readChapter
+|   ├── upload
+|   ├── utils
+|   ├── index.js
+|   └── server.js
 ├── .env.example
 ├── .gitignore
 ├── index.js
@@ -78,17 +53,17 @@ Qaree is a mobile app for e-book reading, with the ability to communicate with r
 
 ### Highlight Folders:
 
-- `__test__` -- Contains all testing codes.
-- `build` -- Contains all front-end files.
-- `controllers` -- Contains all methods that process an endpoint.
-- `middlewares` -- Contains all middlewares needed for the application in one place.
-- `models` -- Contains all MongoDB models
-- `routers` -- Contains all the routes that you have created using Express Router and what they do would be exported from a Controller file.
+- `src` -- Contains all code files.
+  - `graphql` -- Contains all things related with graphql.
+  - `middlewares` -- Contains all middlewares needed for the application in one place.
+  - `models` -- Contains all MongoDB models
+  - `readChapter` -- Contains all functionality of ePub reading.
+  - `upload` -- Contains all functionality of uploading files.
 
 ### Highlight Files:
 
 - `.env.example` -- Contains required environment variables
-- `server.js` -- Application entry end point
+- `tsconfig.json` -- Configuration file used in TypeScript
 - `package.json` -- File which contains all the project npm details, scripts and dependencies.
 
 ## Prerequisites
@@ -126,11 +101,13 @@ npm run start
 Qaree API is organized around [GraphQL](https://en.wikipedia.org/wiki/GraphQL) for data fetching. Our API has predictable resource-oriented URLs, accepts JSON-encoded request bodies, returns [JSON-encoded](http://www.json.org/) responses, and uses standard HTTP response codes and verbs. It also uses [JWT](https://jwt.io/) for authentication.
 
 ### Base URL
+
 ```
 https://publishingcompany-backend.onrender.com/graphql
 ```
 
 ### Endpoints
+
 > Head over [Here](https://documenter.getpostman.com/view/16838332/2s9YJaXiZD) for Postman API documentation.
 
 ## Issues
@@ -140,4 +117,3 @@ If you have an issue, please open it in the issues tab and I will respond.
 ## License
 
 > This software is licensed under MIT License, See [License](./LICENSE) for more information.
-
