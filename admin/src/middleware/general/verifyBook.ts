@@ -31,7 +31,7 @@ const verifyBook = async (bookId: string, context: ContextInterface) => {
 
 		const bookData: BookInterface | null = await Book.findOne({
 			_id: bookId,
-			status: "published",
+			status: { $ne: "draft" },
 		})
 			.populate("categories")
 			.populate("author")
@@ -40,13 +40,16 @@ const verifyBook = async (bookId: string, context: ContextInterface) => {
 
 		if (bookData === null) {
 			return {
-				error: lang === "ar" ? "هذا الكتاب غير موجود" : "Unfound book",
 				bookData: null,
+				error:
+					lang === "ar"
+						? "غير مسموح لك اى عمليات على هذه البيانات"
+						: "You are not allowed to show this book data",
 				statusCode: 404,
 			};
 		}
 
-		return { bookData, error: "", statusCode: 200 };
+		return { bookData, error: null, statusCode: 200 };
 	} catch (error) {
 		return { error: error.message, bookData: null, statusCode: 500 };
 	}

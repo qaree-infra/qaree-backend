@@ -5,7 +5,6 @@ import multer from "multer";
 import VerifyFile from "../middleware/verifyFile.js";
 import Auth from "../middleware/ForRoutes/Auth.js";
 
-
 const router = Router();
 
 const upload = multer({
@@ -21,7 +20,7 @@ router.post(
 );
 
 router.post(
-	"/admin/avatar",
+	"/avatar",
 	Auth,
 	upload.single("avatar"),
 	VerifyFile,
