@@ -5,10 +5,6 @@ const resetPasswordInputs = {
 		type: GraphQLString,
 		description: "",
 	},
-	oldPassword: {
-		type: GraphQLString,
-		description: "",
-	}
 };
 
 export default resetPasswordInputs;

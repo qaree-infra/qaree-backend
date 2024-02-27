@@ -17,7 +17,7 @@ function convertArrayToObject(arr: string[]): object {
 	return result;
 }
 
-const resetPassword = async (_, { oldPassword, newPassword }, context) => {
+const resetPassword = async (_, { newPassword }, context) => {
 	const { lang } = context.query;
 	const headers = convertArrayToObject(context.rawHeaders);
 	let token;
@@ -58,7 +58,7 @@ const resetPassword = async (_, { oldPassword, newPassword }, context) => {
 			userId = decodedData?.sub;
 		}
 
-		if (!oldPassword && !newPassword)
+		if (!newPassword)
 			throw new Error(
 				lang === "ar"
 					? "الوسائط غير صالحة، يرجى إدخال البيانات المطلوبة."
@@ -70,13 +70,6 @@ const resetPassword = async (_, { oldPassword, newPassword }, context) => {
 				lang === "ar"
 					? "كلمة المرور الجديدة مطلوبة"
 					: "The new password is required",
-			);
-
-		if (!oldPassword)
-			throw new Error(
-				lang === "ar"
-					? "كلمة المرور القديمة مطلوبة"
-					: "The old password is required",
 			);
 
 		const user = await User.findById(userId);
