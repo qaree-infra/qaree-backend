@@ -1,5 +1,5 @@
 import Book from "../../../../../models/book.js";
-import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
+import { auth } from "../../../../../middleware/general/auth.js";
 
 const filterByValues = ["inReview", "published", "rejected"];
 const sortByValues = ["updatedAt", "name", "price"];
@@ -8,9 +8,9 @@ const getBooks = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { filterBy, sortBy } = args;
 		const page = args?.page || 1;

@@ -1,4 +1,4 @@
-import { adminAuth } from "../../../../middleware/general/adminAuth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 import { validateEmail } from "../../../../utils/helper.js";
 import Admin from "../../../../models/admin.js";
 import bcrypt from "bcrypt";
@@ -7,9 +7,9 @@ const registerResolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { name, email, password } = args;
 

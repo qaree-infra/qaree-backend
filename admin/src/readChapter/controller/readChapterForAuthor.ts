@@ -1,4 +1,4 @@
-import { AuthRequest } from "../../middleware/general/adminAuth.js";
+import { AuthRequest } from "../../middleware/general/auth.js";
 import { BookInterface } from "../../models/book.js";
 import readFile, {
 	getBookFiles,

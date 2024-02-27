@@ -1,18 +1,22 @@
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { Request, Response, NextFunction } from "express";
-import User, { UserInterface } from "../../models/user.js";
+import Admin, { AdminInterface } from "../../models/admin.js";
 
 export type auth = {
 	error?: string;
-	user?: UserInterface;
+	admin?: AdminInterface;
 };
 
 export interface AuthRequest extends Request {
 	auth: auth;
 }
 
-const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
+const auth = async (
+	req: AuthRequest,
+	res: Response,
+	next: NextFunction,
+) => {
 	try {
 		const { lang } = req.query;
 		let token: string = "";
@@ -46,7 +50,7 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 			userId: string;
 
 		if (token && isCustomAuth) {
-			decodedData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+			decodedData = jwt.verify(token, process.env.ADMIN_ACCESS_TOKEN_SECRET);
 
 			userId = decodedData?.id;
 		} else {
@@ -63,11 +67,11 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 			return next();
 		}
 
-		const user: UserInterface | null =
-			(await User.findById(userId).select("-password")) ||
-			(await User.findOne({ email: decodedData.email }).select("-password"));
+		const admin: AdminInterface | null =
+			(await Admin.findById(userId).select("-password")) ||
+			(await Admin.findOne({ email: decodedData.email }).select("-password"));
 
-		if (!user) {
+		if (!admin) {
 			req.auth = {
 				error: lang === "ar" ? "هذا المستخدم غير موجود" : "User not found",
 			};
@@ -75,7 +79,7 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 			return next();
 		}
 
-		req.auth = { user: user, error: "" };
+		req.auth = { admin: admin, error: "" };
 
 		next();
 	} catch (error) {

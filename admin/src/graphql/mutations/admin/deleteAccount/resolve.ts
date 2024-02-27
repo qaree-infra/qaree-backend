@@ -1,15 +1,15 @@
-import { adminAuth } from "../../../../middleware/general/adminAuth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 import Admin from "../../../../models/admin.js";
 
 const deleteAccountResolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
-		const adminId = adminAuth.admin._id;
+		const adminId = auth.admin._id;
 
 		const admin = await Admin.findByIdAndDelete(adminId);
 

@@ -1,17 +1,17 @@
 import {
+	GraphQLString,
 	GraphQLInt,
 	GraphQLList,
 	GraphQLObjectType,
-	GraphQLString,
 } from "graphql";
-import userType from "../../../../types/user-type.js";
 import resolve from "./resolve.js";
+import userType from "../../../types/user-type.js";
 
 const type = new GraphQLObjectType({
-	name: "GetTopAuthors",
-	description: "this is get top authors query",
+	name: "GetAllUsersType",
+	description: "",
 	fields: {
-		authors: {
+		users: {
 			type: new GraphQLList(userType),
 			description: "",
 		},
@@ -31,12 +31,20 @@ const type = new GraphQLObjectType({
 });
 
 const args = {
+	sortBy: {
+		type: GraphQLString,
+		description: "",
+	},
 	page: {
 		type: GraphQLInt,
 		description: "",
 	},
 	limit: {
 		type: GraphQLInt,
+		description: "",
+	},
+	keyword: {
+		type: GraphQLString,
 		description: "",
 	},
 };

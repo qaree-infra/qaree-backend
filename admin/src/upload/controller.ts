@@ -59,17 +59,11 @@ const uploadBookRelatedFile = async (
 
 type auth = {
 	error?: string;
-	user?: UserInterface;
-};
-
-type adminAuth = {
-	error?: string;
 	admin?: AdminInterface;
 };
 
 interface UploadRequest extends Request {
 	auth: auth;
-	adminAuth: adminAuth;
 }
 
 const uploadController = async (req: UploadRequest, res: Response) => {
@@ -78,7 +72,7 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 		const file = req.file;
 		const folder = req.url.split("/")[2];
 		const fileRef = req.url.split("/")[1];
-		const user = req.auth.user;
+		const user = req.auth.admin;
 		const options: UploadApiOptions = {
 			folder: `${fileRef}/${folder}`,
 		};
@@ -148,7 +142,7 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 
 			return res.status(200).json(savedAvatar);
 		} else if (fileRef === "category") {
-			const admin = req.adminAuth.admin;
+			const admin = req.auth.admin;
 			const { id } = req.params;
 			const { lang } = req.query;
 
@@ -202,7 +196,7 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 
 			return res.status(200).json(savedFile);
 		} else if (fileRef === "admin") {
-			const admin = req.adminAuth.admin;
+			const admin = req.auth.admin;
 			options.width = 200;
 			options.height = 200;
 			options.crop = "fill";

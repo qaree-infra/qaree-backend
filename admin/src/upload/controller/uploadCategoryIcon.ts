@@ -13,13 +13,13 @@ cloudinary.config({
 	api_secret: process.env.CLOUDINARY_CLOUD_API_SECRET,
 });
 
-type adminAuth = {
+type auth = {
 	error?: string;
 	admin?: AdminInterface;
 };
 
 interface UploadRequest extends Request {
-	adminAuth: adminAuth;
+	auth: auth;
 }
 
 const uploadController = async (req: UploadRequest, res: Response) => {
@@ -28,7 +28,7 @@ const uploadController = async (req: UploadRequest, res: Response) => {
 		const file = req.file;
 		const folder = req.url.split("/")[2];
 		const fileRef = req.url.split("/")[1];
-		const admin = req.adminAuth.admin;
+		const admin = req.auth.admin;
 		const options: UploadApiOptions = {
 			folder: `${fileRef}/${folder}`,
 		};

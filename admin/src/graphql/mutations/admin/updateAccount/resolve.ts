@@ -1,4 +1,4 @@
-import { adminAuth } from "../../../../middleware/general/adminAuth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 import { validateEmail } from "../../../../utils/helper.js";
 import Admin from "../../../../models/admin.js";
 import bcrypt from "bcrypt";
@@ -7,13 +7,13 @@ const updateAccountResolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { name, oldPassword, newPassword } = args;
 
-		const oldUser = await Admin.findById(adminAuth.admin._id);
+		const oldUser = await Admin.findById(auth.admin._id);
 
 		if (!name && !oldPassword && !newPassword)
 			throw new Error(

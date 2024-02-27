@@ -52,7 +52,7 @@ export const VerifyBookAuthor = async (
 			await verifyBookAuthor(
 				{ query: { lang: lang === "ar" ? "ar" : "en" } },
 				id,
-				req.auth.user._id,
+				req.auth.admin._id,
 			);
 
 		if (error) return res.status(statusCode).json({ message: error });

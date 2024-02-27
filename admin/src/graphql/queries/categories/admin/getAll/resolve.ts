@@ -1,11 +1,11 @@
 import Category, {CategoryInterface} from "../../../../../models/category.js";
-import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
+import { auth } from "../../../../../middleware/general/auth.js";
 
 const getAllResolve = async (_, args, context) => {
 	try {
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { completed } = args;
 		const page = args?.page || 1;

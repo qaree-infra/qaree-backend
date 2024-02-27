@@ -1,11 +1,11 @@
-import adminSignIn from './signIn/mutation.js'
-import adminRegister from './register/mutation.js'
-import adminUpdateAccount from './updateAccount/mutation.js'
-import adminDeleteAccount from './deleteAccount/mutation.js';
+import signIn from './signIn/mutation.js'
+import register from './register/mutation.js'
+import updateAccount from './updateAccount/mutation.js'
+import deleteAccount from './deleteAccount/mutation.js';
 
 export default {
-  adminSignIn,
-  adminRegister,
-  adminUpdateAccount,
-  adminDeleteAccount
+  signIn,
+  register,
+  updateAccount,
+  deleteAccount
 }

@@ -1,5 +1,5 @@
-import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
-import User from "../../../../../models/user.js";
+import { auth } from "../../../../middleware/general/auth.js";
+import User from "../../../../models/user.js";
 
 const sortByValues = { updatedAt: -1, name: 1, createdAt: -1 };
 
@@ -7,9 +7,9 @@ const resolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { sortBy } = args;
 		const page = args?.page || 1;

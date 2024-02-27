@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
+import { auth } from "../../../../../middleware/general/auth.js";
 import Category, { CategoryInterface } from "../../../../../models/category.js";
 import validateCategoryName from "../../../../middleware/validateCategory.js";
 
@@ -7,9 +7,9 @@ const editCategoryResolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { name_ar, name_en, categoryId } = args;
 

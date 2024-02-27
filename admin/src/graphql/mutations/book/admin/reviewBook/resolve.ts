@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 import Book, { BookInterface } from "../../../../../models/book.js";
-import { adminAuth } from "../../../../../middleware/general/adminAuth.js";
+import { auth } from "../../../../../middleware/general/auth.js";
 
 const reviewBookResolve = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 
-		const adminAuth: adminAuth = context.adminAuth;
+		const auth: auth = context.auth;
 
-		if (adminAuth?.error) throw new Error(adminAuth?.error);
+		if (auth?.error) throw new Error(auth?.error);
 
 		const { bookId, status, content } = args;
 
@@ -60,7 +60,7 @@ const reviewBookResolve = async (_, args, context) => {
 			await Book.findByIdAndUpdate(bookId, {
 				status: status === "approved"? "published" : "rejected",
 				publishionDate: new Date().toISOString(),
-				reviewer: adminAuth.admin._id
+				reviewer: auth.admin._id
 			});
 
 			return { success: true, message: "reviewed successfully" };
@@ -68,7 +68,7 @@ const reviewBookResolve = async (_, args, context) => {
 			await Book.findByIdAndUpdate(bookId, {
 				status: "rejected",
 				rejectionReasons: content,
-				reviewer: adminAuth.admin._id
+				reviewer: auth.admin._id
 			});
 
 			return { success: true, message: "reviewed successfully" };
