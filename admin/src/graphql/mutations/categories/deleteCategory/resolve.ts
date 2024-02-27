@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import { auth } from "../../../../../middleware/general/auth.js";
-import Category, { CategoryInterface } from "../../../../../models/category.js";
-import validateCategoryName from "../../../../middleware/validateCategory.js";
+import Category, { CategoryInterface } from "../../../../models/category.js";
+import { auth } from "../../../../middleware/general/auth.js";
 
-const editCategoryResolve = async (_, args, context) => {
+const deleteCategory = async (_, args, context) => {
 	try {
 		const { lang } = context.query;
 
@@ -11,7 +10,7 @@ const editCategoryResolve = async (_, args, context) => {
 
 		if (auth?.error) throw new Error(auth?.error);
 
-		const { name_ar, name_en, categoryId } = args;
+		const { categoryId } = args;
 
 		if (!categoryId)
 			throw new Error(
@@ -32,26 +31,16 @@ const editCategoryResolve = async (_, args, context) => {
 				lang === "ar" ? "هذا التصنيف غير موجود" : "This category is nonfound",
 			);
 
-		const validateArgs: { error: string; valid: boolean } =
-			await validateCategoryName(args, context, "update");
+		await Category.deleteOne({ _id: category._id });
 
-		if (!validateArgs.valid) throw new Error(validateArgs.error);
-
-		const updatedCateogory: CategoryInterface =
-			await Category.findByIdAndUpdate(
-				category._id,
-				{
-					name_ar,
-					name_en,
-				},
-				{ new: true },
-			);
-
-		return updatedCateogory;
+		return {
+			message: "Category deleted successfully",
+			success: true,
+		};
 	} catch (error) {
 		console.log(error);
 		throw new Error(error);
 	}
 };
 
-export default editCategoryResolve;
+export default deleteCategory;

@@ -1,5 +1,5 @@
 import { GraphQLString } from "graphql";
-import categoryType from "../../../../types/category-type.js";
+import categoryType from "../../../types/category-type.js";
 import editCategroyResolve from "./resolve.js";
 
 const args = {

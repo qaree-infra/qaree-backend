@@ -1,5 +1,5 @@
-import Category, {CategoryInterface} from "../../../../../models/category.js";
-import { auth } from "../../../../../middleware/general/auth.js";
+import Category, {CategoryInterface} from "../../../../models/category.js";
+import { auth } from "../../../../middleware/general/auth.js";
 
 const getAllResolve = async (_, args, context) => {
 	try {

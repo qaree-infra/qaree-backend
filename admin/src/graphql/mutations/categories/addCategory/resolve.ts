@@ -1,6 +1,6 @@
-import { auth } from "../../../../../middleware/general/auth.js";
-import Category, { CategoryInterface } from "../../../../../models/category.js";
-import validateCategoryName from "../../../../middleware/validateCategory.js";
+import { auth } from "../../../../middleware/general/auth.js";
+import Category, { CategoryInterface } from "../../../../models/category.js";
+import validateCategoryName from "../../../middleware/validateCategory.js";
 
 const addCategroyResolve = async (_, args, context) => {
 	try {
