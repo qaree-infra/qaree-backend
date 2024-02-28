@@ -21,6 +21,9 @@ const userType = new GraphQLObjectType({
 		avatar: {
       type: fileType,
     },
+    bio: {
+      type: GraphQLString,
+    },
     updatedAt: {
       type: GraphQLString
     },

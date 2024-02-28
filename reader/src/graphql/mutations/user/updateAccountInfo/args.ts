@@ -5,6 +5,10 @@ const updateAccountArgs = {
     type: GraphQLString,
     description: "",
   },
+  bio: {
+    type: GraphQLString,
+    description: "",
+  },
   oldPassword: {
     type: GraphQLString,
     description: "",

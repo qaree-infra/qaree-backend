@@ -4,7 +4,7 @@ import User from "../../../../models/user.js";
 
 const updateAccountInfo = async (
 	_,
-	{ name, oldPassword, newPassword },
+	{ name, oldPassword, newPassword, bio },
 	context,
 ) => {
 	try {
@@ -15,7 +15,7 @@ const updateAccountInfo = async (
 
 		const oldUser = await User.findById(auth.user._id);
 
-		if (!name && !oldPassword && !newPassword)
+		if (!name && !oldPassword && !newPassword && !bio)
 			throw new Error(
 				lang === "ar"
 					? "من فضلك ادخل البيانات الجديدة"
@@ -52,11 +52,12 @@ const updateAccountInfo = async (
 
 			const passwordHash = await bcrypt.hash(newPassword, 12);
 			newUser = Object.assign(oldUser, {
+				bio,
 				name,
 				password: passwordHash,
 			});
 		} else {
-			newUser = Object.assign(oldUser, { name });
+			newUser = Object.assign(oldUser, { name, bio });
 		}
 
 		const afterUpdate = await User.findByIdAndUpdate(
