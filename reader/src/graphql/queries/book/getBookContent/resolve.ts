@@ -1,14 +1,14 @@
 import cloudinarySdk from "cloudinary";
-import verifyBook from "../../../../../middleware/verifyBook.js";
-import { BookInterface } from "../../../../../../models/book.js";
-import File, { FileInterface } from "../../../../../../models/file.js";
+import verifyBook from "../../../middleware/verifyBook.js";
+import { BookInterface } from "../../../../models/book.js";
+import File, { FileInterface } from "../../../../models/file.js";
 import readFile, {
 	getBookFiles,
 	getEPubRootFile,
 	parseManifest,
 	parseSpain,
 	parseTOC,
-} from "../../../../../../utils/readFile.js";
+} from "../../../../utils/readFile.js";
 
 const cloudinary = cloudinarySdk.v2;
 

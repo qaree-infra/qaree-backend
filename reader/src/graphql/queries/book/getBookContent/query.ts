@@ -1,7 +1,8 @@
-import { GraphQLString } from "graphql";
-import ePubManifestType from "../../../../../types/fileContent/ePubManifest.js";
-
+import {
+	GraphQLString,
+} from "graphql";
 import resolve from "./resolve.js";
+import { bookContent } from "../../../types/fileContent/ePubContent.js";
 
 const args = {
 	bookId: {
@@ -11,7 +12,7 @@ const args = {
 };
 
 export default {
-	type: ePubManifestType,
+	type: bookContent,
 	args,
 	resolve,
 };
