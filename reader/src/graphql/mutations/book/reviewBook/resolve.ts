@@ -1,6 +1,6 @@
-import { auth } from "../../../../../middleware/general/auth.js";
-import BookReview from "../../../../../models/bookReview.js";
-import verifyBook from "../../../../middleware/verifyBook.js";
+import { auth } from "../../../../middleware/general/auth.js";
+import BookReview from "../../../../models/bookReview.js";
+import verifyBook from "../../../middleware/verifyBook.js";
 
 interface ArgsInterface {
 	bookId: string;

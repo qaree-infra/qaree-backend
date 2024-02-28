@@ -1,16 +1,21 @@
-import { GraphQLList, GraphQLObjectType, GraphQLInt, GraphQLString } from 'graphql'
-import resolve from './resolve.js'
-import offerType from '../../../../types/offer-type.js'
+import {
+	GraphQLList,
+	GraphQLObjectType,
+	GraphQLInt,
+	GraphQLString,
+} from "graphql";
+import resolve from "./resolve.js";
+import offerType from "../../../types/offer-type.js";
 
 const getAllOffersType = new GraphQLObjectType({
-  name: "GetAllOffers",
-  description: "this is get all offers",
-  fields: {
-    offers: {
-      type: new GraphQLList(offerType),
-      description: ""
-    },
-    currentPage: {
+	name: "GetAllOffers",
+	description: "this is get all offers",
+	fields: {
+		offers: {
+			type: new GraphQLList(offerType),
+			description: "",
+		},
+		currentPage: {
 			type: GraphQLInt,
 			description: "",
 		},
@@ -22,26 +27,26 @@ const getAllOffersType = new GraphQLObjectType({
 			type: GraphQLInt,
 			description: "",
 		},
-  }
-})
+	},
+});
 
 const args = {
-  page: {
-    type: GraphQLInt,
-    description: "",
-  },
-  limit: {
-    type: GraphQLInt,
-    description: "",
-  },
-  sort: {
-    type: GraphQLString,
-    description: "",
-  }
-}
+	page: {
+		type: GraphQLInt,
+		description: "",
+	},
+	limit: {
+		type: GraphQLInt,
+		description: "",
+	},
+	sort: {
+		type: GraphQLString,
+		description: "",
+	},
+};
 
 export default {
-  type: getAllOffersType,
-  args,
-  resolve,
-}
+	type: getAllOffersType,
+	args,
+	resolve,
+};

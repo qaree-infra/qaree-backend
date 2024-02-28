@@ -1,4 +1,4 @@
-import Offer from "../../../../../models/offer.js";
+import Offer from "../../../../models/offer.js";
 
 const sortByValues = { createdAt: -1, expireAt: -1, percent: 1 };
 
