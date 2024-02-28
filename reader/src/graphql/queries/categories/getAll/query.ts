@@ -5,7 +5,7 @@ import {
 	GraphQLObjectType,
 } from "graphql";
 import getAllResolve from "./resolve.js";
-import categoryType from "../../../../types/category-type.js";
+import categoryType from "../../../types/category-type.js";
 
 const getAllCategories = new GraphQLObjectType({
 	name: "GetAllCategories",

@@ -1,4 +1,4 @@
-import Category, { CategoryInterface } from "../../../../../models/category.js";
+import Category, { CategoryInterface } from "../../../../models/category.js";
 
 const getAllCategoriesResolve = async (_, args, context) => {
 	try {
