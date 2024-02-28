@@ -54,6 +54,7 @@ const resendValidingOTP = async (parent, { email }, context) => {
 			);
 		}
 	} catch (error) {
+		console.log(error);
 		throw new Error(error);
 	}
 };

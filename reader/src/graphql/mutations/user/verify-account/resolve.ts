@@ -35,7 +35,7 @@ const verifyAccount = async (parent, { otp, email }, context) => {
 				lang === "ar" ? "هذا المستخدم غير موجود" : "User not found.",
 			);
 
-		if (user.valid)
+		if (user?.valid)
 			throw new Error(
 				lang === "ar"
 					? "هذا الحساب تم توثيقه من قبل"

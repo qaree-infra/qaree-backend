@@ -4,10 +4,6 @@ const resendValidatingAccountInputs = {
 	email: {
 		type: GraphQLString,
 		description: "",
-	},
-	lang: {
-		type: GraphQLString,
-		description: "",
 	}
 };
 
