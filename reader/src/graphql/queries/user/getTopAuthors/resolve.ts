@@ -1,4 +1,4 @@
-import User, { UserInterface } from "../../../../../models/user.js";
+import User, { UserInterface } from "../../../../models/user.js";
 
 const resolve = async (_, args, context) => {
 	try {

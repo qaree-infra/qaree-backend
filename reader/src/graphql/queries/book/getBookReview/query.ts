@@ -1,6 +1,6 @@
 import { GraphQLString } from "graphql";
 import resolve from "./resolve.js";
-import reviewBookType from "../../../../types/reviewBook-type.js";
+import reviewBookType from "../../../types/reviewBook-type.js";
 
 const args = {
   reviewId: {

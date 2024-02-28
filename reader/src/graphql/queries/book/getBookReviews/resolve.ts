@@ -1,5 +1,5 @@
-import BookReview from "../../../../../models/bookReview.js";
-import verifyBook from "../../../../middleware/verifyBook.js";
+import BookReview from "../../../../models/bookReview.js";
+import verifyBook from "../../../middleware/verifyBook.js";
 
 const sortByValues = { createdAt: -1, rate: -1 };
 

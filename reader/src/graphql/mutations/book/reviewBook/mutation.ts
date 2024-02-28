@@ -6,7 +6,7 @@ import {
 	GraphQLString,
 } from "graphql";
 import reviewBookResolve from "./resolve.js";
-import reviewBookType from "../../../../types/reviewBook-type.js";
+import reviewBookType from "../../../types/reviewBook-type.js";
 
 const reviewBookResponseType = new GraphQLObjectType({
 	name: "ReviewBookResponseType",

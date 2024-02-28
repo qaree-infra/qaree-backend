@@ -4,7 +4,7 @@ import {
 	GraphQLObjectType,
 	GraphQLString,
 } from "graphql";
-import userType from "../../../../types/user-type.js";
+import userType from "../../../types/user-type.js";
 import resolve from "./resolve.js";
 
 const type = new GraphQLObjectType({

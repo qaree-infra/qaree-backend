@@ -1,4 +1,4 @@
-import Book, { BookInterface } from "../../../../../models/book.js";
+import Book, { BookInterface } from "../../../../models/book.js";
 
 const sortByValues = { readers: -1, publishionDate: -1, avgRate: -1 };
 

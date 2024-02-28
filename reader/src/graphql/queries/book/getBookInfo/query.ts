@@ -1,5 +1,5 @@
 import { GraphQLString } from "graphql";
-import bookInfoType from "../../../../types/book-type.js";
+import bookInfoType from "../../../types/book-type.js";
 import getBookInfoResolve from './resolve.js';
 
 export default {

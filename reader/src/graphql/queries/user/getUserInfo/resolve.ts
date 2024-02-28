@@ -1,5 +1,5 @@
-import { auth } from "../../../../../middleware/general/auth.js";
-import User from "../../../../../models/user.js";
+import { auth } from "../../../../middleware/general/auth.js";
+import User from "../../../../models/user.js";
 
 const userInfo = async (_, args, context) => {
 	try {

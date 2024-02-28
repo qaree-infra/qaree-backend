@@ -4,7 +4,7 @@ import {
 	GraphQLInt,
 	GraphQLString,
 } from "graphql";
-import bookInfoType from "../../../../types/book-type.js";
+import bookInfoType from "../../../types/book-type.js";
 import getBooksResolve from "./resolve.js";
 
 const getBooksType = new GraphQLObjectType({

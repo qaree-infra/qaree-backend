@@ -1,5 +1,5 @@
-import { BookInterface } from "../../../../../models/book.js";
-import verifyBook from "../../../../middleware/verifyBook.js";
+import { BookInterface } from "../../../../models/book.js";
+import verifyBook from "../../../middleware/verifyBook.js";
 
 interface ArgsInterface {
 	bookId: string;
