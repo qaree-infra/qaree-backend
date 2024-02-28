@@ -2,7 +2,7 @@ import {
 	GraphQLString,
 } from "graphql";
 import resolve from "./resolve.js";
-import { adminBookContent } from "../../../../../types/fileContent/ePubContent.js";
+import bookContent from "../../../../types/fileContent/ePubContent.js";
 
 const args = {
 	bookId: {
@@ -12,7 +12,7 @@ const args = {
 };
 
 export default {
-	type: adminBookContent,
+	type: bookContent,
 	args,
 	resolve,
 };

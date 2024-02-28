@@ -5,7 +5,7 @@ import {
 	GraphQLObjectType,
 } from "graphql";
 import getUserBooksResolve from "./resolve.js";
-import adminBookType from "../../../../types/adminBook-type.js";
+import adminBookType from "../../../types/book-type.js";
 
 const booksArgs = {
 	sortBy: {

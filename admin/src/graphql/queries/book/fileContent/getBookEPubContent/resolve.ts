@@ -1,12 +1,12 @@
-import { auth } from "../../../../../../middleware/general/auth.js";
-import adminVerifyBook from "../../../../../../middleware/general/verifyBook.js";
+import { auth } from "../../../../../middleware/general/auth.js";
+import adminVerifyBook from "../../../../../middleware/general/verifyBook.js";
 import readFile, {
 	getBookFiles,
 	parseSpain,
 	parseManifest,
 	getEPubRootFile,
 	parseTOC,
-} from "../../../../../../utils/readFile.js";
+} from "../../../../../utils/readFile.js";
 
 const resolve = async (_, args, context) => {
 	try {

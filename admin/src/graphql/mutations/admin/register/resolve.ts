@@ -1,6 +1,6 @@
 import { auth } from "../../../../middleware/general/auth.js";
 import { validateEmail } from "../../../../utils/helper.js";
-import Admin from "../../../../models/admin.js";
+import Admin, { AdminInterface } from "../../../../models/admin.js";
 import bcrypt from "bcrypt";
 
 const registerResolve = async (_, args, context) => {
@@ -36,7 +36,7 @@ const registerResolve = async (_, args, context) => {
 		if (!validateEmail(email))
 			throw new Error(lang === "ar" ? "بريد إلكتروني خاطئ" : "Invalid email");
 
-		const oldUser = await Admin.findOne({ email });
+		const oldUser: AdminInterface = await Admin.findOne({ email });
 		if (oldUser)
 			throw new Error(
 				lang === "ar"
@@ -54,7 +54,7 @@ const registerResolve = async (_, args, context) => {
 		const hashedPassword = await bcrypt.hash(password, 12);
 
 		const newUser = { email, password: hashedPassword, name };
-		const addedUser = await Admin.create(newUser);
+		const addedUser: AdminInterface = await Admin.create(newUser);
 
 		return addedUser;
 	} catch (error) {

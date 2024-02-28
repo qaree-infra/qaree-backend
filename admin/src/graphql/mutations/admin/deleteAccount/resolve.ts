@@ -1,5 +1,5 @@
 import { auth } from "../../../../middleware/general/auth.js";
-import Admin from "../../../../models/admin.js";
+import Admin, { AdminInterface } from "../../../../models/admin.js";
 
 const deleteAccountResolve = async (_, args, context) => {
 	try {
@@ -11,7 +11,7 @@ const deleteAccountResolve = async (_, args, context) => {
 
 		const adminId = auth.admin._id;
 
-		const admin = await Admin.findByIdAndDelete(adminId);
+		const admin: AdminInterface = await Admin.findByIdAndDelete(adminId);
 
 		return {
 			message:

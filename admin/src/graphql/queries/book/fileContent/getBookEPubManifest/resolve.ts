@@ -1,10 +1,10 @@
-import { auth } from "../../../../../../middleware/general/auth.js";
-import adminVerifyBook from "../../../../../../middleware/general/verifyBook.js";
+import { auth } from "../../../../../middleware/general/auth.js";
+import adminVerifyBook from "../../../../../middleware/general/verifyBook.js";
 import readFile, {
-	parseMetadata,
+	parseManifest,
 	getEPubRootFile,
 	getBookFiles,
-} from "../../../../../../utils/readFile.js";
+} from "../../../../../utils/readFile.js";
 
 const resolve = async (_, args, context) => {
 	try {
@@ -34,9 +34,19 @@ const resolve = async (_, args, context) => {
 		);
 
 		const bookContentFileData = await readFile(contentFile, true);
-		const metadata = parseMetadata(bookContentFileData.parsedData.metadata);
+		const manifest = parseManifest(
+			bookContainerURL,
+			bookContentFileData.parsedData.manifest,
+		);
 
-		return metadata;
+		const result = Object.values(manifest).map((file) => {
+			file["mediaType"] = file["media-type"];
+			delete file["media-type"];
+
+			return file;
+		});
+
+		return { files: result, total: result.length };
 	} catch (error) {
 		throw new Error(error);
 	}

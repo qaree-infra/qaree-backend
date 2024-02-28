@@ -2,8 +2,8 @@ import { GraphQLObjectType, GraphQLString, GraphQLBoolean } from "graphql";
 import resolve from "./resolve.js";
 
 const reviewBook = new GraphQLObjectType({
-	name: "AdminBookReview",
-	description: "admin book review type",
+	name: "BookReview",
+	description: "book review type",
 	fields: {
 		message: {
 			type: GraphQLString,

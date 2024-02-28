@@ -8,33 +8,8 @@ export const validateEmail = (email: string): boolean => {
 	return re.test(email);
 };
 
-export const generateOTPCode = () => {
-	const min = 100000;
-	const max = 999999;
-
-	const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-
-	return randomNumber;
-};
-
-export const createAcessToken = (payload) => {
+export const createAccessToken = (payload) => {
 	return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
 		expiresIn: "24h",
-	});
-};
-
-export const createAdminAccessToken = (payload) => {
-	return jwt.sign(payload, process.env.ADMIN_ACCESS_TOKEN_SECRET, {
-		expiresIn: "24h",
-	});
-};
-
-export const createPasswordResetToken = (payload) => {
-	return jwt.sign(payload, process.env.RESET_TOKEN_SECRET, { expiresIn: "1h" });
-};
-
-export const createRefrishToken = (payload) => {
-	return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-		expiresIn: "30d",
 	});
 };

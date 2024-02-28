@@ -1,10 +1,10 @@
 import { GraphQLObjectType, GraphQLString } from "graphql";
-import adminSignInInputs from "./args.js";
-import adminSignInResolve from "./resolver.js";
+import signInInputs from "./args.js";
+import signInResolve from "./resolver.js";
 
 const signInType = new GraphQLObjectType({
-  name: "SignInAdminType",
-  description: 'admin sign in type',
+  name: "SignInType",
+  description: 'sign in type',
   fields: {
     message: {
       type: GraphQLString,
@@ -19,6 +19,6 @@ const signInType = new GraphQLObjectType({
 
 export default {
   type: signInType,
-  args: adminSignInInputs,
-  resolve: adminSignInResolve
+  args: signInInputs,
+  resolve: signInResolve
 }

@@ -2,8 +2,8 @@ import { GraphQLObjectType, GraphQLString, GraphQLBoolean } from "graphql";
 import deleteAccountResolve from "./resolve.js";
 
 const type = new GraphQLObjectType({
-	name: "AdminDeleteAccount",
-	description: "This is admin delet account type",
+	name: "DeleteAccount",
+	description: "This is admin delete account type",
 	fields: {
 		message: {
 			type: GraphQLString,

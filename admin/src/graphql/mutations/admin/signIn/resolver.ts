@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import Admin from "../../../../models/admin.js";
-import { validateEmail, createAdminAccessToken } from "../../../../utils/helper.js";
+import Admin, { AdminInterface } from "../../../../models/admin.js";
+import { validateEmail, createAccessToken } from "../../../../utils/helper.js";
 
 const signIn = async (_, args, context) => {
 	const { lang } = context.query;
@@ -27,7 +27,7 @@ const signIn = async (_, args, context) => {
 		if (!validateEmail(email))
 			throw new Error(lang === "ar" ? "بريد إلكتروني خاطئ" : "Invalid email");
 
-		const existingUser = await Admin.findOne({ email });
+		const existingUser: AdminInterface = await Admin.findOne({ email });
 
 		if (!existingUser)
 			throw new Error(
@@ -41,7 +41,7 @@ const signIn = async (_, args, context) => {
 		if (!isPasswordCorrect)
 			throw new Error(lang === "ar" ? "هذا الباسورد خظأ" : "wrong password");
 
-		const token = createAdminAccessToken({
+		const token = createAccessToken({
 			id: existingUser._id
 		});
 

@@ -1,6 +1,6 @@
 import { GraphQLString } from "graphql";
 
-const adminSignInInputs = {
+const signInInputs = {
 	email: {
 		type: GraphQLString,
 		description: "",
@@ -11,4 +11,4 @@ const adminSignInInputs = {
   }
 };
 
-export default adminSignInInputs;
+export default signInInputs;

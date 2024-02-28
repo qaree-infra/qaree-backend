@@ -1,5 +1,5 @@
 import { auth } from "../../../../middleware/general/auth.js";
-import Admin from "../../../../models/admin.js";
+import Admin, { AdminInterface } from "../../../../models/admin.js";
 
 const sortByValues = { updatedAt: -1, name: 1, createdAt: -1 };
 
@@ -39,7 +39,7 @@ const resolve = async (_, args, context) => {
 
 		const total = await Admin.countDocuments();
 
-		const admins = await Admin.find({
+		const admins: Array<AdminInterface> = await Admin.find({
 			$or: [{ name: { $in: keys } }, { email: { $in: keys } }],
 		})
 			.select("-password")
