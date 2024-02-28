@@ -7,12 +7,29 @@ import {
 	GraphQLList,
 	GraphQLFloat,
 } from "graphql";
-import { authorType } from "./myBook-type.js";
 import categoryType from "./category-type.js";
 import fileType from "./file-type.js";
 
-const bookInfoType = new GraphQLObjectType({
-	name: "BookInfo",
+export const authorType = new GraphQLObjectType({
+	name: "Author",
+	description: "this is book author type",
+	fields: {
+		_id: {
+			type: GraphQLID,
+		},
+		name: {
+			type: GraphQLString,
+			description: "",
+		},
+		avatar: {
+			type: GraphQLString,
+			description: "",
+		},
+	},
+});
+
+const bookType = new GraphQLObjectType({
+	name: "MyBook",
 	description: "This book datails",
 	fields: {
 		_id: {
@@ -66,6 +83,14 @@ const bookInfoType = new GraphQLObjectType({
 			type: fileType,
 			description: "",
 		},
+		file: {
+			type: fileType,
+			description: "",
+		},
+		status: {
+			type: GraphQLString,
+			description: "",
+		},
 		createdAt: {
 			type: GraphQLString,
 			description: "",
@@ -82,7 +107,11 @@ const bookInfoType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
+		rejectionReasons: {
+			type: GraphQLString,
+			description: "",
+		},
 	},
 });
 
-export default bookInfoType;
+export default bookType;
