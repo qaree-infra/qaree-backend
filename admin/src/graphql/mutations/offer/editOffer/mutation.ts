@@ -1,5 +1,5 @@
 import { GraphQLString, GraphQLInt } from "graphql";
-import offerType from "../../../../types/offer-type.js";
+import offerType from "../../../types/offer-type.js";
 import resolve from "./resolve.js";
 
 const addOfferArgs = {

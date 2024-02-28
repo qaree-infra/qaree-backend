@@ -1,6 +1,6 @@
-import { auth } from "../../../../../middleware/general/auth.js";
-import verifyBook from "../../../../middleware/verifyBook.js";
-import Offer, { OfferInterface } from "../../../../../models/offer.js";
+import { auth } from "../../../../middleware/general/auth.js";
+import verifyBook from "../../../middleware/verifyBook.js";
+import Offer, { OfferInterface } from "../../../../models/offer.js";
 
 const addOfferResolve = async (_, args, context) => {
 	try {

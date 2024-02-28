@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { auth } from "../../../../../middleware/general/auth.js";
-import Offer, { OfferInterface } from "../../../../../models/offer.js";
+import { auth } from "../../../../middleware/general/auth.js";
+import Offer, { OfferInterface } from "../../../../models/offer.js";
 
 const editOffer = async (_, args, context) => {
 	try {

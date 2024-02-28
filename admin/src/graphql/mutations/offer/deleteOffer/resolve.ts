@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-import { auth } from "../../../../../middleware/general/auth.js";
+import { auth } from "../../../../middleware/general/auth.js";
 
-import Offer, { OfferInterface } from "../../../../../models/offer.js";
+import Offer, { OfferInterface } from "../../../../models/offer.js";
 
 const deleteOfferResolve = async (_, args, context) => {
 	try {

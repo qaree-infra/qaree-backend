@@ -1,5 +1,5 @@
-import getOffer from "./user/getOffer/query.js";
-import getAllOffers from "./user/getOffers/query.js";
+import getOffer from "./getOffer/query.js";
+import getAllOffers from "./getOffers/query.js";
 
 export default {
 	getOffer: getOffer,

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Offer from "../../../../../models/offer.js";
+import Offer from "../../../../models/offer.js";
 
 const getOfferResolve = async (_, args, context) => {
 	try {

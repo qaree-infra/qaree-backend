@@ -1,6 +1,6 @@
 import { GraphQLInt, GraphQLString } from "graphql";
 import addOfferResolve from "./resolve.js";
-import offerType from "../../../../types/offer-type.js";
+import offerType from "../../../types/offer-type.js";
 
 const addOfferArgs = {
 	bookId: {
