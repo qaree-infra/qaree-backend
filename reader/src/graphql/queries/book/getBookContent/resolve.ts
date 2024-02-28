@@ -1,7 +1,5 @@
-import cloudinarySdk from "cloudinary";
 import verifyBook from "../../../middleware/verifyBook.js";
 import { BookInterface } from "../../../../models/book.js";
-import File, { FileInterface } from "../../../../models/file.js";
 import readFile, {
 	getBookFiles,
 	getEPubRootFile,
@@ -9,8 +7,6 @@ import readFile, {
 	parseSpain,
 	parseTOC,
 } from "../../../../utils/readFile.js";
-
-const cloudinary = cloudinarySdk.v2;
 
 interface VerifyBookInterface {
 	error?: string;
@@ -29,17 +25,24 @@ const getBookContent = async (_, args, context) => {
 			throw new Error(error);
 		}
 
+		if (!bookData?.file) throw new Error("Book file didn't found");
+
 		const allAssets = await getBookFiles(bookData);
+		if (!allAssets?.length) throw new Error("Extarcted files didn't found");
 
 		const bookContainerURL = allAssets.find((asset) =>
 			asset.toLowerCase().includes("meta-inf/container.xml"),
 		);
 
+		if (!bookContainerURL) throw new Error("Container file didn't found");
 		const { filename } = await getEPubRootFile(bookContainerURL);
+
+		if (!filename) throw new Error("Content file didn't found");
 
 		const contentFile = allAssets.find((asset) =>
 			asset.toLowerCase().includes(filename),
 		);
+		if (!contentFile) throw new Error("Content file url didn't found");
 
 		const { parsedData } = await readFile(contentFile);
 
@@ -63,6 +66,7 @@ const getBookContent = async (_, args, context) => {
 			),
 		};
 	} catch (error) {
+		console.log(error);
 		throw new Error(error.message);
 	}
 };
