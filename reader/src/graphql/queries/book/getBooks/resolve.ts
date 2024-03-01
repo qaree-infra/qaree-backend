@@ -34,31 +34,57 @@ const getBooksResolve = async (_, args: ArgsInterface, context) => {
 
 		const startIndex = (Number(page) - 1) * limit;
 
-		const totalBooks = await Book.countDocuments({
-			status: "published",
-			categories: { $in: [category] },
-		});
+		if (category) {
+			const totalBooks = await Book.countDocuments({
+				status: "published",
+				categories: {
+					$in: [category],
+				},
+			});
 
-		const books: BookInterface[] = await Book.find({
-			status: "published",
-			categories: {
-				$in: [category],
-			},
-		})
-			.sort(sortFields)
-			.limit(limit || 10)
-			.skip(startIndex)
-			.populate("categories")
-			.populate("author")
-			.populate("cover")
-			.populate("sample");
+			const books: BookInterface[] = await Book.find({
+				status: "published",
+				categories: {
+					$in: [category],
+				},
+			})
+				.sort(sortFields)
+				.limit(limit || 10)
+				.skip(startIndex)
+				.populate("categories")
+				.populate("author")
+				.populate("cover")
+				.populate("sample");
 
-		return {
-			books,
-			currentPage: page ? Number(page) : totalBooks === 0 ? 0 : 1,
-			numberOfPages: Math.ceil(totalBooks / (limit || 10)),
-			total: totalBooks,
-		};
+			return {
+				books,
+				currentPage: page ? Number(page) : totalBooks === 0 ? 0 : 1,
+				numberOfPages: Math.ceil(totalBooks / (limit || 10)),
+				total: totalBooks,
+			};
+		} else {
+			const totalBooks = await Book.countDocuments({
+				status: "published",
+			});
+
+			const books: BookInterface[] = await Book.find({
+				status: "published",
+			})
+				.sort(sortFields)
+				.limit(limit || 10)
+				.skip(startIndex)
+				.populate("categories")
+				.populate("author")
+				.populate("cover")
+				.populate("sample");
+
+			return {
+				books,
+				currentPage: page ? Number(page) : totalBooks === 0 ? 0 : 1,
+				numberOfPages: Math.ceil(totalBooks / (limit || 10)),
+				total: totalBooks,
+			};
+		}
 	} catch (error) {
 		console.log(error);
 		throw new Error(error.message);
