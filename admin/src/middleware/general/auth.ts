@@ -50,7 +50,7 @@ const auth = async (
 			userId: string;
 
 		if (token && isCustomAuth) {
-			decodedData = jwt.verify(token, process.env.ADMIN_ACCESS_TOKEN_SECRET);
+			decodedData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
 			userId = decodedData?.id;
 		} else {
