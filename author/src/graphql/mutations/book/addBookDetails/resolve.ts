@@ -127,11 +127,12 @@ const addBookDetails = async (_, args, context) => {
 			categories,
 			price,
 			author: auth.user._id,
-			previousPublishingData: previousPublishingDataObj,
+			previousPublishingData: previousPublishingData ? previousPublishingDataObj : new Date(),
 		});
 
 		return addedBook;
 	} catch (error) {
+		console.log(error);
 		throw new Error(error);
 	}
 };
