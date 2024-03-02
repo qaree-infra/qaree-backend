@@ -52,10 +52,6 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 			type: [Schema.Types.ObjectId],
 			ref: "Book",
 		},
-		bookReads: {
-			type: [Schema.Types.ObjectId],
-			// todo: 
-		},
 		bio: {
 			type: String,
 			default: "",

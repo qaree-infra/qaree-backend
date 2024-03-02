@@ -10,21 +10,20 @@ const resolve = async (_, args, context) => {
 		const startIndex = (Number(page) - 1) * limit;
 
 		const total = await User.countDocuments({
-			bookReads: { $gt: [] },
+			// bookReads: { $gt: [] },
 			books: { $gt: [] },
 			valid: true,
 		});
 
 		const authors = await User.find({
-			bookReads: { $gt: [] },
 			books: { $gt: [] },
 			valid: true,
 		})
-			.select("-password")
-			.sort({ bookReads: 1, books: 1, followers: 1, updatedAt: -1 })
-			.limit(limit)
-			.skip(startIndex)
-      .populate("avatar");
+		.select("-password")
+		// .sort({ bookReads: 1, books: 1, followers: 1, updatedAt: -1 })
+		.limit(limit)
+		.skip(startIndex)
+		.populate("avatar");
 
 		return {
 			authors,
@@ -33,6 +32,7 @@ const resolve = async (_, args, context) => {
 			numberOfPages: Math.ceil(total / limit),
 		};
 	} catch (error) {
+		console.log(error);
 		throw new Error(error?.message || error);
 	}
 };
