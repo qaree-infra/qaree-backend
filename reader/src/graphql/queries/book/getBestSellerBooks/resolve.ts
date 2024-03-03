@@ -23,7 +23,7 @@ const resolve = async (_, args, context) => {
 			},
 			{
 				$sort: {
-          bookReadsSize: 1,
+					bookReadsSize: 1,
 					avgRate: -1,
 				},
 			},
@@ -52,11 +52,39 @@ const resolve = async (_, args, context) => {
 			{
 				$limit: limit,
 			},
+			{
+				$unwind: "$author",
+			},
+			{
+				$lookup: {
+					from: "users",
+					localField: "author",
+					foreignField: "_id",
+					as: "author",
+				},
+			},
+			{
+				$unwind: "$cover",
+			},
+			{
+				$lookup: {
+					from: "files",
+					localField: "cover",
+					foreignField: "_id",
+					as: "cover",
+				},
+			},
 		]);
 
 		const books = await query.exec();
 
-		return { books };
+		return {
+			books: books.map((b) => ({
+				...b,
+				author: b.author[0],
+				cover: b.cover[0],
+			})),
+		};
 	} catch (error) {
 		console.log(error);
 		throw new Error(error);
