@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-type status = "sample" | "free" | "purchased";
+type status = "sample" | "purchased";
 
 export interface BookReadInterface {
 	_id: string;

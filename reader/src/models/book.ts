@@ -25,6 +25,10 @@ export interface BookInterface {
 	publishionDate: Date;
 	previousPublishingData: Date;
 	rejectionReasons: string;
+	bookReads: {
+		purchased: Array<Schema.Types.ObjectId>;
+		sample: Array<Schema.Types.ObjectId>;
+	};
 }
 
 const bookSchema: Schema = new mongoose.Schema<BookInterface>(
@@ -110,6 +114,10 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 		rejectionReasons: {
 			type: String,
 			default: "",
+		},
+		bookReads: {
+			purchased: [{ type: Schema.Types.ObjectId, ref: "BookRead" }],
+			sample: [{ type: Schema.Types.ObjectId, ref: "BookRead" }],
 		},
 	},
 	{
