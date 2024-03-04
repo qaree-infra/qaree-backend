@@ -31,7 +31,7 @@ const getLibraryResolve = async (_, args: Args, context) => {
 			.skip(startIndex)
 			.populate({
 				path: "books",
-				populate: ["author", "sample", "cover"],
+				populate: ["author", "sample", "cover", "categories"],
 				options: { limit: 3, skip: 0 },
 			});
 

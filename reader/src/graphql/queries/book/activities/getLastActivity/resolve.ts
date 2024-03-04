@@ -12,7 +12,10 @@ const getBookActivitesResolve = async (_, args, context) => {
 		const bookReads: Array<BookReadInterface> = await BookRead.find({
 			user: auth.user._id,
 		})
-			.populate({ path: "book", options: { populate: ["cover", "author"] } })
+			.populate({
+				path: "book",
+				options: { populate: ["cover", "author", "categories"] },
+			})
 			.sort({ updatedAt: -1 })
 			.limit(1);
 

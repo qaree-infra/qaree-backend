@@ -74,6 +74,17 @@ const resolve = async (_, args, context) => {
 					as: "cover",
 				},
 			},
+			{
+				$unwind: "$categories",
+			},
+			{
+				$lookup: {
+					from: "categories",
+					localField: "categories",
+					foreignField: "_id",
+					as: "categories",
+				},
+			},
 		]);
 
 		const books = await query.exec();

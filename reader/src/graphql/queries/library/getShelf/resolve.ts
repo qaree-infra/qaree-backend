@@ -33,7 +33,11 @@ const getShelfResolve = async (_, args: Args, context) => {
 			userId: user ? user : auth.user._id,
 		}).populate({
 			path: "books",
-			options: { limit: booksLimit, skip: startIndex },
+			options: {
+				limit: booksLimit,
+				skip: startIndex,
+				populate: ["author", "cover", "sample", "categories"],
+			},
 		});
 
 		if (!shelfData)

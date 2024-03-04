@@ -22,7 +22,7 @@ const getOfferResolve = async (_, args, context) => {
 			$or: [{ _id: id }, { book: id }],
 		}).populate({
 			path: "book",
-			options: { populate: ["author", "cover", "sample"] },
+			options: { populate: ["author", "cover", "sample", "categories"] },
 		});
 
 		if (!offer)
