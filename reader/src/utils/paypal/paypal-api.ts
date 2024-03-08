@@ -68,3 +68,38 @@ export async function generateClientToken(author_merchant_id: string) {
 	const jsonData = await handleResponse(response);
 	return jsonData.client_token;
 }
+
+// call the create order method
+export async function createOrder(price: number, author_merchant_id) {
+	const accessToken = await generateAccessToken();
+	const authAssertion = getAuthAssertionValue(
+		PAYPAL_CLIENT_ID,
+		author_merchant_id,
+	);
+
+	const url = `${base}/v2/checkout/orders`;
+	const payload = {
+		intent: "CAPTURE",
+		purchase_units: [
+			{
+				amount: {
+					currency_code: "USD",
+					value: price,
+				},
+			},
+		],
+	};
+
+	const response = await fetch(url, {
+		method: "post",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${accessToken}`,
+			"PayPal-Auth-Assertion": authAssertion,
+			"PayPal-Partner-Attribution-Id": "BN-CODE",
+		},
+		body: JSON.stringify(payload),
+	});
+
+	return handleResponse(response);
+}
