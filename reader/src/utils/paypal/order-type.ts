@@ -32,8 +32,8 @@ export type CapturedOrder = {
 	purchase_units: Array<PurchaseUnit>;
 	payment_source: Array<PaymentSource>;
 	links: Array<Link>;
-	intent: string;
-	payer: Payer;
+	intent?: string;
+	payer?: Payer;
 	status: string;
 };
 

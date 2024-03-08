@@ -103,3 +103,29 @@ export async function createOrder(price: number, author_merchant_id) {
 
 	return handleResponse(response);
 }
+
+// capture payment for an order
+export async function capturePayment(
+	orderId: string,
+	author_merchant_id: string,
+) {
+	const accessToken = await generateAccessToken();
+	const authAssertion = getAuthAssertionValue(
+		PAYPAL_CLIENT_ID,
+		author_merchant_id,
+	);
+
+	const url = `${base}/v2/checkout/orders/${orderId}/capture`;
+
+	const response = await fetch(url, {
+		method: "post",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${accessToken}`,
+			"PayPal-Auth-Assertion": authAssertion,
+			"PayPal-Partner-Attribution-Id": "BN-CODE",
+		},
+	});
+
+	return handleResponse(response);
+}
