@@ -4,8 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // set some important variables
-const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PARTNER_MERCHANT_ID } =
-	process.env;
+const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 
 function getAuthAssertionValue(clientId: string, sellerPayerId: string) {
