@@ -6,6 +6,7 @@ import search from "./search/query.js";
 import getBookContent from "./getBookContent/query.js";
 import getLastActivity from "./activities/getLastActivity/query.js";
 import getBestSellerBooks from './getBestSellerBooks/query.js';
+import getClientData from './buy/getClientData/query.js'
 
 export default {
 	getBooks: getBooks,
@@ -16,4 +17,5 @@ export default {
 	getBookContent: getBookContent,
 	getLastActivity: getLastActivity,
 	getBestSellerBooks: getBestSellerBooks,
+	getPaymentClientData: getClientData,
 };
