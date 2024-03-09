@@ -106,3 +106,19 @@ export async function trackOnboardingStatus(tracking_id: string) {
 
 	return handleResponse(response);
 }
+
+export async function getFullStatus(seller_merchant_id: string) {
+	const url = `${base}/v1/customer/partners/${PARTNER_MERCHANT_ID}/merchant-integrations/${seller_merchant_id}`;
+
+	const accessToken = await generateAccessToken();
+
+	const response = await fetch(url, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+
+	return handleResponse(response);
+}
