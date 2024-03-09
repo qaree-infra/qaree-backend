@@ -90,3 +90,19 @@ export const generateActionURL = async (user: UserInterface, lang: string) => {
 
 	return handleResponse(response);
 };
+
+export async function trackOnboardingStatus(tracking_id: string) {
+	const url = `${base}/v1/customer/partners/${PARTNER_MERCHANT_ID}/merchant-integrations?tracking_id=${tracking_id}`;
+
+	const accessToken = await generateAccessToken();
+
+	const response = await fetch(url, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${accessToken}`,
+		},
+	});
+
+	return handleResponse(response);
+}
