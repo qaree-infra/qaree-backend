@@ -1,4 +1,5 @@
 import OTPCode from "../../../../models/otpcode.js";
+import Shelf from "../../../../models/shelf.js";
 import User from "../../../../models/user.js";
 import { validateEmail } from "../../../../utils/helper.js";
 
@@ -55,6 +56,24 @@ const verifyAccount = async (parent, { otp, email }, context) => {
 
 		await OTPCode.deleteOne({ _id: otpCode._id });
 		await User.findByIdAndUpdate(user._id, { valid: true }, { new: true });
+
+		await Shelf.insertMany([
+			{
+				name_en: "current reading",
+				name_ar: "أقرأ حالياً",
+				userId: user._id,
+			},
+			{
+				name_en: "want to read",
+				name_ar: "أنوى قراءته",
+				userId: user._id,
+			},
+			{
+				name_en: "finished reading",
+				name_ar: "قرأته",
+				userId: user._id,
+			},
+		]);
 
 		return {
 			message:
