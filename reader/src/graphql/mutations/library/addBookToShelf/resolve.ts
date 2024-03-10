@@ -23,11 +23,12 @@ const addBookDetailsResolve = async (_, args, context) => {
 
 		if (bookVerification?.error) throw new Error(bookVerification?.error);
 
-		const orOptions = mongoose.Types.ObjectId.isValid(shelf)
-			? [{ _id: shelf }]
-			: [{ name: shelf }];
+		const idValidation = mongoose.isObjectIdOrHexString(shelf);
+
+		const orOptions = idValidation ? [{ _id: shelf }] : [{ name: shelf }];
 		const shelfData: ShelfInterface = await Shelf.findOne({
 			$or: orOptions,
+			userId: auth.user._id,
 		});
 
 		const bookShelf: ShelfData = await Shelf.findOne({
@@ -47,13 +48,12 @@ const addBookDetailsResolve = async (_, args, context) => {
 					message:
 						lang === "ar" ? "تم اضافة الكتاب بنجاح" : "book added successfully",
 				};
-			} else if (bookShelf) {
-				await Shelf.findByIdAndUpdate(bookShelf._id, {
-					books: bookShelf.books.filter(
-						(book) => book !== bookVerification.bookData._id,
-					),
-				});
 			}
+			await Shelf.findByIdAndUpdate(bookShelf._id, {
+				books: bookShelf.books.filter(
+					(book) => book !== bookVerification.bookData._id,
+				),
+			});
 
 			const updatedShelf: ShelfData = await Shelf.findByIdAndUpdate(
 				shelfData._id,
@@ -71,7 +71,7 @@ const addBookDetailsResolve = async (_, args, context) => {
 					lang === "ar" ? "تم اضافة الكتاب بنجاح" : "book added successfully",
 			};
 		} else {
-			if (mongoose.Types.ObjectId.isValid(shelf)) {
+			if (!idValidation) {
 				throw new Error(lang ? "عنوان الرف غير صالح" : "Invalid shelf id");
 			}
 
