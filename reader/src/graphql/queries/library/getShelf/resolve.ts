@@ -81,7 +81,7 @@ const getShelfResolve = async (_, args: Args, context) => {
 				}),
 			};
 		} else {
-			return shelfData;
+			return { ...shelfData, books: shelfData.books.map((b) => ({ book: b })) };
 		}
 	} catch (error) {
 		console.log(error);

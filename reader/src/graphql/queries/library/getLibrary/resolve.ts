@@ -40,6 +40,7 @@ const getLibraryResolve = async (_, args: Args, context) => {
 			shelves: shelves.map((s) => ({
 				...s,
 				name: lang === "ar" ? s.name_ar : s.name_en,
+				books: s.books.map((b) => ({ book: b })),
 			})),
 			total: totalShelves,
 			currentPage: page,
