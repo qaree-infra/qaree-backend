@@ -1,4 +1,10 @@
-import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList, GraphQLInt } from "graphql";
+import {
+	GraphQLObjectType,
+	GraphQLID,
+	GraphQLString,
+	GraphQLList,
+	GraphQLInt,
+} from "graphql";
 
 import bookInfoType from "./book-type.js";
 import { ShelfInterface } from "../../models/shelf.js";
@@ -10,21 +16,40 @@ export interface ShelfData extends ShelfInterface {
 	name?: string;
 }
 
+const bookShelf = new GraphQLObjectType({
+	name: "BookShelf",
+	description: "",
+	fields: {
+		book: {
+			type: bookInfoType,
+			description: "",
+		},
+		status: {
+			type: GraphQLString,
+			description: "",
+		},
+		readingProgress: {
+			type: GraphQLInt,
+			description: "",
+		},
+	},
+});
+
 const shelfType = new GraphQLObjectType({
-  name: "ShelfType",
-  description: "This liberary shelf data",
-  fields: {
-    _id: {
+	name: "ShelfType",
+	description: "This liberary shelf data",
+	fields: {
+		_id: {
 			type: GraphQLID,
 		},
 		name: {
 			type: GraphQLString,
 			description: "",
 		},
-    books: {
-      type: new GraphQLList(bookInfoType),
-      description: "",
-    },
+		books: {
+			type: new GraphQLList(bookShelf),
+			description: "",
+		},
 		totalBooks: {
 			type: GraphQLInt,
 			description: "",
@@ -37,7 +62,7 @@ const shelfType = new GraphQLObjectType({
 			type: GraphQLInt,
 			description: "",
 		},
-    createdAt: {
+		createdAt: {
 			type: GraphQLString,
 			description: "",
 		},
@@ -45,7 +70,7 @@ const shelfType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
-  }
-})
+	},
+});
 
 export default shelfType;

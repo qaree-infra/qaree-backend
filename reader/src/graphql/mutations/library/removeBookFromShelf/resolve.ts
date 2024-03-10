@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { auth } from "../../../../middleware/general/auth.js";
 import verifyBook from "../../../middleware/verifyBook.js";
 import Shelf, { ShelfInterface } from "../../../../models/shelf.js";
-import { ShelfData } from "../../../types/shelf-type.js";
+import { CURRENT_FINISHED_READING } from "../../../../utils/consts.js";
 
 const removeBookFromShelfResolve = async (_, args, context) => {
 	try {
@@ -34,23 +34,26 @@ const removeBookFromShelfResolve = async (_, args, context) => {
 
 		if (!shelfData) throw new Error(lang ? "رف غير صالح" : "Invalid shelf");
 		else {
-			const updatedShelf: ShelfData = await Shelf.findByIdAndUpdate(
+			if (
+				CURRENT_FINISHED_READING.filter(
+					(s) => s === shelfData.name_ar || s === shelfData.name_en,
+				).length
+			)
+				throw new Error(
+					lang === "ar"
+						? "عفواً، لا تستطيع حزف اى كتاب من هذا الرف"
+						: "Sorry, you can't remove any books from this shelf",
+				);
+
+			await Shelf.findByIdAndUpdate(
 				shelfData._id,
 				{
 					books: shelfData.books.filter((book) => String(book) !== bookId),
 				},
 				{ new: true },
-			).populate({
-				path: "books",
-				options: { limit: 3, skip: 0 },
-			});
-
-			updatedShelf.totalBooks = shelfData.books.length - 1;
-			updatedShelf.name =
-				lang === "ar" ? updatedShelf.name_ar : updatedShelf.name_en;
+			);
 
 			return {
-				shelf: updatedShelf,
 				message:
 					lang === "ar"
 						? "تم ازالة الكتاب من الرف بنجاح"

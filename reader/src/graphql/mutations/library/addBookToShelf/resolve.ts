@@ -6,26 +6,9 @@ import { ShelfData } from "../../../types/shelf-type.js";
 import {
 	FINISHED_READING_SHELF,
 	FINISHED_READING_SHELF_AR,
-	CURRENT_READING_SHELF,
-	CURRENT_READING_SHELF_AR,
 } from "../../../../utils/consts.js";
-import BookRead, { BookReadInterface } from "../../../../models/bookRead.js";
-import { BookInterface } from "../../../../models/book.js";
-import { UserInterface } from "../../../../models/user.js";
-
-const createBookReadForCurrentShelf = async (
-	bookData: BookInterface,
-	user: UserInterface,
-) => {
-	const bookRead: BookReadInterface = await BookRead.create({
-		book: bookData._id,
-		status: bookData.price === 0 ? "purchased" : "sample",
-		readingProgress: 0,
-		user: user._id,
-	});
-
-	return { ...bookRead, book: bookData };
-};
+import BookRead from "../../../../models/bookRead.js";
+import { isCurrentShelf } from "../../../../utils/helper.js";
 
 const addBookDetailsResolve = async (_, args, context) => {
 	try {
@@ -59,9 +42,6 @@ const addBookDetailsResolve = async (_, args, context) => {
 		const bookShelf: ShelfData = await Shelf.findOne({
 			books: { $in: [bookVerification.bookData._id] },
 			userId: auth.user._id,
-		}).populate({
-			path: "books",
-			options: { limit: 3, skip: 0 },
 		});
 
 		if (shelfData) {
@@ -80,22 +60,20 @@ const addBookDetailsResolve = async (_, args, context) => {
 				bookShelf.name = lang === "ar" ? bookShelf.name_ar : bookShelf.name_en;
 				return {
 					success: true,
-					shelf: bookShelf,
 					message:
 						lang === "ar" ? "تم اضافة الكتاب بنجاح" : "book added successfully",
 				};
 			}
 
-			const isCurrentShelf =
-				shelfData.name_en === CURRENT_READING_SHELF ||
-				shelfData.name_ar === CURRENT_READING_SHELF_AR;
+			const validateCurrentShelf = isCurrentShelf(shelfData);
 
-			bookVerification.bookData = isCurrentShelf
-				? await createBookReadForCurrentShelf(
-						bookVerification.bookData,
-						auth.user,
-				  )
-				: bookVerification.bookData;
+			if (validateCurrentShelf)
+				await BookRead.create({
+					book: bookVerification.bookData._id,
+					status:
+						bookVerification.bookData.price === 0 ? "purchased" : "sample",
+					user: auth.user._id,
+				});
 
 			await Shelf.findByIdAndUpdate(bookShelf._id, {
 				books: bookShelf.books.filter(
@@ -103,21 +81,14 @@ const addBookDetailsResolve = async (_, args, context) => {
 				),
 			});
 
-			const updatedShelf: ShelfData = await Shelf.findByIdAndUpdate(
+			await Shelf.findByIdAndUpdate(
 				shelfData._id,
 				{ books: [bookVerification.bookData._id].concat(shelfData.books) },
 				{ new: true },
-			).populate({
-				path: "books",
-				options: { limit: 3, skip: 0 },
-			});
-
-			updatedShelf.name =
-				lang === "ar" ? updatedShelf.name_ar : updatedShelf.name_en;
+			);
 
 			return {
 				success: true,
-				shelf: updatedShelf,
 				message:
 					lang === "ar" ? "تم اضافة الكتاب بنجاح" : "book added successfully",
 			};
@@ -126,22 +97,15 @@ const addBookDetailsResolve = async (_, args, context) => {
 				throw new Error(lang ? "عنوان الرف غير صالح" : "Invalid shelf id");
 			}
 
-			const newShelf: ShelfData = await Shelf.create({
+			await Shelf.create({
 				name_ar: shelf,
 				name_en: shelf,
 				books: [bookVerification.bookData._id],
 				userId: auth.user?._id,
 			});
 
-			newShelf.books = [bookVerification.bookData];
-			newShelf.totalBooks = 1;
-			newShelf.currentBooksPage = 1;
-			newShelf.numberOfBooksPages = 1;
-			newShelf.name = lang === "ar" ? newShelf.name_ar : newShelf.name_en;
-
 			return {
 				success: true,
-				shelf: newShelf,
 				message:
 					lang === "ar" ? "تم اضافة الكتاب بنجاح" : "book added successfully",
 			};

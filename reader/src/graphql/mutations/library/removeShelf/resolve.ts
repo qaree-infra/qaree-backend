@@ -36,7 +36,7 @@ const removeShelfResolve = async (_, args, context) => {
 			if (
 				MAIN_SHELFS_READING.filter(
 					(s) => s === shelfData.name_ar || s === shelfData.name_en,
-				)
+				).length
 			)
 				throw new Error(
 					lang === "ar"

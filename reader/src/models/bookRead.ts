@@ -1,10 +1,11 @@
 import mongoose, { Schema } from "mongoose";
+import { BookInterface } from "./book.js";
 
 type status = "sample" | "purchased";
 
 export interface BookReadInterface {
 	_id: string;
-	book: Schema.Types.ObjectId;
+	book: Schema.Types.ObjectId | BookInterface;
 	status: status;
 	createdAt: Date;
 	updatedAt: Date;

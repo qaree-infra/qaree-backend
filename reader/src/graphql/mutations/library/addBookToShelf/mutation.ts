@@ -1,25 +1,20 @@
 import { GraphQLBoolean, GraphQLObjectType, GraphQLString } from "graphql";
-import shelfType from "../../../types/shelf-type.js";
 import resolve from "./resolve.js";
 
 const type = new GraphQLObjectType({
-  name: "AddBookShelf",
-  description: "this add book shelf type",
-  fields: {
-    shelf: {
-      type: shelfType,
-      description: ""
-    },
-    message: {
-      type: GraphQLString,
-      description: ""
-    },
-    success: {
-      type: GraphQLBoolean,
-      description: ""
-    }
-  }
-})
+	name: "AddBookShelf",
+	description: "this add book shelf type",
+	fields: {
+		message: {
+			type: GraphQLString,
+			description: "",
+		},
+		success: {
+			type: GraphQLBoolean,
+			description: "",
+		},
+	},
+});
 
 export default {
 	type: type,
@@ -29,8 +24,8 @@ export default {
 			description: "",
 		},
 		shelf: {
-			/* shelfId or shelfName */ 
-      type: GraphQLString,
+			/* shelfId or shelfName */
+			type: GraphQLString,
 			description: "",
 		},
 	},

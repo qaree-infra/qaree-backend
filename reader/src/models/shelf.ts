@@ -1,11 +1,13 @@
 import mongoose, { Schema } from "mongoose";
+import { BookInterface } from "./book.js";
 
 export interface ShelfInterface {
 	_id: Schema.Types.ObjectId;
 	name_en: string;
 	name_ar: string;
 	userId: string;
-	books: Array<Schema.Types.ObjectId>;
+	books: Array<Schema.Types.ObjectId> | Array<BookInterface>;
+	// bookReads: Array<Schema.Types.ObjectId>;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -30,6 +32,14 @@ const shelfSchema: Schema = new mongoose.Schema<ShelfInterface>(
 				},
 			],
 		},
+		// bookReads: {
+		// 	type: [
+		// 		{
+		// 			type: Schema.Types.ObjectId,
+		// 			ref: "BookRead",
+		// 		},
+		// 	],
+		// },
 		userId: {
 			type: String,
 		},
