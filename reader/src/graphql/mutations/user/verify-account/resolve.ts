@@ -1,6 +1,7 @@
 import OTPCode from "../../../../models/otpcode.js";
 import Shelf from "../../../../models/shelf.js";
 import User from "../../../../models/user.js";
+import { CURRENT_READING_SHELF, CURRENT_READING_SHELF_AR, FINISHED_READING_SHELF, FINISHED_READING_SHELF_AR, WANT_TO_READ_SHELF, WANT_TO_READ_SHELF_AR } from "../../../../utils/consts.js";
 import { validateEmail } from "../../../../utils/helper.js";
 
 const verifyAccount = async (parent, { otp, email }, context) => {
@@ -59,18 +60,18 @@ const verifyAccount = async (parent, { otp, email }, context) => {
 
 		await Shelf.insertMany([
 			{
-				name_en: "current reading",
-				name_ar: "أقرأ حالياً",
+				name_en: CURRENT_READING_SHELF,
+				name_ar: CURRENT_READING_SHELF_AR,
 				userId: user._id,
 			},
 			{
-				name_en: "want to read",
-				name_ar: "أنوى قراءته",
+				name_en: WANT_TO_READ_SHELF,
+				name_ar: WANT_TO_READ_SHELF_AR,
 				userId: user._id,
 			},
 			{
-				name_en: "finished reading",
-				name_ar: "قرأته",
+				name_en: FINISHED_READING_SHELF,
+				name_ar: FINISHED_READING_SHELF_AR,
 				userId: user._id,
 			},
 		]);

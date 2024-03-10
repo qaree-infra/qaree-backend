@@ -3,6 +3,29 @@ import { auth } from "../../../../middleware/general/auth.js";
 import verifyBook from "../../../middleware/verifyBook.js";
 import Shelf, { ShelfInterface } from "../../../../models/shelf.js";
 import { ShelfData } from "../../../types/shelf-type.js";
+import {
+	FINISHED_READING_SHELF,
+	FINISHED_READING_SHELF_AR,
+	CURRENT_READING_SHELF,
+	CURRENT_READING_SHELF_AR,
+} from "../../../../utils/consts.js";
+import BookRead, { BookReadInterface } from "../../../../models/bookRead.js";
+import { BookInterface } from "../../../../models/book.js";
+import { UserInterface } from "../../../../models/user.js";
+
+const createBookReadForCurrentShelf = async (
+	bookData: BookInterface,
+	user: UserInterface,
+) => {
+	const bookRead: BookReadInterface = await BookRead.create({
+		book: bookData._id,
+		status: bookData.price === 0 ? "purchased" : "sample",
+		readingProgress: 0,
+		user: user._id,
+	});
+
+	return { ...bookRead, book: bookData };
+};
 
 const addBookDetailsResolve = async (_, args, context) => {
 	try {
@@ -42,6 +65,16 @@ const addBookDetailsResolve = async (_, args, context) => {
 		});
 
 		if (shelfData) {
+			if (
+				shelfData.name_en === FINISHED_READING_SHELF ||
+				shelfData.name_ar === FINISHED_READING_SHELF_AR
+			)
+				throw new Error(
+					lang === "ar"
+						? "عفواً، غير مسموح باضافة اى كتاب الى هذا الرف"
+						: "Sorry, it is not allowed to add any book to this shelf",
+				);
+
 			if (String(bookShelf?._id) === String(shelfData._id)) {
 				bookShelf.totalBooks = shelfData.books.length;
 				bookShelf.name = lang === "ar" ? bookShelf.name_ar : bookShelf.name_en;
@@ -52,6 +85,18 @@ const addBookDetailsResolve = async (_, args, context) => {
 						lang === "ar" ? "تم اضافة الكتاب بنجاح" : "book added successfully",
 				};
 			}
+
+			const isCurrentShelf =
+				shelfData.name_en === CURRENT_READING_SHELF ||
+				shelfData.name_ar === CURRENT_READING_SHELF_AR;
+
+			bookVerification.bookData = isCurrentShelf
+				? await createBookReadForCurrentShelf(
+						bookVerification.bookData,
+						auth.user,
+				  )
+				: bookVerification.bookData;
+
 			await Shelf.findByIdAndUpdate(bookShelf._id, {
 				books: bookShelf.books.filter(
 					(book) => book !== bookVerification.bookData._id,
