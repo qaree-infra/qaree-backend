@@ -2,7 +2,8 @@ import mongoose, { Schema } from "mongoose";
 
 export interface ShelfInterface {
 	_id: Schema.Types.ObjectId;
-	name: string;
+	name_en: string;
+	name_ar: string;
 	userId: string;
 	books: Array<Schema.Types.ObjectId>;
 	createdAt: Date;
@@ -11,7 +12,12 @@ export interface ShelfInterface {
 
 const shelfSchema: Schema = new mongoose.Schema<ShelfInterface>(
 	{
-		name: {
+		name_ar: {
+			type: String,
+			require: [true, "please enter shelf name!"],
+			trim: true,
+		},
+		name_en: {
 			type: String,
 			require: [true, "please enter shelf name!"],
 			trim: true,

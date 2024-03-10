@@ -5,6 +5,10 @@ interface Args {
 	name: string;
 }
 
+interface ShelfData extends ShelfInterface {
+	name?: string;
+}
+
 const resolve = async (_, args: Args, context) => {
 	try {
 		const { lang } = context.query;
@@ -24,7 +28,14 @@ const resolve = async (_, args: Args, context) => {
 		}
 
 		const createdShelf: ShelfInterface = await Shelf.findOne({
-			name,
+			$or: [
+				{
+					name_en: name,
+				},
+				{
+					name_ar: name,
+				},
+			],
 			userId: auth.user._id,
 		});
 
@@ -36,10 +47,13 @@ const resolve = async (_, args: Args, context) => {
 			);
 		}
 
-		const newShelf: ShelfInterface = await Shelf.create({
-			name: name,
+		const newShelf: ShelfData = await Shelf.create({
+			name_ar: name,
+			name_en: name,
 			userId: auth.user._id,
 		});
+
+		newShelf.name = lang === "ar" ? newShelf.name_ar : newShelf.name_en;
 
 		return {
 			shelf: newShelf,

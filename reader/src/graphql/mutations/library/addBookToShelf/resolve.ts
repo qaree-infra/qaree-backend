@@ -25,7 +25,9 @@ const addBookDetailsResolve = async (_, args, context) => {
 
 		const idValidation = mongoose.isObjectIdOrHexString(shelf);
 
-		const orOptions = idValidation ? [{ _id: shelf }] : [{ name: shelf }];
+		const orOptions = idValidation
+			? [{ _id: shelf }]
+			: [{ name_ar: shelf }, { name_en: shelf }];
 		const shelfData: ShelfInterface = await Shelf.findOne({
 			$or: orOptions,
 			userId: auth.user._id,
@@ -42,6 +44,7 @@ const addBookDetailsResolve = async (_, args, context) => {
 		if (shelfData) {
 			if (String(bookShelf?._id) === String(shelfData._id)) {
 				bookShelf.totalBooks = shelfData.books.length;
+				bookShelf.name = lang === "ar" ? bookShelf.name_ar : bookShelf.name_en;
 				return {
 					success: true,
 					shelf: bookShelf,
@@ -64,6 +67,9 @@ const addBookDetailsResolve = async (_, args, context) => {
 				options: { limit: 3, skip: 0 },
 			});
 
+			updatedShelf.name =
+				lang === "ar" ? updatedShelf.name_ar : updatedShelf.name_en;
+
 			return {
 				success: true,
 				shelf: updatedShelf,
@@ -76,7 +82,8 @@ const addBookDetailsResolve = async (_, args, context) => {
 			}
 
 			const newShelf: ShelfData = await Shelf.create({
-				name: shelf,
+				name_ar: shelf,
+				name_en: shelf,
 				books: [bookVerification.bookData._id],
 				userId: auth.user?._id,
 			});
@@ -85,6 +92,7 @@ const addBookDetailsResolve = async (_, args, context) => {
 			newShelf.totalBooks = 1;
 			newShelf.currentBooksPage = 1;
 			newShelf.numberOfBooksPages = 1;
+			newShelf.name = lang === "ar" ? newShelf.name_ar : newShelf.name_en;
 
 			return {
 				success: true,

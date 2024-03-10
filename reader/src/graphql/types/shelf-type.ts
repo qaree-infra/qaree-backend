@@ -7,6 +7,7 @@ export interface ShelfData extends ShelfInterface {
 	totalBooks?: number;
 	numberOfBooksPages?: number;
 	currentBooksPage?: number;
+	name?: string;
 }
 
 const shelfType = new GraphQLObjectType({

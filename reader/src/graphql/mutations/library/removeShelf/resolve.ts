@@ -18,9 +18,11 @@ const removeShelfResolve = async (_, args, context) => {
 			);
 		}
 
-		const orOptions = mongoose.Types.ObjectId.isValid(shelf)
+		const idValidation = mongoose.isObjectIdOrHexString(shelf);
+
+		const orOptions = idValidation
 			? [{ _id: shelf }]
-			: [{ name: shelf }];
+			: [{ name_ar: shelf }, { name_en: shelf }];
 
 		const shelfData: ShelfInterface = await Shelf.findOne({
 			$or: orOptions,

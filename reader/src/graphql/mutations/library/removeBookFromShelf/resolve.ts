@@ -23,9 +23,11 @@ const removeBookFromShelfResolve = async (_, args, context) => {
 
 		if (bookVerification?.error) throw new Error(bookVerification?.error);
 
-		const orOptions = mongoose.Types.ObjectId.isValid(shelf)
+		const idValidation = mongoose.isObjectIdOrHexString(shelf);
+
+		const orOptions = idValidation
 			? [{ _id: shelf }]
-			: [{ name: shelf }];
+			: [{ name_ar: shelf }, { name_en: shelf }];
 		const shelfData: ShelfInterface = await Shelf.findOne({
 			$or: orOptions,
 		});
@@ -44,6 +46,8 @@ const removeBookFromShelfResolve = async (_, args, context) => {
 			});
 
 			updatedShelf.totalBooks = shelfData.books.length - 1;
+			updatedShelf.name =
+				lang === "ar" ? updatedShelf.name_ar : updatedShelf.name_en;
 
 			return {
 				shelf: updatedShelf,

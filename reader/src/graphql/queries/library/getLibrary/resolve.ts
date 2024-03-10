@@ -11,6 +11,7 @@ interface Args {
 
 const getLibraryResolve = async (_, args: Args, context) => {
 	try {
+		const { lang } = context.query;
 		const { user } = args;
 		const limit = args?.limit || 10;
 		const page = args?.page || 1;
@@ -36,7 +37,10 @@ const getLibraryResolve = async (_, args: Args, context) => {
 			});
 
 		return {
-			shelves: shelves,
+			shelves: shelves.map((s) => ({
+				...s,
+				name: lang === "ar" ? s.name_ar : s.name_en,
+			})),
 			total: totalShelves,
 			currentPage: page,
 			numberOfPages: Math.ceil(totalShelves / limit),

@@ -22,9 +22,10 @@ const getShelfResolve = async (_, args: Args, context) => {
 
 		if (!user && auth.error) throw new Error(auth.error);
 
-		const orOptions = mongoose.Types.ObjectId.isValid(shelf)
+		const idValidation = mongoose.isObjectIdOrHexString(shelf);
+		const orOptions = idValidation
 			? [{ _id: shelf }]
-			: [{ name: shelf }];
+			: [{ name_ar: shelf }, { name_en: shelf }];
 
 		const startIndex = (Number(booksPage) - 1) * booksLimit;
 
@@ -45,6 +46,7 @@ const getShelfResolve = async (_, args: Args, context) => {
 
 		const shelfDataBooks = (await Shelf.findById(shelfData._id)).books;
 
+		shelfData.name = lang === "ar" ? shelfData.name_ar : shelfData.name_en;
 		shelfData.currentBooksPage = booksPage;
 		shelfData.totalBooks = shelfDataBooks.length;
 		shelfData.numberOfBooksPages = Math.ceil(
