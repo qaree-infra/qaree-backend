@@ -11,6 +11,11 @@ const bookSearch = async (_, args, context) => {
 		const page = args?.page || 1;
 		const limit = args?.limit || 10;
 
+		if (keyword.trim().length === 0)
+			throw new Error(
+				lang === "ar" ? "ادخل كلمة البحث" : "Enter the search keyword",
+			);
+
 		const keys = keyword
 			?.trim()
 			?.split(" ")
@@ -30,20 +35,22 @@ const bookSearch = async (_, args, context) => {
 			sortFields[sort] = sortByValues[sort];
 		}
 
-		const totalBooks = await Book.countDocuments({
-			status: "published",
-			categories: { $in: categories },
-			name: { $in: keys }
-		});
-		
+		const query =
+			categories?.length > 0
+				? {
+						status: "published",
+						categories: { $in: categories },
+						name: { $in: keys },
+				  }
+				: {
+						status: "published",
+						name: { $in: keys },
+				  };
+
+		const totalBooks = await Book.countDocuments(query);
+
 		const startIndex = (Number(page) - 1) * limit;
-		const books: Array<BookInterface> = await Book.find({
-			status: "published",
-			categories: {
-				$in: categories,
-			},
-			name: { $in: keys }
-		})
+		const books: Array<BookInterface> = await Book.find(query)
 			.sort(sortFields)
 			.limit(limit || 10)
 			.skip(startIndex)
