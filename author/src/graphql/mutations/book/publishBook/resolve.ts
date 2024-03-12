@@ -30,7 +30,7 @@ const publishBookResolve = async (_, args: { bookId: string }, context) => {
 			bookData.categories.length === 0 ||
 			!bookData.edition ||
 			!bookData.language ||
-			bookFiles.length !== 3
+			bookFiles.length !== 2
 		) {
 			throw new Error(
 				lang === "ar"
