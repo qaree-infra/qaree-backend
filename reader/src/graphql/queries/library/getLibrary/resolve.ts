@@ -1,4 +1,5 @@
 import { auth } from "../../../../middleware/general/auth.js";
+import { BookInterface } from "../../../../models/book.js";
 import Shelf from "../../../../models/shelf.js";
 import { ShelfData } from "../../../types/shelf-type.js";
 
@@ -36,12 +37,46 @@ const getLibraryResolve = async (_, args: Args, context) => {
 				options: { limit: 3, skip: 0 },
 			});
 
+		const totalBooksAtShelves = await Shelf.aggregate([
+			{
+				$match: {
+					userId: user ? user : auth.user?._id.toString(),
+				},
+			},
+			{
+				$limit: limit,
+			},
+			{
+				$skip: startIndex,
+			},
+			{
+				$addFields: {
+					totalBooks: { $size: "$books" },
+				},
+			},
+			{
+				$project: {
+					_id: 1,
+					totalBooks: 1,
+				},
+			},
+		]);
+
 		return {
-			shelves: shelves.map((s) => ({
-				...s,
-				name: lang === "ar" ? s.name_ar : s.name_en,
-				books: s.books.map((b) => ({ book: b })),
-			})),
+			shelves: shelves.map((s) => {
+				const totalBooks = totalBooksAtShelves.find((t) => t._id === s._id);
+				return {
+					...s,
+					_id: s._id,
+					name: lang === "ar" ? s.name_ar : s.name_en,
+					books: s.books.map((b) => ({ book: b })),
+					totalBooks: totalBooks ? totalBooks.totalBooks : s.books.length,
+					numberOfBooksPages: totalBooks ? totalBooks.totalBooks / 3 : 0,
+					currentBooksPage: 1,
+					createdAt: s.createdAt,
+					updatedAt: s.updatedAt,
+				};
+			}),
 			total: totalShelves,
 			currentPage: page,
 			numberOfPages: Math.ceil(totalShelves / limit),
