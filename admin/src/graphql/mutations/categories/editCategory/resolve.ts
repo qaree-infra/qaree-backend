@@ -11,7 +11,7 @@ const editCategoryResolve = async (_, args, context) => {
 
 		if (auth?.error) throw new Error(auth?.error);
 
-		const { name_ar, name_en, categoryId } = args;
+		const { name_ar, name_en, background, categoryId } = args;
 
 		if (!categoryId)
 			throw new Error(
@@ -43,6 +43,7 @@ const editCategoryResolve = async (_, args, context) => {
 				{
 					name_ar,
 					name_en,
+					background
 				},
 				{ new: true },
 			);

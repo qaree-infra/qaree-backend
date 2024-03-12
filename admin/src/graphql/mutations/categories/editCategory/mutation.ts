@@ -1,20 +1,14 @@
 import { GraphQLString } from "graphql";
 import categoryType from "../../../types/category-type.js";
 import editCategroyResolve from "./resolve.js";
+import { commonArgs } from "../addCategory/mutation.js";
 
 const args = {
 	categoryId: {
 		type: GraphQLString,
 		description: "",
 	},
-	name_ar: {
-		type: GraphQLString,
-		description: "",
-	},
-	name_en: {
-		type: GraphQLString,
-		description: "",
-	},
+	...commonArgs
 };
 
 export default {

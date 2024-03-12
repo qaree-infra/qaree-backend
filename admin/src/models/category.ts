@@ -8,6 +8,7 @@ export interface CategoryInterface {
 	adminId: string;
 	createdAt: Date;
 	updatedAt: Date;
+	background: string;
 }
 
 const categorySchema = new mongoose.Schema<CategoryInterface>(
@@ -30,6 +31,10 @@ const categorySchema = new mongoose.Schema<CategoryInterface>(
 		icon: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "File",
+		},
+		background: {
+			type: String,
+			default: "#186cb0",
 		},
 	},
 	{

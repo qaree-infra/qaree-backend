@@ -24,6 +24,10 @@ const categoryType = new GraphQLObjectType({
       type: fileType,
       description: ""
     },
+		background: {
+			type: GraphQLString,
+			description: "",
+		},
 		createdAt: {
 			type: GraphQLString,
 			description: "",

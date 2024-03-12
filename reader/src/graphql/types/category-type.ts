@@ -1,8 +1,4 @@
-import {
-	GraphQLObjectType,
-	GraphQLID,
-	GraphQLString,
-} from "graphql";
+import { GraphQLObjectType, GraphQLID, GraphQLString } from "graphql";
 import fileType from "./file-type.js";
 
 const categoryType = new GraphQLObjectType({
@@ -20,10 +16,14 @@ const categoryType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
-    icon: {
-      type: fileType,
-      description: ""
-    },
+		icon: {
+			type: fileType,
+			description: "",
+		},
+		background: {
+			type: GraphQLString,
+			description: "",
+		},
 		createdAt: {
 			type: GraphQLString,
 			description: "",
