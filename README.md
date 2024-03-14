@@ -31,7 +31,9 @@ Qaree is a mobile app for e-book reading, with the ability to communicate with r
 - [Next.js](https://nextjs.org/) - Next.js is an open-source web development framework created by the private company Vercel providing React-based web applications with server-side rendering and static website generation.
 
 ## Project Structure
+The backend has been separated into three services such as `reader`, `author`, and `admin`. 
 
+Every service has this structure.
 ```
 ├── src
 |   ├── graphql
@@ -70,7 +72,7 @@ Qaree is a mobile app for e-book reading, with the ability to communicate with r
 
 - [Node.js](https://nodejs.org/en/) version 14+
 - [Exprees.js](https://expressjs.com/) version 4+
-- [MongoDB](https://www.mongodb.com/)
+- [MongoDB](https://www.mongodb.com/) version 7+
 
 ## Getting Started
 
@@ -84,13 +86,18 @@ git clone https://github.com/qaree-infra/qaree-backend.git
 cd qaree-backend
 ```
 
-2. **Install dependencies**
+2. **Choose the service**
+```
+cd <service> # admin, author, or reader
+```
+
+3. **Install dependencies**
 
 ```
 npm install
 ```
 
-3. **Run the project**
+4. **Run the project**
 
 ```
 npm run start
@@ -108,7 +115,14 @@ https://publishingcompany-backend.onrender.com/graphql
 
 ### Endpoints
 
-> Head over [Here](https://documenter.getpostman.com/view/16838332/2s9YJaXiZD) for Postman API documentation.
+For reader
+> Head over [Here](https://documenter.getpostman.com/view/16838332/2sA2xmUADc) for Postman API documentation.
+
+For admin
+> Head over [Here](https://documenter.getpostman.com/view/16838332/2sA2xcbFf2) for Postman API documentation.
+
+For author
+> Head over [Here](https://documenter.getpostman.com/view/16838332/2sA2xcbFf4) for Postman API documentation.
 
 ## Issues
 
