@@ -53,6 +53,7 @@ const reviewBookResolve = async (_, args, context) => {
 				user: user._id,
 				rate,
 				content,
+				bookId
 			});
 
 			return {
