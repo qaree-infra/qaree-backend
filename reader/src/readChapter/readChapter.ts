@@ -48,7 +48,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		while ((hrefValue = hrefRegex.exec(htmlContent.content)) !== null) {
 			const manifestData = manifestArray.find((f) =>
 				f?.href?.endsWith(
-					hrefValue[1]?.split("/")[hrefValue[1]?.split("/") - 1],
+					hrefValue[1]?.split("/")[hrefValue[1]?.split("/").length - 1],
 				),
 			);
 			console.log(manifestData);
