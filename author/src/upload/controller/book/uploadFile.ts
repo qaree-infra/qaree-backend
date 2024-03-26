@@ -47,10 +47,9 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 
 		if (book["file"]) {
 			// todo: delete all assets
-			await cloudinary.api.delete_resources_by_prefix(
-				`book/file/${book._id}`,
-				{ resource_type: "raw" },
-			);
+			await cloudinary.api.delete_resources_by_prefix(`book/file/${book._id}`, {
+				resource_type: "raw",
+			});
 
 			await File.findByIdAndDelete(fileData?._id);
 		}
@@ -105,8 +104,16 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 									folder: folder,
 								},
 								async (err, result) => {
-									const file = Object.values(epub.manifest).find(
-										(e: { href: string }) => e?.href?.includes(fileName),
+									const file: {
+										href?: string;
+										mediaType?: string;
+										"media-type"?: string;
+									} = Object.values(epub.manifest).find(
+										(e: {
+											href: string;
+											mediaType?: string;
+											"media-type"?: string;
+										}) => e?.href?.includes(fileName),
 									);
 									if (
 										file?.mediaType === "application/xhtml+xml" ||
