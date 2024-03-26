@@ -18,9 +18,26 @@ interface ReadRequest extends Request {
 
 const readChapter = async (req: ReadRequest, res: Response) => {
 	try {
-		// 3. validate if the book at book sample or not
+		const { lang } = req.query;
+		const { chId } = req.params;
 		const { chapterData, bookData, bookManifest, auth } = req;
 		const user = auth.user;
+
+		const bookRead = await BookRead.findOne({
+			book: bookData._id,
+			user: user._id,
+		});
+
+		if (
+			bookData.price > 0 &&
+			bookRead?.status !== "purchased" &&
+			bookData.sample.includes(chId)
+		)
+			throw new Error(
+				lang === "ar"
+					? "عفواَ لا يمكنك الوصل الى هذا الفصل"
+					: "Sorry, you can't read this chapter",
+			);
 
 		const htmlContent = await readFile(chapterData.href);
 		const manifestArray: Array<{ id: string; href: string }> =
@@ -90,11 +107,6 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 				{ new: true },
 			);
 		}
-
-		const bookRead = await BookRead.findOne({
-			book: bookData._id,
-			user: user._id,
-		});
 
 		if (bookRead) {
 			const chapterAtBookRead = bookRead.content.find(
