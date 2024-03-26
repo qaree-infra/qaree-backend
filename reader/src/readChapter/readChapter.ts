@@ -67,7 +67,9 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 
 		let chapter: { path: string; length: number } = bookFile.assets.find(
 			(f: { path: string; length: number }) =>
-				f?.path.endsWith(chapterData.href.split("/").at(-1)),
+				f?.path.endsWith(
+					chapterData.href.split("/")[chapterData.href.split("/").length - 1],
+				),
 		);
 
 		if (!chapter) {
