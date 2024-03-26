@@ -31,31 +31,34 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		let srcValue;
 		while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
 			console.log(srcValue[1].split("/"));
-			const manifestData = manifestArray.find((f) =>
-				f?.href?.endsWith(
+			const manifestData = manifestArray.find(
+				(f) =>
+					f?.href?.split("/")[f?.href?.split("/").length - 1] ===
 					srcValue[1]?.split("/")[srcValue[1]?.split("/").length - 1],
-				),
 			);
 			console.log(manifestData);
 			console.log(srcValue[1]);
+			const replacer = manifestData ? manifestData?.href : srcValue[1];
 			htmlContent.content = htmlContent.content.replace(
 				new RegExp(srcValue[1], "g"),
-				manifestData?.href || srcValue[1],
+				replacer,
 			);
 		}
 
 		let hrefValue;
 		while ((hrefValue = hrefRegex.exec(htmlContent.content)) !== null) {
-			const manifestData = manifestArray.find((f) =>
-				f?.href?.endsWith(
+			console.log(hrefValue[1]?.split("/"));
+			const manifestData = manifestArray.find(
+				(f) =>
+					f?.href?.split("/")[f?.href?.split("/").length - 1] ===
 					hrefValue[1]?.split("/")[hrefValue[1]?.split("/").length - 1],
-				),
 			);
 			console.log(manifestData);
 			console.log(hrefValue[1]);
+			const replacer = manifestData ? manifestData?.href : hrefValue[1];
 			htmlContent.content = htmlContent.content.replace(
 				new RegExp(hrefValue[1], "g"),
-				manifestData?.href || hrefValue[1],
+				replacer,
 			);
 		}
 
