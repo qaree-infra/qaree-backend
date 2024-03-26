@@ -36,6 +36,8 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 					srcValue[1]?.split("/")[srcValue[1]?.split("/").length - 1],
 				),
 			);
+			console.log(manifestData);
+			console.log(srcValue[1]);
 			htmlContent.content = htmlContent.content.replaceAll(
 				srcValue[1],
 				manifestData?.href || srcValue[1],
