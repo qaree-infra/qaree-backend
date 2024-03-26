@@ -11,6 +11,7 @@ export interface BookReadInterface {
 	updatedAt: Date;
 	readingProgress: number;
 	user: Schema.Types.ObjectId;
+	content: Array<{ length: number; path: string }>;
 }
 
 const bookSchema: Schema = new mongoose.Schema<BookReadInterface>(
@@ -24,6 +25,11 @@ const bookSchema: Schema = new mongoose.Schema<BookReadInterface>(
 			type: String,
 			trim: true,
 			default: "sample",
+		},
+		content: {
+			type: new Array,
+			trim: true,
+			default: [],
 		},
 		readingProgress: {
 			type: Number,
