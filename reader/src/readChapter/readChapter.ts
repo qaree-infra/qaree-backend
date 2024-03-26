@@ -32,7 +32,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		let srcValue;
 		while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
 			const manifestData = manifestArray.find((f) =>
-				f?.href?.endsWith(srcValue[1].split("/").at(-1)),
+				f?.href?.endsWith(srcValue[1]?.split("/")?.at(-1)),
 			);
 			htmlContent.content = htmlContent.content.replaceAll(
 				srcValue[1],
@@ -43,7 +43,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		let hrefValue;
 		while ((hrefValue = hrefRegex.exec(htmlContent.content)) !== null) {
 			const manifestData = manifestArray.find((f) =>
-				f?.href?.endsWith(hrefValue[1].split("/").at(-1)),
+				f?.href?.endsWith(hrefValue[1]?.split("/")?.at(-1)),
 			);
 			htmlContent.content = htmlContent.content.replaceAll(
 				hrefValue[1],
