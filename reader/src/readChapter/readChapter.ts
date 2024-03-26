@@ -38,8 +38,8 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			);
 			console.log(manifestData);
 			console.log(srcValue[1]);
-			htmlContent.content = htmlContent.content.replaceAll(
-				srcValue[1],
+			htmlContent.content = htmlContent.content.replace(
+				new RegExp(srcValue[1], "g"),
 				manifestData?.href || srcValue[1],
 			);
 		}
@@ -53,8 +53,8 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			);
 			console.log(manifestData);
 			console.log(hrefValue[1]);
-			htmlContent.content = htmlContent.content.replaceAll(
-				hrefValue[1],
+			htmlContent.content = htmlContent.content.replace(
+				new RegExp(hrefValue[1], "g"),
 				manifestData?.href || hrefValue[1],
 			);
 		}
