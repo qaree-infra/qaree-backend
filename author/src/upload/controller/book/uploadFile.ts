@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from "path";
 import unzipper from "unzipper";
 import { EPub } from "epub2";
 import { Response, Request } from "express";
@@ -37,6 +36,8 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 			resource_type: "raw",
 		};
 
+		const epub = await EPub.createAsync(file.path, "", "");
+
 		const book: BookInterface = await Book.findById(id);
 
 		const fileData: FileInterface = await File.findOne({
@@ -46,7 +47,10 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 
 		if (book["file"]) {
 			// todo: delete all assets
-			cloudinary.api.delete_resources([fileData?.name]);
+			await cloudinary.api.delete_resources_by_prefix(
+				`book/file/${book._id}`,
+				{ resource_type: "raw" },
+			);
 
 			await File.findByIdAndDelete(fileData?._id);
 		}
@@ -77,7 +81,7 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 				const entryType = entry.type;
 
 				if (entryType === "File") {
-					entry.buffer().then(async (content) => {
+					await entry.buffer().then(async (content) => {
 						await cloudinary.uploader
 							.upload_stream(
 								{
@@ -101,14 +105,28 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 									folder: folder,
 								},
 								async (err, result) => {
-									await assets.push(result.secure_url);
-									await File.findByIdAndUpdate(
-										newFileData._id,
-										{
-											assets: assets,
-										},
-										{ new: true },
+									const file = Object.values(epub.manifest).find(
+										(e: { href: string }) => e?.href?.includes(fileName),
 									);
+									if (
+										file?.mediaType === "application/xhtml+xml" ||
+										file?.["media-type"] === "application/xhtml+xml"
+									) {
+										const text = await Buffer.from(content)
+											.toString("utf-8")
+											.replace(/<[^>]*>/g, " ");
+										await assets.push({
+											path: result.secure_url,
+											length: text.trim().split(/\s+/).length,
+										});
+										await File.findByIdAndUpdate(
+											newFileData._id,
+											{
+												assets: assets,
+											},
+											{ new: true },
+										);
+									}
 								},
 							)
 							.end(content);
