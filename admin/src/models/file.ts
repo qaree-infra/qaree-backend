@@ -8,7 +8,7 @@ export interface FileInterface {
 	type: string;
 	userId: string;
 	deleted: boolean;
-	assets?: Array<string>;
+	assets?: Array<{ path: string; length: number }>;
 }
 
 const fileSchema = new mongoose.Schema<FileInterface>(
@@ -42,7 +42,7 @@ const fileSchema = new mongoose.Schema<FileInterface>(
 			default: false,
 		},
 		assets: {
-			type: [{ type: String }],
+			type: [{ path: { type: String }, length: { type: Number } }],
 		},
 	},
 	{
