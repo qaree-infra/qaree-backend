@@ -23,14 +23,16 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		const user = auth.user;
 
 		const htmlContent = await readFile(chapterData.href);
-
+		console.log(htmlContent);
 		const manifestArray: Array<{ id: string; href: string }> =
 			Object.values(bookManifest);
+		console.log(manifestArray);
 
 		const srcRegex = /src="([^"]*)"/g;
 		const hrefRegex = /href="([^"]*)"/g;
 		let srcValue;
 		while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
+			console.log(srcValue[1]);
 			const manifestData = manifestArray.find((f) =>
 				f?.href?.endsWith(srcValue[1]?.split("/")?.at(-1)),
 			);
