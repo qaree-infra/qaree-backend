@@ -66,8 +66,7 @@ const getMyBooksResolve = async (_, args, context) => {
 				.populate("categories")
 				.populate("author")
 				.populate("cover")
-				.populate("file")
-				.populate("sample");
+				.populate("file");
 
 			return {
 				books,
@@ -90,8 +89,7 @@ const getMyBooksResolve = async (_, args, context) => {
 				.populate("categories")
 				.populate("author")
 				.populate("cover")
-				.populate("file")
-				.populate("sample");
+				.populate("file");
 
 			return {
 				books,

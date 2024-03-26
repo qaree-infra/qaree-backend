@@ -40,14 +40,6 @@ const deleteBookResolve = async (_, args, context) => {
 			{ new: true },
 		);
 
-		await File.findByIdAndUpdate(
-			bookVerification.bookData.sample,
-			{
-				deleted: true,
-			},
-			{ new: true },
-		);
-
 		return {
 			message:
 				lang === "ar"

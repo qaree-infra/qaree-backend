@@ -21,7 +21,7 @@ const publishBookResolve = async (_, args: { bookId: string }, context) => {
 		if (error) throw new Error(error);
 
 		const bookFiles = await File.find({
-			_id: { $in: [bookData.file, bookData.sample, bookData.cover] },
+			_id: { $in: [bookData.file, bookData.cover] },
 		});
 
 		if (
@@ -47,8 +47,7 @@ const publishBookResolve = async (_, args: { bookId: string }, context) => {
 			.populate("categories")
 			.populate("author")
 			.populate("cover")
-			.populate("file")
-			.populate("sample");
+			.populate("file");
 
 		return { message: "published successfully", book: updatedBook };
 	} catch (error) {

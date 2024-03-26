@@ -14,7 +14,7 @@ export interface BookInterface {
 	price: number;
 	cover: Schema.Types.ObjectId;
 	file: Schema.Types.ObjectId;
-	sample: Schema.Types.ObjectId;
+	sample: Array<string>;
 	deleted: boolean;
 	language: string;
 	author: Schema.Types.ObjectId;
@@ -25,10 +25,6 @@ export interface BookInterface {
 	publishionDate: Date;
 	previousPublishingData: Date;
 	rejectionReasons: string;
-	bookReads: {
-		purchased: Array<Schema.Types.ObjectId>;
-		sample: Array<Schema.Types.ObjectId>;
-	};
 }
 
 const bookSchema: Schema = new mongoose.Schema<BookInterface>(
@@ -75,8 +71,8 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			ref: "File",
 		},
 		sample: {
-			type: Schema.Types.ObjectId,
-			ref: "File",
+			type: [{ type: String }],
+			default: [],
 		},
 		deleted: {
 			type: Boolean,
@@ -114,10 +110,6 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 		rejectionReasons: {
 			type: String,
 			default: "",
-		},
-		bookReads: {
-			purchased: [{ type: Schema.Types.ObjectId, ref: "BookRead" }],
-			sample: [{ type: Schema.Types.ObjectId, ref: "BookRead" }],
 		},
 	},
 	{

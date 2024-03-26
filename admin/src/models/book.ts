@@ -14,7 +14,7 @@ export interface BookInterface {
 	price: number;
 	cover: Schema.Types.ObjectId;
 	file: Schema.Types.ObjectId;
-	sample: Schema.Types.ObjectId;
+	sample: Array<string>;
 	deleted: boolean;
 	language: string;
 	author: Schema.Types.ObjectId;
@@ -71,8 +71,8 @@ const bookSchema: Schema = new mongoose.Schema<BookInterface>(
 			ref: "File",
 		},
 		sample: {
-			type: Schema.Types.ObjectId,
-			ref: "File",
+			type: [{ type: String }],
+			default: [],
 		},
 		deleted: {
 			type: Boolean,

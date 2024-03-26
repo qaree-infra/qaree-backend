@@ -53,8 +53,7 @@ const getBooksResolve = async (_, args: ArgsInterface, context) => {
 				.skip(startIndex)
 				.populate("categories")
 				.populate("author")
-				.populate("cover")
-				.populate("sample");
+				.populate("cover");
 
 			return {
 				books,
@@ -75,8 +74,7 @@ const getBooksResolve = async (_, args: ArgsInterface, context) => {
 				.skip(startIndex)
 				.populate("categories")
 				.populate("author")
-				.populate("cover")
-				.populate("sample");
+				.populate("cover");
 
 			return {
 				books,

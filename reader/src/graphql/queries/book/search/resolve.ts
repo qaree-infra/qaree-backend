@@ -56,8 +56,7 @@ const bookSearch = async (_, args, context) => {
 			.skip(startIndex)
 			.populate("categories")
 			.populate("author")
-			.populate("cover")
-			.populate("sample");
+			.populate("cover");
 
 		return {
 			books,

@@ -45,8 +45,7 @@ const verifyBookMiddleware = async (
 		})
 			.populate("categories")
 			.populate("author")
-			.populate("cover")
-			.populate("sample");
+			.populate("cover");
 
 		if (bookData === null) {
 			res

@@ -78,7 +78,7 @@ const editOffer = async (_, args, context) => {
 			{ new: true },
 		).populate({
 			path: "book",
-			options: { populate: ["author", "cover", "sample"] },
+			options: { populate: ["author", "cover"] },
 		});
 
 		return updatedOffer;

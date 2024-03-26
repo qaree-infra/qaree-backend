@@ -39,7 +39,7 @@ const getShelfResolve = async (_, args: Args, context) => {
 			options: {
 				limit: booksLimit,
 				skip: startIndex,
-				populate: ["author", "cover", "sample", "categories"],
+				populate: ["author", "cover", "categories"],
 			},
 		});
 

@@ -49,7 +49,7 @@ const VerifyFile = async (req: Request, res: Response, next: NextFunction) => {
 		}
 
 		if (
-			(fileType.includes("file") || fileType.includes("sample")) &&
+			(fileType.includes("file")) &&
 			file.mimetype !== "application/epub+zip"
 		) {
 			return res.status(400).json({

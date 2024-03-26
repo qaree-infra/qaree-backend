@@ -34,7 +34,7 @@ const getOffersResolve = async (_, args, context) => {
 			.skip(startIndex)
 			.populate({
 				path: "book",
-				options: { populate: ["author", "cover", "sample", "categories"] },
+				options: { populate: ["author", "cover", "categories"] },
 			});
 
 		return {

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import controller from "./controller.js";
 import uploadUserAvatarController from "./controller/Avatar/user.js";
 import uploadBookCoverController from "./controller/book/uploadCover.js";
 import uploadBookFileController from "./controller/book/uploadFile.js";
@@ -38,15 +37,6 @@ router.post(
 	upload.single("file"),
 	VerifyFile,
 	uploadBookFileController,
-);
-
-router.post(
-	"/book/sample/:id",
-	Auth,
-	VerifyBook,
-	upload.single("sample"),
-	VerifyFile,
-	controller,
 );
 
 export default router;

@@ -20,8 +20,7 @@ const verifyBook = async (context, bookId, userId) => {
 			.populate("categories")
 			.populate("author")
 			.populate("cover")
-			.populate("file")
-			.populate("sample");
+			.populate("file");
 
 		if (bookData === null) {
 			return {

@@ -33,8 +33,7 @@ const verifyBook = async (bookId: string, context: ContextInterface) => {
 		})
 			.populate("categories")
 			.populate("author")
-			.populate("cover")
-			.populate("sample");
+			.populate("cover");
 
 		if (bookData === null) {
 			return {
