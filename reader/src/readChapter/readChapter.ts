@@ -33,6 +33,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		let srcValue;
 		while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
 			console.log(srcValue[1]);
+			console.log(srcValue[1].split("/"));
 			const manifestData = manifestArray.find((f) =>
 				f?.href?.endsWith(srcValue[1]?.split("/")?.at(-1)),
 			);
