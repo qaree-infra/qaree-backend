@@ -31,13 +31,16 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		if (
 			bookData.price > 0 &&
 			bookRead?.status !== "purchased" &&
-			bookData.sample.includes(chId)
+			!bookData.sample.includes(chId)
 		)
-			throw new Error(
-				lang === "ar"
-					? "عفواَ لا يمكنك الوصل الى هذا الفصل"
-					: "Sorry, you can't read this chapter",
-			);
+			res
+				.status(400)
+				.json({
+					message:
+						lang === "ar"
+							? "عفواَ لا يمكنك الوصل الى هذا الفصل"
+							: "Sorry, you can't read this chapter",
+				});
 
 		const htmlContent = await readFile(chapterData.href);
 		const manifestArray: Array<{ id: string; href: string }> =
@@ -47,14 +50,11 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		const hrefRegex = /href="([^"]*)"/g;
 		let srcValue;
 		while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
-			console.log(srcValue[1].split("/"));
 			const manifestData = manifestArray.find(
 				(f) =>
 					f?.href?.split("/")[f?.href?.split("/").length - 1] ===
 					srcValue[1]?.split("/")[srcValue[1]?.split("/").length - 1],
 			);
-			console.log(manifestData);
-			console.log(srcValue[1]);
 			const replacer = manifestData ? manifestData?.href : srcValue[1];
 			htmlContent.content = htmlContent.content.replace(
 				new RegExp(srcValue[1], "g"),
@@ -64,14 +64,11 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 
 		let hrefValue;
 		while ((hrefValue = hrefRegex.exec(htmlContent.content)) !== null) {
-			console.log(hrefValue[1]?.split("/"));
 			const manifestData = manifestArray.find(
 				(f) =>
 					f?.href?.split("/")[f?.href?.split("/").length - 1] ===
 					hrefValue[1]?.split("/")[hrefValue[1]?.split("/").length - 1],
 			);
-			console.log(manifestData);
-			console.log(hrefValue[1]);
 			const replacer = manifestData ? manifestData?.href : hrefValue[1];
 			htmlContent.content = htmlContent.content.replace(
 				new RegExp(hrefValue[1], "g"),
