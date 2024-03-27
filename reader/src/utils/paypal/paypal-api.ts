@@ -59,7 +59,7 @@ export async function generateClientToken(author_merchant_id: string) {
 			Authorization: `Bearer ${accessToken}`,
 			"Accept-Language": "en_US",
 			"Content-Type": "application/json",
-			"PayPal-Auth-Assertion": authAssertion,
+			// "PayPal-Auth-Assertion": authAssertion,
 			"PayPal-Partner-Attribution-Id": "BN-CODE",
 		},
 	});
@@ -94,7 +94,7 @@ export async function createOrder(price: number, author_merchant_id) {
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: `Bearer ${accessToken}`,
-			"PayPal-Auth-Assertion": authAssertion,
+			// "PayPal-Auth-Assertion": authAssertion,
 			"PayPal-Partner-Attribution-Id": "BN-CODE",
 		},
 		body: JSON.stringify(payload),
@@ -121,7 +121,7 @@ export async function capturePayment(
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: `Bearer ${accessToken}`,
-			"PayPal-Auth-Assertion": authAssertion,
+			// "PayPal-Auth-Assertion": authAssertion,
 			"PayPal-Partner-Attribution-Id": "BN-CODE",
 		},
 	});
