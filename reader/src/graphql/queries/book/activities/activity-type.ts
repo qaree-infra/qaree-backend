@@ -1,4 +1,4 @@
-import { GraphQLInt, GraphQLString, GraphQLObjectType } from "graphql";
+import { GraphQLInt, GraphQLString, GraphQLObjectType, GraphQLFloat } from "graphql";
 import bookInfoType from "../../../types/book-type.js";
 
 const activity = new GraphQLObjectType({
@@ -14,7 +14,7 @@ const activity = new GraphQLObjectType({
 			description: "",
 		},
 		readingProgress: {
-			type: GraphQLInt,
+			type: GraphQLFloat,
 			description: "",
 		},
 		updatedAt: {
