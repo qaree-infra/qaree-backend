@@ -33,14 +33,12 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			bookRead?.status !== "purchased" &&
 			!bookData.sample.includes(chId)
 		)
-			res
-				.status(400)
-				.json({
-					message:
-						lang === "ar"
-							? "عفواَ لا يمكنك الوصل الى هذا الفصل"
-							: "Sorry, you can't read this chapter",
-				});
+			return res.status(400).json({
+				message:
+					lang === "ar"
+						? "عفواَ لا يمكنك الوصل الى هذا الفصل"
+						: "Sorry, you can't read this chapter",
+			});
 
 		const htmlContent = await readFile(chapterData.href);
 		const manifestArray: Array<{ id: string; href: string }> =
@@ -105,6 +103,8 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			);
 		}
 
+		console.log(bookRead);
+
 		if (bookRead) {
 			const chapterAtBookRead = bookRead.content.find(
 				(e) => e?.path === chapterData?.href,
@@ -112,7 +112,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			if (!chapterAtBookRead) {
 				const content = bookRead.content.concat([chapter]);
 				const progerss =
-					content.length === 0
+					content?.length === 0
 						? 0
 						: content?.reduce((p, c) => p + (c?.length || 0), 0);
 				await BookRead.findByIdAndUpdate(bookRead._id, {
@@ -121,9 +121,9 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 				});
 			}
 		} else {
-			const content = bookRead.content.concat([chapter]);
+			const content = bookRead?.content.concat([chapter]);
 			const progerss =
-				content.length === 0
+				content?.length === 0
 					? 0
 					: content?.reduce((p, c) => p + (c?.length || 0), 0);
 			await BookRead.create({
@@ -135,7 +135,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			});
 		}
 
-		res.send(htmlContent.content);
+		return res.send(htmlContent.content);
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: error.message });

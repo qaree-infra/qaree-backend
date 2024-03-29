@@ -11,6 +11,8 @@ export const getBookFiles = async (bookData: BookInterface) => {
 	try {
 		const bookFile: FileInterface = await File.findById(bookData.file);
 
+		console.log(bookData);
+
 		const allAssets = await cloudinary.api
 			.resources({
 				type: "upload",
@@ -18,9 +20,10 @@ export const getBookFiles = async (bookData: BookInterface) => {
 				resource_type: "raw",
 				max_results: 500,
 			})
-			.then((res) => res.resources.map((resource) => resource.secure_url));
+			console.log(allAssets.resources.map((resource) => resource.secure_url));
+			// .then((res) => res.resources.map((resource) => resource.secure_url));
 
-		return allAssets;
+		return allAssets.resources.map((resource) => resource.secure_url);
 	} catch (error) {
 		throw new Error(error);
 	}
