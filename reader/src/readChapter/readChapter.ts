@@ -103,8 +103,6 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			);
 		}
 
-		console.log(bookRead);
-
 		if (bookRead) {
 			const chapterAtBookRead = bookRead.content.find(
 				(e) => e?.path === chapterData?.href,
@@ -117,7 +115,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 						: content?.reduce((p, c) => p + (c?.length || 0), 0);
 				await BookRead.findByIdAndUpdate(bookRead._id, {
 					content: content,
-					readingProgress: progerss / bookLength,
+					readingProgress: (progerss / bookLength) * 100,
 				});
 			}
 		} else {
@@ -130,7 +128,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 				user: user._id,
 				book: bookData._id,
 				content: content,
-				readingProgress: progerss / bookLength,
+				readingProgress: (progerss / bookLength) * 100,
 				status: bookData.price === 0 ? "purchased" : "sample",
 			});
 		}
