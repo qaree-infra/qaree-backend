@@ -11,7 +11,7 @@ export const getBookFiles = async (bookData: BookInterface) => {
 	try {
 		const bookFile: FileInterface = await File.findById(bookData.file);
 
-		console.log(bookData);
+		// console.log(bookData);
 
 		const allAssets = await cloudinary.api
 			.resources({
@@ -20,7 +20,7 @@ export const getBookFiles = async (bookData: BookInterface) => {
 				resource_type: "raw",
 				max_results: 500,
 			})
-			console.log(allAssets.resources.map((resource) => resource.secure_url));
+			// console.log(allAssets.resources.map((resource) => resource.secure_url));
 			// .then((res) => res.resources.map((resource) => resource.secure_url));
 
 		return allAssets.resources.map((resource) => resource.secure_url);
@@ -30,10 +30,13 @@ export const getBookFiles = async (bookData: BookInterface) => {
 };
 
 const readFile = async (fileUrl: string, lower?: boolean) => {
+	// console.log(fileUrl);
 	try {
 		const { data } = await axios.get(fileUrl);
+		// console.log(fileUrl, data)
 
 		const parseData = parseXML(data, lower);
+		// console.log(fileUrl, parseData)
 
 		return { content: data, parsedData: parseData };
 	} catch (error) {
@@ -275,6 +278,8 @@ export const parseManifest = (rootFile: string, manifest) => {
 export const getEPubRootFile = async (bookContainerURL: string) => {
 	try {
 		const bookContainerData = await readFile(bookContainerURL, true);
+
+		// console.log(bookContainerData);
 
 		if (
 			!bookContainerData.parsedData.rootfiles ||

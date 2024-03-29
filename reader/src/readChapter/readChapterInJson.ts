@@ -136,7 +136,10 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		// console.log(htmlContent.parsedData);
 		// console.log(typeof htmlContent.content);
 
-		return res.send(htmlContent.content);
+		return res.json({
+			content: htmlContent.content,
+			parsedData: htmlContent.parsedData,
+		});
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json({ message: error.message });
