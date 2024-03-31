@@ -63,6 +63,7 @@ const verifyBookMiddleware = async (
 		const bookContainerURL = allAssets.find((asset) =>
 			asset.toLowerCase().includes("meta-inf/container.xml"),
 		);
+		console.log(bookContainerURL);
 
 		if (!bookContainerURL) throw new Error("Container file didn't found");
 		const { filename } = await getEPubRootFile(bookContainerURL);
