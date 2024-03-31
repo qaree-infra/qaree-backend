@@ -74,64 +74,64 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			);
 		}
 
-		const bookFile = await File.findById(bookData.file);
-		const bookLength = bookFile?.assets?.reduce(
-			(p, c) => p + (c?.length || 0),
-			0,
-		);
+		// const bookFile = await File.findById(bookData.file);
+		// const bookLength = bookFile?.assets?.reduce(
+		// 	(p, c) => p + (c?.length || 0),
+		// 	0,
+		// );
 
-		let chapter: { path: string; length: number } = bookFile.assets.find(
-			(f: { path: string; length: number }) =>
-				f?.path.split("/")[f?.path.split("/").length - 1] ===
-				chapterData.href.split("/")[chapterData.href.split("/").length - 1],
-		);
+		// let chapter: { path: string; length: number } = bookFile.assets.find(
+		// 	(f: { path: string; length: number }) =>
+		// 		f?.path.split("/")[f?.path.split("/").length - 1] ===
+		// 		chapterData.href.split("/")[chapterData.href.split("/").length - 1],
+		// );
 
-		if (!chapter) {
-			chapter = {
-				path: chapterData.href,
-				length: htmlContent.content
-					.replace(/<[^>]*>/g, " ")
-					.trim()
-					.split(/\s+/).length,
-			};
-			await File.findByIdAndUpdate(
-				bookFile._id,
-				{
-					assets: bookFile.assets.concat([chapter]),
-				},
-				{ new: true },
-			);
-		}
+		// if (!chapter) {
+		// 	chapter = {
+		// 		path: chapterData.href,
+		// 		length: htmlContent.content
+		// 			.replace(/<[^>]*>/g, " ")
+		// 			.trim()
+		// 			.split(/\s+/).length,
+		// 	};
+		// 	await File.findByIdAndUpdate(
+		// 		bookFile._id,
+		// 		{
+		// 			assets: bookFile.assets.concat([chapter]),
+		// 		},
+		// 		{ new: true },
+		// 	);
+		// }
 
-		if (bookRead) {
-			const chapterAtBookRead = bookRead.content.find(
-				(e) => e?.path === chapterData?.href,
-			);
-			if (!chapterAtBookRead) {
-				const content = bookRead.content.concat([chapter]);
-				const progerss =
-					content?.length === 0
-						? 0
-						: content?.reduce((p, c) => p + (c?.length || 0), 0);
-				await BookRead.findByIdAndUpdate(bookRead._id, {
-					content: content,
-					readingProgress: (progerss / bookLength) * 100,
-				});
-			}
-		} else {
-			const content = bookRead?.content.concat([chapter]);
-			const progerss =
-				content?.length === 0
-					? 0
-					: content?.reduce((p, c) => p + (c?.length || 0), 0);
-			await BookRead.create({
-				user: user._id,
-				book: bookData._id,
-				content: content,
-				readingProgress: (progerss / bookLength) * 100,
-				status: bookData.price === 0 ? "purchased" : "sample",
-			});
-		}
+		// if (bookRead) {
+		// 	const chapterAtBookRead = bookRead.content.find(
+		// 		(e) => e?.path === chapterData?.href,
+		// 	);
+		// 	if (!chapterAtBookRead) {
+		// 		const content = bookRead.content.concat([chapter]);
+		// 		const progerss =
+		// 			content?.length === 0
+		// 				? 0
+		// 				: content?.reduce((p, c) => p + (c?.length || 0), 0);
+		// 		await BookRead.findByIdAndUpdate(bookRead._id, {
+		// 			content: content,
+		// 			readingProgress: (progerss / bookLength) * 100,
+		// 		});
+		// 	}
+		// } else {
+		// 	const content = bookRead?.content.concat([chapter]);
+		// 	const progerss =
+		// 		content?.length === 0
+		// 			? 0
+		// 			: content?.reduce((p, c) => p + (c?.length || 0), 0);
+		// 	await BookRead.create({
+		// 		user: user._id,
+		// 		book: bookData._id,
+		// 		content: content,
+		// 		readingProgress: (progerss / bookLength) * 100,
+		// 		status: bookData.price === 0 ? "purchased" : "sample",
+		// 	});
+		// }
 		// console.log(htmlContent.content);
 		// console.log(htmlContent.parsedData);
 		// console.log(typeof htmlContent.content);
