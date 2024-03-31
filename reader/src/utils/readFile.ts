@@ -25,7 +25,7 @@ export const getBookFiles = async (bookData: BookInterface) => {
 
 		return allAssets.resources.map((resource) => resource.secure_url);
 	} catch (error) {
-		throw new Error(error);
+		throw new Error(error.message);
 	}
 };
 
