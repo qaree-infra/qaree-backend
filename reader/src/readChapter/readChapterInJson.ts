@@ -138,7 +138,6 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 
 		return res.json({
 			content: htmlContent.content,
-			parsedData: htmlContent.parsedData,
 		});
 	} catch (error) {
 		console.log(error);
