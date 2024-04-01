@@ -42,9 +42,13 @@ const resolve = async (_, args, context) => {
 			(f) => f?.["media-type"] === extention || f?.["mediaType"] === extention,
 		);
 
-		const allAtHTMLFiles = allHTML.every((e: { id: string }) =>
-			sample.includes(e.id),
-		);
+		const allAtHTMLFiles = sample.every((e) => {
+			return (
+				allHTML.find((html: { id: string }) => {
+					return html.id === e;
+				}) !== undefined
+			);
+		});
 
 		if (!allAtHTMLFiles)
 			throw new Error(
