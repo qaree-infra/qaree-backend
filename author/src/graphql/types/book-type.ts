@@ -76,7 +76,7 @@ const bookType = new GraphQLObjectType({
 			description: "",
 		},
 		sample: {
-			type: fileType,
+			type: new GraphQLList(GraphQLString),
 			description: "",
 		},
 		cover: {
