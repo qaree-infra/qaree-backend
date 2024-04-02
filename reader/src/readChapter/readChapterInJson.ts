@@ -127,10 +127,8 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 				});
 			}
 		} else {
-			const content = bookRead?.content.concat([
-				{ chId: chapterData.id, length: chapter.length },
-			]);
-			console.log("content: ", )
+			const content = [{ chId: chapterData.id, length: chapter.length }];
+			console.log("content: ");
 			console.log("content: ", content);
 			const progerss: number =
 				content?.length === 0
