@@ -110,17 +110,17 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			const chapterAtBookRead = bookRead.content.find(
 				(e) => e?.chId === chapterData?.id,
 			);
-			console.log("chAtBookRead: ", chapterAtBookRead);
+			console.log("chAtBookRead for book read: ", chapterAtBookRead);
 			if (!chapterAtBookRead) {
 				const content = bookRead.content.concat([
 					{ chId: chapterData.id, length: chapter.length },
 				]);
-				console.log("content: ", content);
+				console.log("content for book read: ", content);
 				const progerss =
 					content?.length === 0
 						? 0
 						: content?.reduce((p, c) => p + (c?.length || 0), 0);
-				console.log("progress: ", progerss);
+				console.log("progress for book read: ", progerss);
 				await BookRead.findByIdAndUpdate(bookRead._id, {
 					content: content,
 					readingProgress: (progerss / bookLength) * 100,
@@ -145,9 +145,6 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 				status: bookData.price === 0 ? "purchased" : "sample",
 			});
 		}
-		// console.log(htmlContent.content);
-		// console.log(htmlContent.parsedData);
-		// console.log(typeof htmlContent.content);
 
 		return res.json({
 			content: htmlContent.content,
