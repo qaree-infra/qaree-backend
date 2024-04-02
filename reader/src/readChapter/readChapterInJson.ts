@@ -27,6 +27,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			book: bookData._id,
 			user: user._id,
 		});
+		console.log(bookRead);
 
 		if (
 			bookData.price > 0 &&
@@ -129,6 +130,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			const content = bookRead?.content.concat([
 				{ chId: chapterData.id, length: chapter.length },
 			]);
+			console.log("content: ", )
 			console.log("content: ", content);
 			const progerss: number =
 				content?.length === 0
