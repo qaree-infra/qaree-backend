@@ -79,12 +79,14 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			(p, c) => p + (c?.length || 0),
 			0,
 		);
+		console.log(bookLength);
 
 		let chapter: { path: string; length: number } = bookFile.assets.find(
 			(f: { path: string; length: number }) =>
 				f?.path.split("/")[f?.path.split("/").length - 1] ===
 				chapterData.href.split("/")[chapterData.href.split("/").length - 1],
 		);
+		console.log(chapter);
 
 		if (!chapter) {
 			chapter = {
@@ -107,14 +109,17 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			const chapterAtBookRead = bookRead.content.find(
 				(e) => e?.chId === chapterData?.id,
 			);
+			console.log("chAtBookRead: ", chapterAtBookRead);
 			if (!chapterAtBookRead) {
 				const content = bookRead.content.concat([
 					{ chId: chapterData.id, length: chapter.length },
 				]);
+				console.log("content: ", content);
 				const progerss =
 					content?.length === 0
 						? 0
 						: content?.reduce((p, c) => p + (c?.length || 0), 0);
+				console.log("progress: ", progerss);
 				await BookRead.findByIdAndUpdate(bookRead._id, {
 					content: content,
 					readingProgress: (progerss / bookLength) * 100,
@@ -124,10 +129,12 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			const content = bookRead?.content.concat([
 				{ chId: chapterData.id, length: chapter.length },
 			]);
-			const progerss =
+			console.log("content: ", content);
+			const progerss: number =
 				content?.length === 0
 					? 0
 					: content?.reduce((p, c) => p + (c?.length || 0), 0);
+			console.log("progress: ", progerss);
 			await BookRead.create({
 				user: user._id,
 				book: bookData._id,
