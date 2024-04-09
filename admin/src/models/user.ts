@@ -12,6 +12,10 @@ export interface UserInterface {
 	books?: Array<Schema.Types.ObjectId>;
 	bookReads: Array<Schema.Types.ObjectId>;
 	bio: string;
+	chat: {
+		connection: boolean;
+		socketId: string;
+	};
 }
 
 const userSchema: Schema = new mongoose.Schema<UserInterface>(
@@ -54,11 +58,15 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 		},
 		bookReads: {
 			type: [Schema.Types.ObjectId],
-			// todo: 
+			// todo:
 		},
 		bio: {
 			type: String,
 			default: "",
+		},
+		chat: {
+			type: { connection: Boolean, socketId: String },
+			default: { connection: false, socketId: "" },
 		},
 	},
 	{
