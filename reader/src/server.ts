@@ -62,7 +62,7 @@ io.on("connection", async (socket) => {
 
 	socket.on("read", readMsg(io, socket));
 
-	socket.on("list", listMsgs(io, socket));
+	socket.on("message-list", listMsgs(io, socket));
 
 	socket.on("disconnect", async () => {
 		const result = await User.findByIdAndUpdate(
