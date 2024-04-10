@@ -9,7 +9,9 @@ const authSocket = async (socket, next) => {
 		let token: string = "";
 
 		if (socket.handshake.auth.token || socket.handshake.headers.authorization)
-			token = socket.handshake.auth.token.split("Bearer ")[1] || socket.handshake.headers.authorization.split("Bearer ")[1];
+			token =
+				socket.handshake.auth.token.split("Bearer ")[1] ||
+				socket.handshake.headers.authorization.split("Bearer ")[1];
 
 		if (!token) {
 			return next(
@@ -54,8 +56,10 @@ const authSocket = async (socket, next) => {
 		}
 
 		const user: UserInterface | null =
-			(await User.findById(userId).select("-password")) ||
-			(await User.findOne({ email: decodedData.email }).select("-password"));
+			(await User.findById(userId).select("-password").populate("avatar")) ||
+			(await User.findOne({ email: decodedData.email })
+				.select("-password")
+				.populate("avatar"));
 
 		if (!user) {
 			return next(
