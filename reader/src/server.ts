@@ -71,6 +71,8 @@ io.on("connection", async (socket) => {
 
 	socket.on("get-room", getRoom(io, socket));
 
+	socket.on("get-room-members", getRoomMembers(io, socket));
+
 	socket.on("typeing", typeing(io, socket));
 
 	socket.on("read", readMsg(io, socket));
