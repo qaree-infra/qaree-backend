@@ -10,11 +10,11 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import authSocket from "./middleware/forSocket/auth.js";
 import User from "./models/user.js";
-import Community from "./models/community.js";
 import messageing from "./chat/messageing.js";
 import typeing from "./chat/typeing.js";
 import readMsg from "./chat/readMsg.js";
 import listMsgs from "./chat/listMsgs.js";
+import Room from "./models/chatRoom.js";
 
 const app: express.Application = express();
 const server = createServer(app);
@@ -43,18 +43,27 @@ io.on("connection", async (socket) => {
 		{ new: true },
 	);
 
-	const rooms = userData.rooms;
+	const rooms = await Room.find({
+		$or: [
+			{
+				creator: userData._id,
+				activation: true,
+			},
+			{
+				partner: userData._id,
+				activation: true,
+			},
+			{
+				members: { $elemMatch: { user: userData._id } },
+			},
+		],
+	});
 
 	if (rooms.length > 0) {
-		rooms.forEach((room: string) => {
-			socket.join(room);
+		rooms.forEach((room) => {
+			socket.join(room.roomId);
 		});
 	}
-
-	const community = await Community.findOne({
-		members: { $elemMatch: { user: userData._id } },
-	});
-	console.log(community);
 
 	socket.on("message", messageing(io, socket));
 
