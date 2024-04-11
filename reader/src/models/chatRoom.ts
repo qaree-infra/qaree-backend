@@ -6,10 +6,10 @@ export interface RoomInterface {
 	avatar: Schema.Types.ObjectId; // 2
 	lastMessage: Schema.Types.ObjectId; // 2
 	activation: boolean; // 2
-	creator: Schema.Types.ObjectId; // 1 // me
+	creator: Schema.Types.ObjectId; // 1 // me or author
 	partner: Schema.Types.ObjectId; // 1 // other side
 	book: Schema.Types.ObjectId | null; // 1
-	members: [{ user: Schema.Types.ObjectId; role: 1 | 2 | 3 }];
+	members: [Schema.Types.ObjectId];
 	roomId: string; // 2
 }
 
@@ -47,6 +47,10 @@ const roomSchema: Schema = new mongoose.Schema<RoomInterface>(
 		roomId: {
 			type: String,
 		},
+		members: {
+			type: [Schema.Types.ObjectId],
+			ref: "User"
+		}
 	},
 	{
 		timestamps: true,

@@ -15,6 +15,8 @@ import typeing from "./chat/typeing.js";
 import readMsg from "./chat/readMsg.js";
 import listMsgs from "./chat/listMsgs.js";
 import Room from "./models/chatRoom.js";
+import getRoom from "./chat/getRoom.js";
+import getRoomMembers from "./chat/getRoomMembers.js";
 
 const app: express.Application = express();
 const server = createServer(app);
@@ -66,6 +68,8 @@ io.on("connection", async (socket) => {
 	}
 
 	socket.on("message", messageing(io, socket));
+
+	socket.on("get-room", getRoom(io, socket));
 
 	socket.on("typeing", typeing(io, socket));
 
