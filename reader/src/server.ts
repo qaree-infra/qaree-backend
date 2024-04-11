@@ -17,6 +17,7 @@ import listMsgs from "./chat/listMsgs.js";
 import Room from "./models/chatRoom.js";
 import getRoom from "./chat/getRoom.js";
 import getRoomMembers from "./chat/getRoomMembers.js";
+import getRooms from "./chat/getRooms.js";
 
 const app: express.Application = express();
 const server = createServer(app);
@@ -52,14 +53,11 @@ io.on("connection", async (socket) => {
 				activation: true,
 			},
 			{
-				partner: userData._id,
+				members: { $elemMatch: { user: userData._id } },
 				activation: true,
 			},
-			{
-				members: { $elemMatch: { user: userData._id } },
-			},
 		],
-	});
+	}).select("roomId");
 
 	if (rooms.length > 0) {
 		rooms.forEach((room) => {
@@ -72,6 +70,10 @@ io.on("connection", async (socket) => {
 	socket.on("get-room", getRoom(io, socket));
 
 	socket.on("get-room-members", getRoomMembers(io, socket));
+
+	socket.on("get-rooms", getRooms(io, socket));
+
+	// socket.on("delete-chat", deleteChat(io, socket));
 
 	socket.on("typeing", typeing(io, socket));
 

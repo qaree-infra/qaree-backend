@@ -24,8 +24,8 @@ export default (io, socket) => {
 		});
 
 		if (roomData) {
-			const startIndex = (Number(page) - 1) * (Number(limitMembers) || 10);
-			const currentPage = page;
+			const currentPage = Number(page || 1);
+			const startIndex = (Number(currentPage) - 1) * (Number(limitMembers) || 10);
 			const roomMembers = await Room.findById(roomData._id).populate([
 				{
 					path: "members",
