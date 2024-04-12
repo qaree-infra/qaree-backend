@@ -75,11 +75,11 @@ const addBookDetailsResolve = async (_, args, context) => {
 					user: auth.user._id,
 				});
 
-			await Shelf.findByIdAndUpdate(bookShelf._id, {
-				books: bookShelf.books.filter(
-					(book) => book !== bookVerification.bookData._id,
-				),
-			});
+			// await Shelf.findByIdAndUpdate(bookShelf._id, {
+			// 	books: bookShelf.books.filter(
+			// 		(book) => book !== bookVerification.bookData._id,
+			// 	),
+			// });
 
 			await Shelf.findByIdAndUpdate(
 				shelfData._id,
