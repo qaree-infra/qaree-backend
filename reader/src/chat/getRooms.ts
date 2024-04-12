@@ -1,17 +1,23 @@
 import Room from "../models/chatRoom.js";
 
 export default (io, socket) => {
-	return async ({ page, limit }) => {
+	return async ({ page, limit, keyword = "" }) => {
 		const userData = socket.handshake["authData"].user;
 
 		const startIndex = (Number(page || 1) - 1) * limit;
+		const keys = keyword
+			?.trim()
+			?.split(" ")
+			.map((e: string) => new RegExp(e, "gi"));
 
 		const orOptions = [
 			{
+				$or: [{ name: { $in: keys } }],
 				creator: userData._id,
 				activation: true,
 			},
 			{
+				$or: [{ name: { $in: keys } }],
 				members: { $elemMatch: { user: userData._id } },
 				activation: true,
 			},
