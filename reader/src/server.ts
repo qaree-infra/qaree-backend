@@ -18,6 +18,7 @@ import Room from "./models/chatRoom.js";
 import getRoom from "./chat/getRoom.js";
 import getRoomMembers from "./chat/getRoomMembers.js";
 import getRooms from "./chat/getRooms.js";
+import deleteRoom from "./chat/deleteRoom.js";
 
 const app: express.Application = express();
 const server = createServer(app);
@@ -73,7 +74,7 @@ io.on("connection", async (socket) => {
 
 	socket.on("get-rooms", getRooms(io, socket));
 
-	// socket.on("delete-chat", deleteChat(io, socket));
+	socket.on("delete-chat", deleteRoom(io, socket));
 
 	socket.on("typeing", typeing(io, socket));
 
