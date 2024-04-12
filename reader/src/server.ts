@@ -7,18 +7,18 @@ import auth from "./middleware/general/auth.js";
 import uploadRoute from "./upload/route.js";
 import readChapter from "./readChapter/route.js";
 import { createServer } from "http";
-import { Server } from "socket.io";
-import authSocket from "./middleware/forSocket/auth.js";
-import User from "./models/user.js";
-import messageing from "./chat/messageing.js";
-import typeing from "./chat/typeing.js";
-import readMsg from "./chat/readMsg.js";
-import listMsgs from "./chat/listMsgs.js";
-import Room from "./models/chatRoom.js";
-import getRoom from "./chat/getRoom.js";
-import getRoomMembers from "./chat/getRoomMembers.js";
-import getRooms from "./chat/getRooms.js";
-import deleteRoom from "./chat/deleteRoom.js";
+// import { Server } from "socket.io";
+// import authSocket from "./middleware/forSocket/auth.js";
+// import User from "./models/user.js";
+// import messageing from "./chat/messageing.js";
+// import typeing from "./chat/typeing.js";
+// import readMsg from "./chat/readMsg.js";
+// import listMsgs from "./chat/listMsgs.js";
+// import Room from "./models/chatRoom.js";
+// import getRoom from "./chat/getRoom.js";
+// import getRoomMembers from "./chat/getRoomMembers.js";
+// import getRooms from "./chat/getRooms.js";
+// import deleteRoom from "./chat/deleteRoom.js";
 
 const app: express.Application = express();
 const server = createServer(app);
@@ -29,69 +29,69 @@ app.use(cors());
 
 app.use(auth);
 
-const io = new Server(server, {});
+// const io = new Server(server, {});
 
-io.use(authSocket);
+// io.use(authSocket);
 
-io.on("connection", async (socket) => {
-	const userData = socket.handshake["authData"].user;
+// io.on("connection", async (socket) => {
+// 	const userData = socket.handshake["authData"].user;
 
-	await User.findByIdAndUpdate(
-		userData._id,
-		{
-			chat: {
-				connection: true,
-				socketId: socket.id,
-			},
-		},
-		{ new: true },
-	);
+// 	await User.findByIdAndUpdate(
+// 		userData._id,
+// 		{
+// 			chat: {
+// 				connection: true,
+// 				socketId: socket.id,
+// 			},
+// 		},
+// 		{ new: true },
+// 	);
 
-	const rooms = await Room.find({
-		$or: [
-			{
-				creator: userData._id,
-				activation: true,
-			},
-			{
-				members: { $elemMatch: { user: userData._id } },
-				activation: true,
-			},
-		],
-	}).select("roomId");
+// 	const rooms = await Room.find({
+// 		$or: [
+// 			{
+// 				creator: userData._id,
+// 				activation: true,
+// 			},
+// 			{
+// 				members: { $elemMatch: { user: userData._id } },
+// 				activation: true,
+// 			},
+// 		],
+// 	}).select("roomId");
 
-	if (rooms.length > 0) {
-		rooms.forEach((room) => {
-			socket.join(room.roomId);
-		});
-	}
+// 	if (rooms.length > 0) {
+// 		rooms.forEach((room) => {
+// 			socket.join(room.roomId);
+// 		});
+// 	}
 
-	socket.on("message", messageing(io, socket));
+// 	socket.on("message", messageing(io, socket));
 
-	socket.on("get-room", getRoom(io, socket));
+// 	socket.on("get-room", getRoom(io, socket));
 
-	socket.on("get-room-members", getRoomMembers(io, socket));
+// 	socket.on("get-room-members", getRoomMembers(io, socket));
 
-	socket.on("get-rooms", getRooms(io, socket));
+// 	socket.on("get-rooms", getRooms(io, socket));
 
-	socket.on("delete-chat", deleteRoom(io, socket));
+// 	socket.on("delete-chat", deleteRoom(io, socket));
 
-	socket.on("typeing", typeing(io, socket));
+// 	socket.on("typeing", typeing(io, socket));
 
-	socket.on("read", readMsg(io, socket));
+// 	socket.on("read", readMsg(io, socket));
 
-	socket.on("message-list", listMsgs(io, socket));
+// 	socket.on("message-list", listMsgs(io, socket));
 
-	socket.on("disconnect", async () => {
-		const result = await User.findByIdAndUpdate(
-			userData._id,
-			{ chat: { connection: false, socketId: "" } },
-			{ new: true },
-		);
-		console.log(result);
-		await console.log(socket.id);
-	});
-});
+// 	socket.on("disconnect", async () => {
+// 		const result = await User.findByIdAndUpdate(
+// 			userData._id,
+// 			{ chat: { connection: false, socketId: "" } },
+// 			{ new: true },
+// 		);
+// 		console.log(result);
+// 		await console.log(socket.id);
+// 	});
+// });
 
 app.use(
 	"/graphql",
