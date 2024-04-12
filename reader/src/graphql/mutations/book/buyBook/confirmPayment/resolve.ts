@@ -16,6 +16,7 @@ const resolve = async (
 		if (auth.error) throw new Error(auth.error);
 
 		const { bookId, orderId } = args;
+		console.log(bookId, orderId);
 
 		const bookVerification = await verifyBook(bookId, context);
 		if (bookVerification.error) throw new Error(bookVerification.error);
@@ -27,6 +28,7 @@ const resolve = async (
 			orderId,
 			bookVerification.bookData.author.merchant_id,
 		);
+		console.log(capturedOrder);
 
 		if (capturedOrder.status !== "COMPLETED")
 			throw new Error("Uncompleted order");
@@ -37,6 +39,7 @@ const resolve = async (
 			readingProgress: 0,
 			user: auth.user._id,
 		});
+		console.log(purchasedBook);
 
 		return { capturedOrder, purchasedBook: purchasedBook };
 	} catch (error) {

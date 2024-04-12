@@ -11,6 +11,7 @@ const resolve = async (_, args: { bookId: string }, context) => {
 		if (auth.error) throw new Error(auth.error);
 
 		const { bookId } = args;
+		console.log(bookId);
 
 		const bookVerification = await verifyBook(bookId, context);
 		if (bookVerification.error) throw new Error(bookVerification.error);
@@ -22,6 +23,7 @@ const resolve = async (_, args: { bookId: string }, context) => {
 			bookVerification.bookData.price,
 			bookVerification.bookData.author.merchant_id,
 		);
+		console.log(createdOrder);
 
 		if (createdOrder.status !== "CREATED")
 			throw new Error("invalid order creation");
