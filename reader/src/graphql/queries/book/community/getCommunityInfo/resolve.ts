@@ -83,7 +83,12 @@ export default async function resolve(
 			);
 
 			return returnedObject;
-		}
+		} else
+			throw new Error(
+				lang === "ar"
+					? "عذراً، انت لست فى هذا المجتمع"
+					: "you aren't at this community",
+			);
 	} catch (error) {
 		console.log(error);
 		throw new Error(error);
