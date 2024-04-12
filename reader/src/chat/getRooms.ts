@@ -33,11 +33,16 @@ export default (io, socket) => {
 				{
 					path: "partner",
 					options: {
+						select: "name avatar",
 						populate: { path: "avatar" },
 					},
 				},
 				{
-					path: "avatar",
+					path: "book",
+					options: {
+						select: "name cover",
+						populate: { path: "cover" },
+					},
 				},
 			]);
 

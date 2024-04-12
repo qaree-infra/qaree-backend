@@ -2,8 +2,8 @@ import mongoose, { Schema } from "mongoose";
 
 export interface RoomInterface {
 	_id: string;
-	name: string; // 2
-	avatar: Schema.Types.ObjectId; // 2
+	// name: string; // 2
+	// avatar: Schema.Types.ObjectId; // 2
 	lastMessage: Schema.Types.ObjectId; // 2
 	activation: boolean; // 2
 	creator: Schema.Types.ObjectId; // 1 // me or author
@@ -15,15 +15,15 @@ export interface RoomInterface {
 
 const roomSchema: Schema = new mongoose.Schema<RoomInterface>(
 	{
-		name: {
-			type: String,
-			require: [true, "please enter your name!"],
-			trim: true,
-		},
-		avatar: {
-			type: Schema.Types.ObjectId,
-			ref: "File",
-		},
+		// name: {
+		// 	type: String,
+		// 	require: [true, "please enter your name!"],
+		// 	trim: true,
+		// },
+		// avatar: {
+		// 	type: Schema.Types.ObjectId,
+		// 	ref: "File",
+		// },
 		lastMessage: {
 			type: Schema.Types.ObjectId,
 			ref: "Message",
