@@ -9,6 +9,7 @@ import getBestSellerBooks from "./getBestSellerBooks/query.js";
 import getClientData from "./buy/getClientData/query.js";
 import getBookStatus from "./activities/getBookStatus/query.js";
 import getBookCommunity from "./community/getCommunityInfo/mutation.js";
+import getCommunityMembers from "./community/getCommunityMembers/mutation.js";
 
 export default {
 	getBooks: getBooks,
@@ -22,4 +23,5 @@ export default {
 	getPaymentClientData: getClientData,
 	getBookStatus: getBookStatus,
 	getBookCommunity: getBookCommunity,
+	getCommunityMembers: getCommunityMembers,
 };
