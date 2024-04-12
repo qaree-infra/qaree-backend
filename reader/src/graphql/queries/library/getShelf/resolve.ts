@@ -59,7 +59,7 @@ const getShelfResolve = async (_, args: Args, context) => {
 			shelfDataBooks.length / (booksLimit || 10),
 		);
 
-		if (relatedWithActivity().length > 0 && auth.user._id === user) {
+		if (relatedWithActivity().length > 0 && auth.user._id.toString() === user) {
 			const bookReads: BookReadInterface[] = await BookRead.find({
 				user: auth.user._id,
 				readingProgress: relatedWithActivity[0].includes("finished")
