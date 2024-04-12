@@ -8,6 +8,7 @@ import getLastActivity from "./activities/getLastActivity/query.js";
 import getBestSellerBooks from "./getBestSellerBooks/query.js";
 import getClientData from "./buy/getClientData/query.js";
 import getBookStatus from "./activities/getBookStatus/query.js";
+import getBookCommunity from "./community/getCommunityInfo/mutation.js";
 
 export default {
 	getBooks: getBooks,
@@ -20,4 +21,5 @@ export default {
 	getBestSellerBooks: getBestSellerBooks,
 	getPaymentClientData: getClientData,
 	getBookStatus: getBookStatus,
+	getBookCommunity: getBookCommunity,
 };
