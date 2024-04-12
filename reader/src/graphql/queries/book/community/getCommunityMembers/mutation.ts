@@ -1,6 +1,4 @@
-import {
-	GraphQLString,
-} from "graphql";
+import { GraphQLInt, GraphQLString } from "graphql";
 import resolve from "./resolve.js";
 import { communityMembers } from "../../../../types/book-community-type.js";
 
@@ -11,6 +9,14 @@ const args = {
 	},
 	bookId: {
 		type: GraphQLString,
+		description: "",
+	},
+	limitMembers: {
+		type: GraphQLInt,
+		description: "",
+	},
+	page: {
+		type: GraphQLInt,
 		description: "",
 	},
 };
