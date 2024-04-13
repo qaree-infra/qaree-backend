@@ -27,21 +27,32 @@ const resolve = async (_, args, context) => {
 			throw new Error(error);
 		}
 
-		const allAssets = await getBookFiles(bookData);
+		if (!bookData?.file) throw new Error("Book file didn't found");
 
-		const bookContainerURL = allAssets.find((asset: string) =>
+		const allAssets = await getBookFiles(bookData);
+		if (!allAssets?.length) throw new Error("Extarcted files didn't found");
+
+		const bookContainerURL = allAssets.find((asset) =>
 			asset.toLowerCase().includes("meta-inf/container.xml"),
 		);
 
+		if (!bookContainerURL) throw new Error("Container file didn't found");
 		const { filename } = await getEPubRootFile(bookContainerURL);
+
+		if (!filename) throw new Error("Content file didn't found");
 
 		const contentFile = allAssets.find((asset) =>
 			asset.toLowerCase().includes(filename),
 		);
+		if (!contentFile) throw new Error("Content file url didn't found");
 
 		const { parsedData } = await readFile(contentFile);
 
-		const manifest = parseManifest(bookContainerURL, parsedData.manifest);
+		const manifest = parseManifest(
+			allAssets,
+			bookContainerURL,
+			parsedData.manifest,
+		);
 
 		const { contents, toc } = await parseSpain(
 			parsedData.spine,
@@ -61,7 +72,8 @@ const resolve = async (_, args, context) => {
 			),
 		};
 	} catch (error) {
-		throw new Error(error);
+		console.log(error);
+		throw new Error(error.message);
 	}
 };
 
