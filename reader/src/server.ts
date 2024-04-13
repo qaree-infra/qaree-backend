@@ -54,7 +54,7 @@ io.on("connection", async (socket) => {
 				activation: true,
 			},
 			{
-				members: { $elemMatch: { user: userData._id } },
+				members: { $in: [userData._id] },
 				activation: true,
 			},
 		],
@@ -62,25 +62,28 @@ io.on("connection", async (socket) => {
 
 	if (rooms.length > 0) {
 		rooms.forEach((room) => {
+			console.log(room.roomId);
 			socket.join(room.roomId);
 		});
 	}
 
 	socket.on("message", messageing(io, socket));
 
-	socket.on("get-room", getRoom(io, socket));
-
-	socket.on("get-room-members", getRoomMembers(io, socket));
-
-	socket.on("get-rooms", getRooms(io, socket));
-
-	socket.on("delete-chat", deleteRoom(io, socket));
-
 	socket.on("typeing", typeing(io, socket));
 
 	socket.on("read", readMsg(io, socket));
 
 	socket.on("message-list", listMsgs(io, socket));
+	// convert to query
+	socket.on("get-room", getRoom(io, socket));
+
+	// convert to query
+	socket.on("get-room-members", getRoomMembers(io, socket));
+
+	// convert to query 
+	socket.on("get-rooms", getRooms(io, socket));
+
+	socket.on("delete-chat", deleteRoom(io, socket));
 
 	socket.on("disconnect", async () => {
 		const result = await User.findByIdAndUpdate(
