@@ -24,6 +24,19 @@ const resolve = async (
 		if (bookVerification.bookData.price === 0)
 			throw new Error(lang === "ar" ? "هذا الكتاب مجانى" : "This is free book");
 
+		const userBookRead = await BookRead.findOne({
+			book: bookId,
+			status: "purchased",
+			user: auth.user._id,
+		});
+
+		if (userBookRead)
+			throw new Error(
+				lang === "ar"
+					? "لقد اشتريت الكتاب بالفعل"
+					: "you have bought this book already",
+			);
+
 		const capturedOrder: CapturedOrder = await capturePayment(
 			orderId,
 			bookVerification.bookData.author.merchant_id,
