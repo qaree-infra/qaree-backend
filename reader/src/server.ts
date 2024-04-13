@@ -34,38 +34,38 @@ const io = new Server(server, {});
 // io.use(authSocket);
 
 io.on("connection", async (socket) => {
-	const userData = socket.handshake["authData"].user;
+	// const userData = socket.handshake["authData"].user;
 
-	await User.findByIdAndUpdate(
-		userData._id,
-		{
-			chat: {
-				connection: true,
-				socketId: socket.id,
-			},
-		},
-		{ new: true },
-	);
+	// await User.findByIdAndUpdate(
+	// 	userData._id,
+	// 	{
+	// 		chat: {
+	// 			connection: true,
+	// 			socketId: socket.id,
+	// 		},
+	// 	},
+	// 	{ new: true },
+	// );
 
-	const rooms = await Room.find({
-		$or: [
-			{
-				creator: userData._id,
-				activation: true,
-			},
-			{
-				members: { $in: [userData._id] },
-				activation: true,
-			},
-		],
-	}).select("roomId");
+	// const rooms = await Room.find({
+	// 	$or: [
+	// 		{
+	// 			creator: userData._id,
+	// 			activation: true,
+	// 		},
+	// 		{
+	// 			members: { $in: [userData._id] },
+	// 			activation: true,
+	// 		},
+	// 	],
+	// }).select("roomId");
 
-	if (rooms.length > 0) {
-		rooms.forEach((room) => {
-			console.log(room.roomId);
-			socket.join(room.roomId);
-		});
-	}
+	// if (rooms.length > 0) {
+	// 	rooms.forEach((room) => {
+	// 		console.log(room.roomId);
+	// 		socket.join(room.roomId);
+	// 	});
+	// }
 
 	socket.on("message", messageing(io, socket));
 
@@ -86,12 +86,12 @@ io.on("connection", async (socket) => {
 	socket.on("delete-chat", deleteRoom(io, socket));
 
 	socket.on("disconnect", async () => {
-		const result = await User.findByIdAndUpdate(
-			userData._id,
-			{ chat: { connection: false, socketId: "" } },
-			{ new: true },
-		);
-		console.log(result);
+		// const result = await User.findByIdAndUpdate(
+		// 	userData._id,
+		// 	{ chat: { connection: false, socketId: "" } },
+		// 	{ new: true },
+		// );
+		// console.log(result);
 		await console.log(socket.id);
 	});
 });
