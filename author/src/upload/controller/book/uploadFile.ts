@@ -37,6 +37,7 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 		};
 
 		const epub = await EPub.createAsync(file.path, "", "");
+		console.log(epub.manifest);
 
 		const book: BookInterface = await Book.findById(id);
 
@@ -115,6 +116,8 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 											"media-type"?: string;
 										}) => e?.href?.includes(fileName),
 									);
+									console.log(file?.href);
+									console.log(result?.secure_url);
 									if (
 										file?.mediaType === "application/xhtml+xml" ||
 										file?.["media-type"] === "application/xhtml+xml"
