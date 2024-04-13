@@ -46,7 +46,11 @@ const getBookContent = async (_, args, context) => {
 
 		const { parsedData } = await readFile(contentFile);
 
-		const manifest = parseManifest(bookContainerURL, parsedData.manifest);
+		const manifest = parseManifest(
+			allAssets,
+			bookContainerURL,
+			parsedData.manifest,
+		);
 
 		const { contents, toc } = await parseSpain(
 			parsedData.spine,

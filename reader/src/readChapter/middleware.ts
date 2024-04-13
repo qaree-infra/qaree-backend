@@ -77,7 +77,11 @@ const verifyBookMiddleware = async (
 
 		const { parsedData } = await readFile(contentFile);
 
-		const manifest = parseManifest(bookContainerURL, parsedData.manifest);
+		const manifest = parseManifest(
+			allAssets,
+			bookContainerURL,
+			parsedData.manifest,
+		);
 
 		const extention = "application/xhtml+xml";
 

@@ -40,6 +40,7 @@ const resolve = async (_, args, context) => {
 
 		const bookContentFileData = await readFile(contentFile, true);
 		const manifest = parseManifest(
+			allAssets,
 			bookContainerURL,
 			bookContentFileData.parsedData.manifest,
 		);

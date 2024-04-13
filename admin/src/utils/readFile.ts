@@ -1,36 +1,45 @@
 import axios from "axios";
 import xml2js from "xml2js";
 import cloudinarySdk from "cloudinary";
-import File, { FileInterface } from "../models/file.js";
 import { BookInterface } from "../models/book.js";
+
+const cloudinary = cloudinarySdk.v2;
+cloudinary.config({
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_CLOUD_API_KEY,
+	api_secret: process.env.CLOUDINARY_CLOUD_API_SECRET,
+});
 
 const xml2jsOptions = xml2js.defaults["0.1"];
 
 export const getBookFiles = async (bookData: BookInterface) => {
-	const cloudinary = cloudinarySdk.v2;
 	try {
-		const bookFile: FileInterface = await File.findById(bookData.file);
+		const prefix = `book/file/${bookData._id.toString()}`;
 
-		const allAssets = await cloudinary.api
-			.resources({
-				type: "upload",
-				prefix: `book/file/${bookData._id}`,
-				resource_type: "raw",
-				max_results: 500,
-			})
-			.then((res) => res.resources.map((resource) => resource.secure_url));
+		const allAssets = await cloudinary.api.resources({
+			type: "upload",
+			prefix: prefix,
+			resource_type: "raw",
+			max_results: 500,
+		});
+		console.log(allAssets.resources.map((resource) => resource.secure_url));
+		// .then((res) => res.resources.map((resource) => resource.secure_url));
 
-		return allAssets;
+		return allAssets.resources.map((resource) => resource.secure_url);
 	} catch (error) {
-		throw new Error(error);
+		console.log(error);
+		throw new Error(error.message);
 	}
 };
 
 const readFile = async (fileUrl: string, lower?: boolean) => {
+	console.log(fileUrl);
 	try {
 		const { data } = await axios.get(fileUrl);
+		// console.log(fileUrl, data)
 
 		const parseData = parseXML(data, lower);
+		// console.log(fileUrl, parseData)
 
 		return { content: data, parsedData: parseData };
 	} catch (error) {
@@ -243,7 +252,7 @@ export const parseMetadata = (metadata) => {
 	return result;
 };
 
-export const parseManifest = (rootFile: string, manifest) => {
+export const parseManifest = (allAssets, rootFile: string, manifest) => {
 	const path = rootFile.slice(0, -23).split("/");
 	const path_str = path.join("/");
 
@@ -258,7 +267,12 @@ export const parseManifest = (rootFile: string, manifest) => {
 					element.href &&
 					element.href.substr(0, path_str.length) != path_str
 				) {
-					element.href = path.concat([element.href]).join("/");
+					const fromAssets = allAssets.find((asset) =>
+						asset.toLowerCase().includes(element.href),
+					);
+					element.href = fromAssets
+						? fromAssets
+						: path.concat([element.href]).join("/");
 				}
 
 				result[manifest.item[i]["@"].id] = element;
@@ -310,7 +324,7 @@ export const getEPubRootFile = async (bookContainerURL: string) => {
 
 		return { filename };
 	} catch (error) {
-		throw new Error(error);
+		throw new Error(error.message);
 	}
 };
 

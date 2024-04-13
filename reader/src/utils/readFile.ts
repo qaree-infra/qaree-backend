@@ -252,7 +252,7 @@ export const parseMetadata = (metadata) => {
 	return result;
 };
 
-export const parseManifest = (rootFile: string, manifest) => {
+export const parseManifest = (allAssets, rootFile: string, manifest) => {
 	const path = rootFile.slice(0, -23).split("/");
 	const path_str = path.join("/");
 
@@ -267,7 +267,12 @@ export const parseManifest = (rootFile: string, manifest) => {
 					element.href &&
 					element.href.substr(0, path_str.length) != path_str
 				) {
-					element.href = path.concat([element.href]).join("/");
+					const fromAssets = allAssets.find((asset) =>
+						asset.toLowerCase().includes(element.href),
+					);
+					element.href = fromAssets
+						? fromAssets
+						: path.concat([element.href]).join("/");
 				}
 
 				result[manifest.item[i]["@"].id] = element;

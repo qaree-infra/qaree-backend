@@ -30,7 +30,11 @@ const readChapterForAdmin = async (req: RequestWithBookData, res) => {
 
 		const { parsedData } = await readFile(contentFileURL);
 
-		const manifest = parseManifest(bookContainerURL, parsedData.manifest);
+		const manifest = parseManifest(
+			allAssets,
+			bookContainerURL,
+			parsedData.manifest,
+		);
 
 		const fileData = manifest[chId];
 		const extention = "application/xhtml+xml";
