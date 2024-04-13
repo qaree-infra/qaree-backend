@@ -22,7 +22,7 @@ export const getBookFiles = async (bookData: BookInterface) => {
 			resource_type: "raw",
 			max_results: 500,
 		});
-		console.log(allAssets.resources.map((resource) => resource.secure_url));
+		// console.log(allAssets.resources.map((resource) => resource.secure_url));
 		// .then((res) => res.resources.map((resource) => resource.secure_url));
 
 		return allAssets.resources.map((resource) => resource.secure_url);
