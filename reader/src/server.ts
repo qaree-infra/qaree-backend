@@ -31,7 +31,7 @@ app.use(auth);
 
 const io = new Server(server, {});
 
-io.use(authSocket);
+// io.use(authSocket);
 
 io.on("connection", async (socket) => {
 	const userData = socket.handshake["authData"].user;
