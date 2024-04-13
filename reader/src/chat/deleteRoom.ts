@@ -51,7 +51,10 @@ export default (io, socket) => {
 				);
 			}
 
-			socket.emit("get-room", roomData);
+			socket.emit("delete-chat", {
+				success: true,
+				message: "the chat have been deleted successfully",
+			});
 		} else {
 			socket.emit("error", "This is room not found");
 		}
