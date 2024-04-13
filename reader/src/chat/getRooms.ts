@@ -10,15 +10,18 @@ export default (io, socket) => {
 			?.split(" ")
 			.map((e: string) => new RegExp(e, "gi"));
 
+		console.log(keys);
+
 		const orOptions = [
 			{
-				$or: [{ name: { $in: keys } }],
+				// $or: [{ name: { $in: keys } }],
 				creator: userData._id,
 				activation: true,
 			},
 			{
-				$or: [{ name: { $in: keys } }],
-				members: { $elemMatch: { user: userData._id } },
+				// $or: [{ name: { $in: keys } }],
+				// members: { $elemMatch: { user: userData._id } },
+				members: { $in: [userData._id] },
 				activation: true,
 			},
 		];
@@ -32,6 +35,7 @@ export default (io, socket) => {
 			.populate([
 				{
 					path: "partner",
+					match: { name: { $in: keys } },
 					options: {
 						select: "name avatar",
 						populate: { path: "avatar" },
@@ -39,6 +43,7 @@ export default (io, socket) => {
 				},
 				{
 					path: "book",
+					match: { name: { $in: keys } },
 					options: {
 						select: "name cover",
 						populate: { path: "cover" },
@@ -46,7 +51,48 @@ export default (io, socket) => {
 				},
 			]);
 
-		const totalRooms = await Room.countDocuments({ $or: orOptions });
+		console.log(roomData);
+
+		const totalRooms = await Room.countDocuments({
+			$or: [
+				{
+					$and: [
+						{ partner: { $exists: true } },
+						{
+							$lookup: {
+								from: "User", // Assuming your user collection name is 'User'
+								localField: "partner",
+								foreignField: "_id",
+								as: "partnerDetails",
+							},
+						},
+						{
+							$match: {
+								"partnerDetails.name": { $in: keys }, // Case-insensitive search by name
+							},
+						},
+					],
+				},
+				{
+					$and: [
+						{ book: { $exists: true } },
+						{
+							$lookup: {
+								from: "Book", // Assuming your user collection name is 'User'
+								localField: "book",
+								foreignField: "_id",
+								as: "bookDetails",
+							},
+						},
+						{
+							$match: {
+								"bookDetails.name": { $in: keys }, // Case-insensitive search by name
+							},
+						},
+					],
+				},
+			],
+		});
 
 		if (roomData) {
 			socket.emit("get-rooms", {
