@@ -5,35 +5,54 @@ export default (io, socket) => {
 	return async ({ room, limit, page, type }) => {
 		const userData = socket.handshake["authData"].user;
 
-		const roomData = await Room.find({
-			$or: [
-				{
-					roomId: room,
-				},
-				{
-					book: room,
-				},
-				{
-					creator: userData._id,
-					partner: room.split("-")[1],
-				},
-			],
+		const orOptions =
+			room.split("-").length !== 2
+				? [
+						{
+							roomId: room,
+							$or: [
+								{ creator: userData._id },
+								{ members: { $in: [userData._id] } },
+							],
+						},
+						{
+							_id: room,
+							$or: [
+								{ creator: userData._id },
+								{ members: { $in: [userData._id] } },
+							],
+						},
+						{
+							book: room,
+							members: { $in: [userData._id] },
+						},
+				  ]
+				: [
+						{
+							roomId: room,
+							creator: userData._id,
+							partner: room.split("-")[1],
+						},
+				  ];
+
+		const roomData = await Room.findOne({
+			$or: orOptions,
 		});
 
-		if (roomData.length > 0) {
+		if (roomData) {
 			const startIndex = (Number(page || 1) - 1) * Number(limit || 10);
-			const roomMsgs = await Message.find({ room: roomData[0].roomId })
+			const roomMsgs = await Message.find({ room: roomData.roomId })
 				.sort({ createdAt: type === "read" ? 1 : -1 })
 				.limit(Number(limit || 10))
 				.skip(startIndex)
 				.populate([
 					{
 						path: "sender",
-						options: { populate: "avatar" },
+						options: { populate: "avatar", select: "_id name avatar bio" },
 					},
 					{
 						path: "reader",
-						options: { populate: "avatar" },
+						options: { populate: "avatar", select: "_id name avatar bio" },
 					},
 				]);
 
