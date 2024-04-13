@@ -56,13 +56,22 @@ export default (io, socket) => {
 					},
 				]);
 
+			const totalMessages = await Message.countDocuments({
+				room: roomData.roomId,
+			});
+
 			socket.emit("message-list", {
-				messages: roomMsgs,
+				messages: {
+					messages: roomMsgs,
+					totalMessages: totalMessages,
+					currentPage: page || 1,
+					numberOfPages: Math.ceil(totalMessages / (limit || 10)),
+				},
 				userId: userData._id,
 			});
 		} else {
 			socket.emit("message-list", {
-				messages: [],
+				messages: { messages: [] },
 				userId: userData._id,
 			});
 		}
