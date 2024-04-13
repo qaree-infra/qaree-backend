@@ -16,22 +16,52 @@ export default (io, socket) => {
 		if (!to || to.trim().length === 0)
 			return socket.emit("error", "Invalid recipient ID format");
 		const toId = to.split("-")[1] || "";
-		const fromRooms = await Room.find({
-			$or: [
-				{
-					creator: userData._id,
-					partner: to.split("-")[1],
-				},
-				{
-					roomId: to,
-				},
-				{
-					book: to,
-				},
-			],
+
+		const orOptions =
+			to.split("-").length !== 2
+				? [
+						{
+							roomId: to,
+							$or: [
+								{ creator: userData._id },
+								{ members: { $in: [userData._id] } },
+							],
+							activation: true,
+						},
+						{
+							_id: to,
+							$or: [
+								{ creator: userData._id },
+								{ members: { $in: [userData._id] } },
+							],
+							activation: true,
+						},
+						{
+							book: to,
+							members: { $in: [userData._id] },
+							activation: true,
+						},
+				  ]
+				: [
+						{
+							creator: userData._id,
+							partner: toId,
+							activation: true,
+						},
+				  ];
+
+		const roomData = await Room.findOne({
+			$or: orOptions,
 		});
 
-		if (fromRooms.length === 0) {
+		if (
+			roomData?.members.length > 0 &&
+			!roomData?.members?.includes(userData._id)
+		) {
+			return socket.emit("error", "invalid room");
+		}
+
+		if (!roomData) {
 			if (to.includes("user")) {
 				const reciverId = toId === userData._id;
 				if (reciverId)
@@ -56,18 +86,14 @@ export default (io, socket) => {
 					await Room.insertMany([
 						{
 							creator: userData._id,
-							name: reciver.name,
-							avatar: reciver.avatar,
 							roomId: userData._id + "-" + reciver._id,
-							partners: reciver._id,
+							partner: reciver._id,
 							lastMessage: message._id,
 						},
 						{
 							creator: reciver._id,
-							name: userData.name,
-							avatar: userData.avatar,
 							roomId: userData._id + "-" + reciver._id,
-							partners: userData._id,
+							partner: userData._id,
 							lastMessage: message._id,
 						},
 					]);
@@ -80,15 +106,15 @@ export default (io, socket) => {
 			const message = await Message.create({
 				content: content,
 				sender: userData._id,
-				room: fromRooms[0].roomId,
+				room: roomData.roomId,
 			});
 			await Room.findByIdAndUpdate(
-				fromRooms[0]._id,
+				roomData._id,
 				{ lastMessage: message._id },
 				{ new: true },
 			);
-			console.log(fromRooms[0]);
-			io.in(fromRooms[0].roomId).emit("message", message);
+			console.log(roomData);
+			io.in(roomData.roomId).emit("message", message);
 		}
 	};
 };
