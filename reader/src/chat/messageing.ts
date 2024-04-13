@@ -6,7 +6,7 @@ export default (io, socket) => {
 	return async ({ content, to }) => {
 		const userData = socket.handshake["authData"].user;
 
-		console.log(content, to);
+		// console.log(content, to);
 		if (content.length === 0) return socket.emit("error", "Empty content");
 		if (content.length > 500)
 			return socket.emit(
@@ -72,12 +72,12 @@ export default (io, socket) => {
 					const newTo = `${userData._id}-${toId}`;
 					await socket.join(newTo);
 					if (reciver.chat.connection) {
-						console.log(reciver.chat);
+						// console.log(reciver.chat);
 						socket.broadcast
 							.to(reciver.chat.socketId)
 							.emit("message", { content, to: newTo });
 					}
-					console.log(newTo);
+					// console.log(newTo);
 					const message = await Message.create({
 						content: content,
 						sender: userData._id,
@@ -113,7 +113,7 @@ export default (io, socket) => {
 				{ lastMessage: message._id },
 				{ new: true },
 			);
-			console.log(roomData);
+			// console.log(roomData);
 			io.in(roomData.roomId).emit("message", message);
 		}
 	};
