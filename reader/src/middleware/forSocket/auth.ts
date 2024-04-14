@@ -8,9 +8,9 @@ const authSocket = async (socket, next) => {
 		console.log(lang);
 		let token: string = "";
 
-		if (socket.handshake.auth.token || socket.handshake.headers.authorization)
+		if (socket.handshake.auth?.token || socket.handshake.headers?.authorization)
 			token =
-				socket.handshake.auth.token.split("Bearer ")[1] ||
+				socket.handshake.auth?.token?.split("Bearer ")[1] ||
 				socket.handshake.headers.authorization.split("Bearer ")[1];
 
 		if (!token) {
