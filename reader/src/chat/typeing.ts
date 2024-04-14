@@ -47,7 +47,10 @@ export default (io, socket) => {
 						{
 							roomId: room,
 							creator: userData._id,
-							partner: room.split("-")[1],
+							partner:
+								room.split("-")[1] !== userData._id.toString()
+									? room.split("-")[1]
+									: room.split("-")[0],
 							activation: true,
 						},
 				  ];

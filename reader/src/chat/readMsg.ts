@@ -43,7 +43,10 @@ export default (io, socket) => {
 						{
 							roomId: msg.room,
 							creator: userData._id,
-							partner: msg.room.split("-")[1],
+							partner:
+								msg.room.split("-")[1] !== userData._id.toString()
+									? msg.room.split("-")[1]
+									: msg.room.split("-")[0],
 							activation: true,
 						},
 				  ];
@@ -55,7 +58,7 @@ export default (io, socket) => {
 		if (!roomData) {
 			return socket.emit(
 				"error",
-				"sorry, you can't read messages at this room",
+				"sorry, you can't read messages at this msg.room",
 			);
 		}
 

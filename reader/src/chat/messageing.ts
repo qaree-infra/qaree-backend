@@ -15,7 +15,10 @@ export default (io, socket) => {
 			);
 		if (!to || to.trim().length === 0)
 			return socket.emit("error", "Invalid recipient ID format");
-		const toId = to.split("-")[1] || "";
+		const toId =
+			to.split("-")[1] !== userData._id.toString()
+				? to.split("-")[1]
+				: to.split("-")[0] || "";
 
 		const orOptions =
 			to.split("-").length !== 2
@@ -93,9 +96,7 @@ export default (io, socket) => {
 					]);
 					if (reciver.chat.connection) {
 						// console.log(reciver.chat);
-						socket.broadcast
-							.to(reciver.chat.socketId)
-							.emit("message", message);
+						socket.broadcast.to(reciver.chat.socketId).emit("message", message);
 					}
 					io.in(newTo).emit("message", message);
 				}
@@ -103,18 +104,42 @@ export default (io, socket) => {
 				return socket.emit("error", "Sorry, you aren't at this community");
 			}
 		} else {
-			const message = await Message.create({
-				content: content,
-				sender: userData._id,
-				room: roomData.roomId,
+			const reciverRoom = await Room.findOne({
+				partner: userData._id,
+				creator: toId,
+				activation: true,
 			});
-			await Room.findByIdAndUpdate(
-				roomData._id,
-				{ lastMessage: message._id },
-				{ new: true },
-			);
-			// console.log(roomData);
-			io.in(roomData.roomId).emit("message", message);
+
+			if (reciverRoom) {
+				const message = await Message.create({
+					content: content,
+					sender: userData._id,
+					room: roomData.roomId,
+				});
+				await Room.findByIdAndUpdate(
+					roomData._id,
+					{ lastMessage: message._id },
+					{ new: true },
+				);
+				await Room.findByIdAndUpdate(
+					reciverRoom._id,
+					{ lastMessage: message._id },
+					{ new: true },
+				);
+				io.in(roomData.roomId).emit("message", message);
+			} else {
+				const message = await Message.create({
+					content: content,
+					sender: userData._id,
+					room: roomData.roomId,
+				});
+				await Room.findByIdAndUpdate(
+					roomData._id,
+					{ lastMessage: message._id },
+					{ new: true },
+				);
+				socket.emit("message", message);
+			}
 		}
 	};
 };
