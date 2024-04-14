@@ -71,12 +71,6 @@ export default (io, socket) => {
 				else {
 					const newTo = `${userData._id}-${toId}`;
 					await socket.join(newTo);
-					if (reciver.chat.connection) {
-						// console.log(reciver.chat);
-						socket.broadcast
-							.to(reciver.chat.socketId)
-							.emit("message", { content, to: newTo });
-					}
 					// console.log(newTo);
 					const message = await Message.create({
 						content: content,
@@ -97,6 +91,12 @@ export default (io, socket) => {
 							lastMessage: message._id,
 						},
 					]);
+					if (reciver.chat.connection) {
+						// console.log(reciver.chat);
+						socket.broadcast
+							.to(reciver.chat.socketId)
+							.emit("message", message);
+					}
 					io.in(newTo).emit("message", message);
 				}
 			} else {
