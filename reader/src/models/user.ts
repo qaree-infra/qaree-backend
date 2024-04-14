@@ -16,7 +16,6 @@ export interface UserInterface {
 		connection: boolean;
 		socketId: string;
 	};
-	rooms: [string];
 }
 
 const userSchema: Schema = new mongoose.Schema<UserInterface>(
@@ -72,7 +71,6 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 			},
 			default: { connection: false, socketId: "" },
 		},
-		rooms: { type: [String], default: [] }, // community and uid-uid
 	},
 	{
 		timestamps: true,
