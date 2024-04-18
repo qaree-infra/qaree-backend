@@ -16,6 +16,9 @@ export interface UserInterface {
 		connection: boolean;
 		socketId: string;
 	};
+	notifications: {
+		token: string;
+	};
 }
 
 const userSchema: Schema = new mongoose.Schema<UserInterface>(
@@ -70,6 +73,14 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 				},
 			},
 			default: { connection: false, socketId: "" },
+		},
+		notifications: {
+			type: {
+				token: {
+					type: String,
+				},
+			},
+			default: { token: "" },
 		},
 	},
 	{

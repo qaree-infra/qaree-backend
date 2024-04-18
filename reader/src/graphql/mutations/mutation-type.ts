@@ -3,6 +3,7 @@ import UserMutation from "./user/user-mutation.js";
 import BookMutations from "./book/book-mutations.js";
 import ShelfMutations from "./library/shelf-mutation.js";
 import ChatMutations from "./chat/chat-mutations.js";
+import NotificationsMutations from "./notifications/notifications-mutations.js";
 
 const mutationType = new GraphQLObjectType({
 	name: "Mutation",
@@ -12,6 +13,7 @@ const mutationType = new GraphQLObjectType({
 		...BookMutations,
 		...ShelfMutations,
 		...ChatMutations,
+		...NotificationsMutations,
 	},
 });
 
