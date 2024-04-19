@@ -12,6 +12,16 @@ export interface AuthRequest extends Request {
 	auth: auth;
 }
 
+interface tokenValidateion extends jwt.JwtPayload {
+	exp: number;
+}
+
+interface DecodedData extends jwt.JwtPayload {
+	id?: string;
+	sub?: string;
+	email: string;
+}
+
 const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 	try {
 		const { lang } = req.query;
@@ -30,7 +40,9 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 
 		const isCustomAuth = token?.length < 500;
 
-		const tokenValidateion = jwt.decode(token);
+		const tokenValidateion: tokenValidateion = jwt.decode(
+			token,
+		) as tokenValidateion;
 		if (tokenValidateion?.exp * 1000 < new Date().getTime()) {
 			req.auth = {
 				error:
@@ -42,15 +54,14 @@ const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
 			return next();
 		}
 
-		let decodedData: { id?: string; sub?: string; email: string },
-			userId: string;
+		let decodedData: DecodedData, userId: string;
 
 		if (token && isCustomAuth) {
-			decodedData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+			decodedData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as DecodedData;
 
 			userId = decodedData?.id;
 		} else {
-			decodedData = jwt.decode(token);
+			decodedData = jwt.decode(token) as DecodedData;
 
 			userId = decodedData?.sub;
 		}

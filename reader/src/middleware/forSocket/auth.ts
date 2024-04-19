@@ -2,6 +2,16 @@ import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import User, { UserInterface } from "../../models/user.js";
 
+interface tokenValidateion extends jwt.JwtPayload {
+	exp: number;
+}
+
+interface DecodedData extends jwt.JwtPayload {
+	id?: string;
+	sub?: string;
+	email: string;
+}
+
 const authSocket = async (socket, next) => {
 	try {
 		const lang = socket.handshake.headers["accept-language"];
@@ -23,7 +33,9 @@ const authSocket = async (socket, next) => {
 
 		const isCustomAuth = token?.length < 500;
 
-		const tokenValidateion = jwt.decode(token);
+		const tokenValidateion: tokenValidateion = jwt.decode(
+			token,
+		) as tokenValidateion;
 		if (tokenValidateion?.exp * 1000 < new Date().getTime()) {
 			return next(
 				new Error(
@@ -34,15 +46,15 @@ const authSocket = async (socket, next) => {
 			);
 		}
 
-		let decodedData: { id?: string; sub?: string; email: string },
+		let decodedData: DecodedData,
 			userId: string;
 
 		if (token && isCustomAuth) {
-			decodedData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+			decodedData = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as DecodedData
 
 			userId = decodedData?.id;
 		} else {
-			decodedData = jwt.decode(token);
+			decodedData = jwt.decode(token) as DecodedData;
 
 			userId = decodedData?.sub;
 		}
