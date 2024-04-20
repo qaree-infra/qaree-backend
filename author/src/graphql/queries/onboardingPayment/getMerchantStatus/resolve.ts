@@ -19,11 +19,12 @@ const resolve = async (_, args, context) => {
 		} else {
 			const statusData = await trackOnboardingStatus(auth.user._id);
 
-			await User.findByIdAndUpdate(
-				auth.user._id,
-				{ merchantId: statusData.merchant_id },
-				{ new: true },
-			);
+			if (statusData.merchant_id)
+				await User.findByIdAndUpdate(
+					auth.user._id,
+					{ merchantId: statusData.merchant_id },
+					{ new: true },
+				);
 
 			const merchantStatusData = await getFullStatus(statusData.merchant_id);
 
