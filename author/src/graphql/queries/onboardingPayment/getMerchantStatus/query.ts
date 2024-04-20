@@ -18,7 +18,7 @@ const productType = new GraphQLObjectType({
 			type: GraphQLString,
 			description: "",
 		},
-		vetting_status: {
+		vettingStatus: {
 			type: GraphQLString,
 			description: "",
 		},
@@ -48,11 +48,11 @@ const oauthThirdParty = new GraphQLObjectType({
 	name: "OAuthThirdParty",
 	description: "",
 	fields: {
-		partner_client_id: {
+		partnerClientId: {
 			type: GraphQLString,
 			description: "",
 		},
-		merchant_client_id: {
+		merchantClientId: {
 			type: GraphQLString,
 			description: "",
 		},
@@ -67,15 +67,15 @@ const oauthIntergration = new GraphQLObjectType({
 	name: "OAuthIntergation",
 	description: "",
 	fields: {
-		integration_type: {
+		integrationType: {
 			type: GraphQLString,
 			description: "",
 		},
-		integration_method: {
+		integrationMethod: {
 			type: GraphQLString,
 			description: "",
 		},
-		oauth_third_party: {
+		oauthThirdParty: {
 			type: new GraphQLList(oauthThirdParty),
 			description: "",
 		},
@@ -102,19 +102,19 @@ const type = new GraphQLObjectType({
 			type: new GraphQLList(capabilityType),
 			description: "",
 		},
-		payments_receivable: {
+		paymentsReceivable: {
 			type: GraphQLBoolean,
 			description: "",
 		},
-		legal_name: {
+		legalName: {
 			type: GraphQLString,
 			description: "",
 		},
-		primary_email_confirmed: {
+		primaryEmailConfirmed: {
 			type: GraphQLString,
 			description: "",
 		},
-		oauth_integrations: {
+		oauthIntegrations: {
 			type: GraphQLList(oauthIntergration),
 			description: "",
 		},
