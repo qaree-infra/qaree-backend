@@ -13,16 +13,20 @@ const resolve = async (_, args, context) => {
 		const auth: auth = context.auth;
 		if (auth.error) throw new Error(auth.error);
 
-		if (trackingId !== auth.user._id)
+		if (trackingId !== auth.user._id.toString())
 			throw new Error("No permisions for this operation");
 
 		const statusData = await trackOnboardingStatus(trackingId);
 
-		await User.findByIdAndUpdate(
-			auth.user._id,
-			{ merchantId: statusData.merchant_id },
-			{ new: true },
-		);
+		if (statusData.merchant_id)
+			await User.findByIdAndUpdate(
+				auth.user._id,
+				{ merchantId: statusData.merchant_id },
+				{ new: true },
+			);
+		else {
+			throw new Error("invalid resource id");
+		}
 
 		return statusData;
 	} catch (error) {
