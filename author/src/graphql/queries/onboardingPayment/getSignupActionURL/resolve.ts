@@ -19,12 +19,13 @@ const resolve = async (_, args, context) => {
 			auth.user,
 			lang,
 		);
+		console.log(generatedActionUrl);
 
 		const url: Link = generatedActionUrl.links.filter(
 			(l: Link) => l.rel === "action_url",
 		)[0];
 
-		return { actionUrl: url.href };
+		return { actionURL: url.href };
 	} catch (error) {
 		throw new Error(error?.message || error);
 	}
