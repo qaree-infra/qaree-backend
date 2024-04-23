@@ -187,6 +187,8 @@ export default (io, socket) => {
 						},
 						room: 1,
 						reader: 1,
+						createdAt: 1,
+						updatedAt:1
 					},
 					activation: 1,
 					creator: 1,
