@@ -7,6 +7,8 @@ export interface MessageInterface {
 	room: string;
 	// reciver: string;
 	reader: [Schema.Types.ObjectId];
+	createdAt: Date;
+	updatedAt: Date;
 }
 
 const userSchema: Schema = new mongoose.Schema<MessageInterface>(

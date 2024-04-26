@@ -56,6 +56,7 @@ export default (io, socket) => {
 		const roomData = await Room.findOne({
 			$or: orOptions,
 		});
+		// console.log(content, roomData);
 
 		if (
 			roomData?.members.length > 0 &&
@@ -64,12 +65,12 @@ export default (io, socket) => {
 			return socket.emit("error", "invalid room");
 		}
 
+		const reciver = await User.findById(toId);
 		if (!roomData) {
 			if (to.includes("user")) {
 				const reciverId = toId === userData._id;
 				if (reciverId)
 					return socket.emit("error", "sorry, you can't send message to you");
-				const reciver = await User.findById(toId);
 				if (!reciver) return socket.emit("error", "invalid reciver");
 				else {
 					const newTo = `${userData._id}-${toId}`;
@@ -96,9 +97,37 @@ export default (io, socket) => {
 					]);
 					if (reciver.chat.connection) {
 						// console.log(reciver.chat);
-						socket.broadcast.to(reciver.chat.socketId).emit("message", message);
+						socket.broadcast.to(reciver.chat.socketId).emit("message", {
+							_id: message._id,
+							content: message.content,
+							sender: {
+								_id: userData._id,
+								name: userData.name,
+								avatar: userData.avatar,
+								bio: userData.bio,
+								email: userData.email,
+							},
+							room: roomData.roomId,
+							createdAt: message.createdAt,
+							updatedAt: message.updatedAt,
+							reader: message.reader,
+						});
 					}
-					io.in(newTo).emit("message", message);
+					io.in(newTo).emit("message", {
+						_id: message._id,
+						content: message.content,
+						sender: {
+							_id: userData._id,
+							name: userData.name,
+							avatar: userData.avatar,
+							bio: userData.bio,
+							email: userData.email,
+						},
+						room: roomData.roomId,
+						createdAt: message.createdAt,
+						updatedAt: message.updatedAt,
+						reader: message.reader,
+					});
 				}
 			} else {
 				return socket.emit("error", "Sorry, you aren't at this community");
@@ -109,6 +138,7 @@ export default (io, socket) => {
 				creator: toId,
 				activation: true,
 			});
+			// console.log(reciverRoom);
 
 			if (reciverRoom) {
 				const message = await Message.create({
@@ -126,7 +156,54 @@ export default (io, socket) => {
 					{ lastMessage: message._id },
 					{ new: true },
 				);
-				io.in(roomData.roomId).emit("message", message);
+				if (reciver.chat.connection) {
+					socket.broadcast.to(reciver.chat.socketId).emit("message", {
+						_id: message._id,
+						content: message.content,
+						sender: {
+							_id: userData._id,
+							name: userData.name,
+							avatar: userData.avatar,
+							bio: userData.bio,
+							email: userData.email,
+						},
+						room: roomData.roomId,
+						createdAt: message.createdAt,
+						updatedAt: message.updatedAt,
+						reader: message.reader,
+					});
+					socket.emit("message", {
+						_id: message._id,
+						content: message.content,
+						sender: {
+							_id: userData._id,
+							name: userData.name,
+							avatar: userData.avatar,
+							bio: userData.bio,
+							email: userData.email,
+						},
+						room: roomData.roomId,
+						createdAt: message.createdAt,
+						updatedAt: message.updatedAt,
+						reader: message.reader,
+					});
+				} else {
+					io.in(roomData.roomId).emit("message", {
+						_id: message._id,
+						content: message.content,
+						sender: {
+							_id: userData._id,
+							name: userData.name,
+							avatar: userData.avatar,
+							bio: userData.bio,
+							email: userData.email,
+						},
+						room: roomData.roomId,
+						createdAt: message.createdAt,
+						updatedAt: message.updatedAt,
+						reader: message.reader,
+					});
+				}
 			} else {
 				const message = await Message.create({
 					content: content,
@@ -138,7 +215,21 @@ export default (io, socket) => {
 					{ lastMessage: message._id },
 					{ new: true },
 				);
-				socket.emit("message", message);
+				io.in(roomData.roomId).emit("message", {
+					_id: message._id,
+					content: message.content,
+					sender: {
+						_id: userData._id,
+						name: userData.name,
+						avatar: userData.avatar,
+						bio: userData.bio,
+						email: userData.email,
+					},
+					room: roomData.roomId,
+					createdAt: message.createdAt,
+					updatedAt: message.updatedAt,
+					reader: message.reader,
+				});
 			}
 		}
 	};
