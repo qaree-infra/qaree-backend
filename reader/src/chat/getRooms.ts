@@ -1,32 +1,31 @@
-import mongoose from "mongoose";
 import Room from "../models/chatRoom.js";
 
 export default (io, socket) => {
 	return async ({ page, limit, keyword = "" }) => {
 		const userData = socket.handshake["authData"].user;
 
-		const startIndex = (Number(page || 1) - 1) * limit;
-		console.log(keyword);
+		// const startIndex = (Number(page || 1) - 1) * limit;
+		// console.log(keyword);
 		const keys = keyword
 			?.trim()
 			?.split(" ")
 			.map((e: string) => new RegExp(e, "gi"));
 
-		console.log(keys);
+		// console.log("keys: ", keys);
 
-		const orOptions = [
-			{
-				// $or: [{ name: { $in: keys } }],
-				creator: userData._id,
-				activation: true,
-			},
-			{
-				// $or: [{ name: { $in: keys } }],
-				// members: { $elemMatch: { user: userData._id } },
-				members: { $in: [userData._id] },
-				activation: true,
-			},
-		];
+		// const orOptions = [
+		// 	{
+		// 		// $or: [{ name: { $in: keys } }],
+		// 		creator: userData._id,
+		// 		activation: true,
+		// 	},
+		// 	{
+		// 		// $or: [{ name: { $in: keys } }],
+		// 		// members: { $elemMatch: { user: userData._id } },
+		// 		members: { $in: [userData._id] },
+		// 		activation: true,
+		// 	},
+		// ];
 
 		const roomData = await Room.aggregate([
 			{
@@ -128,6 +127,41 @@ export default (io, socket) => {
 				},
 			},
 			{
+				$lookup: {
+					from: "messages",
+					localField: "roomId",
+					foreignField: "room",
+					as: "messages",
+				},
+			},
+			{
+				$addFields: {
+					unread: {
+						$size: {
+							$filter: {
+								input: {
+									$map: {
+										input: "$messages",
+										as: "message",
+										in: {
+											_id: "$$message._id",
+											reader: "$$message.reader",
+											sender: "$$message.sender",
+										},
+									},
+								},
+								cond: {
+									$and: [
+										{ $not: { $in: ["$$this.reader", [userData._id]] } },
+										{ $ne: ["$$this.sender", userData._id] },
+									],
+								},
+							},
+						},
+					},
+				},
+			},
+			{
 				$match: {
 					$or: [
 						{
@@ -188,17 +222,18 @@ export default (io, socket) => {
 						room: 1,
 						reader: 1,
 						createdAt: 1,
-						updatedAt:1
+						updatedAt: 1,
 					},
 					activation: 1,
 					creator: 1,
 					roomId: 1,
 					members: 1,
+					unread: 1,
 				},
 			},
 		]);
 
-		console.log(roomData);
+		// console.log(roomData);
 
 		if (roomData) {
 			socket.emit("get-rooms", {

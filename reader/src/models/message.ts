@@ -5,7 +5,6 @@ export interface MessageInterface {
 	content: string;
 	sender: Schema.Types.ObjectId;
 	room: string;
-	// reciver: string;
 	reader: [Schema.Types.ObjectId];
 	createdAt: Date;
 	updatedAt: Date;
@@ -24,10 +23,6 @@ const userSchema: Schema = new mongoose.Schema<MessageInterface>(
 			trim: true,
 			ref: "User",
 		},
-		// reciver: {
-		// 	type: String,
-		// 	require: [true, "please enter the massage reciver!"],
-		// },
 		reader: {
 			type: [Schema.Types.ObjectId],
 			ref: "User",
