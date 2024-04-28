@@ -45,7 +45,7 @@ export default (io, socket) => {
 		if (roomData) {
 			const startIndex = (Number(page || 1) - 1) * Number(limit || 10);
 			const roomMsgs = await Message.find({ room: roomData.roomId })
-				.sort({ createdAt: type === "read" ? 1 : -1 })
+				.sort({ createdAt: type.toLowerCase() === "read" ? -1 : 1 })
 				.limit(Number(limit || 10))
 				.skip(startIndex)
 				.populate([
