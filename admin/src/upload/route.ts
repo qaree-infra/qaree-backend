@@ -20,7 +20,7 @@ router.post(
 );
 
 router.post(
-	"/avatar",
+	"/admin/avatar",
 	Auth,
 	upload.single("avatar"),
 	VerifyFile,
