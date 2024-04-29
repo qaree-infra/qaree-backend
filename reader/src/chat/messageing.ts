@@ -6,7 +6,7 @@ export default (io, socket) => {
 	return async ({ content, to }) => {
 		const userData = socket.handshake["authData"].user;
 
-		// console.log(content, to);
+		console.log(content, to);
 		if (content.length === 0) return socket.emit("error", "Empty content");
 		if (content.length > 500)
 			return socket.emit(
@@ -56,7 +56,7 @@ export default (io, socket) => {
 		const roomData = await Room.findOne({
 			$or: orOptions,
 		});
-		// console.log(content, roomData);
+		console.log(content, roomData);
 
 		if (
 			roomData?.members.length > 0 &&
@@ -66,6 +66,7 @@ export default (io, socket) => {
 		}
 
 		const reciver = await User.findById(toId);
+		console.log(reciver);
 		if (!roomData) {
 			if (to.includes("user")) {
 				const reciverId = toId === userData._id;
@@ -75,7 +76,7 @@ export default (io, socket) => {
 				else {
 					const newTo = `${userData._id}-${toId}`;
 					await socket.join(newTo);
-					// console.log(newTo);
+					await console.log("newTo: ", newTo);
 					const message = await Message.create({
 						content: content,
 						sender: userData._id,
@@ -96,7 +97,7 @@ export default (io, socket) => {
 						},
 					]);
 					if (reciver.chat.connection) {
-						// console.log(reciver.chat);
+						console.log("reciver.chat: ", reciver.chat);
 						socket.broadcast.to(reciver.chat.socketId).emit("message", {
 							_id: message._id,
 							content: message.content,
@@ -107,7 +108,7 @@ export default (io, socket) => {
 								bio: userData.bio,
 								email: userData.email,
 							},
-							room: roomData.roomId,
+							room: newTo,
 							createdAt: message.createdAt,
 							updatedAt: message.updatedAt,
 							reader: message.reader,
@@ -123,7 +124,7 @@ export default (io, socket) => {
 							bio: userData.bio,
 							email: userData.email,
 						},
-						room: roomData.roomId,
+						room: newTo,
 						createdAt: message.createdAt,
 						updatedAt: message.updatedAt,
 						reader: message.reader,
@@ -138,7 +139,7 @@ export default (io, socket) => {
 				creator: toId,
 				activation: true,
 			});
-			// console.log(reciverRoom);
+			console.log(reciverRoom);
 
 			if (reciverRoom) {
 				const message = await Message.create({
