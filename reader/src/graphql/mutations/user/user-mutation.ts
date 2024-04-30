@@ -7,8 +7,9 @@ import validateResetPasswordOTPMutation from "./validateResetPasswordOTP/mutatio
 import ResendResetPasswordOTPMutation from "./resnedResetPasswordOTP/mutation.js";
 import ResetPasswordMutation from "./resetPassword/mutation.js";
 import updateAccountMutation from "./updateAccountInfo/mutation.js";
-import deleteAccountMutation from './deleteUser/mutation.js'
+import deleteAccountMutation from "./deleteUser/mutation.js";
 import googleLoginMutation from "./googleLogin/mutation.js";
+import followUserMutation from "./follow/mutation.js";
 
 export default {
 	signup: signupMutation,
@@ -21,5 +22,6 @@ export default {
 	resetPassword: ResetPasswordMutation,
 	updateUser: updateAccountMutation,
 	deleteAccount: deleteAccountMutation,
-	googleLogin: googleLoginMutation
+	googleLogin: googleLoginMutation,
+	followUser: followUserMutation,
 };
