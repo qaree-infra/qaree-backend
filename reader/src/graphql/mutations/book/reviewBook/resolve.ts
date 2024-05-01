@@ -1,5 +1,7 @@
 import { auth } from "../../../../middleware/general/auth.js";
 import BookReview from "../../../../models/bookReview.js";
+import User from "../../../../models/user.js";
+import { generateNewReviewNotification, sendFcmMessage } from "../../../../utils/sendNotification.js";
 import verifyBook from "../../../middleware/verifyBook.js";
 
 interface ArgsInterface {
@@ -53,7 +55,23 @@ const reviewBookResolve = async (_, args, context) => {
 				user: user._id,
 				rate,
 				content,
-				bookId
+				bookId,
+			});
+
+			const reviewerFollowes = await User.find({
+				following: { $in: [user._id] },
+				"notifications.token": { $ne: "" },
+			});
+
+			reviewerFollowes.forEach((u) => {
+				const notificationMsg = generateNewReviewNotification(
+					{ user, _id: review._id },
+					bookVerification.bookData,
+					lang
+				);
+
+				notificationMsg.message.token = u.notifications.token;
+				sendFcmMessage(notificationMsg);
 			});
 
 			return {

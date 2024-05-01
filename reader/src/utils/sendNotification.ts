@@ -3,7 +3,6 @@ import { google } from "googleapis";
 import dotenv from "dotenv";
 import https from "https";
 import { UserInterface } from "../models/user.js";
-import { MessageInterface } from "../models/message.js";
 
 dotenv.config();
 
@@ -133,6 +132,7 @@ export function generateNewReviewNotification(review, book, lang: string) {
 	return {
 		message: {
 			/* add token to message object */
+			token: "",
 			notification: {
 				title:
 					lang === "ar"
