@@ -91,7 +91,7 @@ export function generateMessageNotification(
 ) {
 	return {
 		message: {
-			/* add token to message object */
+			/* add token to message object */ token: "REGISTERETION_TOKEN",
 			notification: {
 				title:
 					lang === "ar"

@@ -1,10 +1,12 @@
 import User from "../models/user.js";
 import Message from "../models/message.js";
 import Room from "../models/chatRoom.js";
+import { generateMessageNotification, sendFcmMessage } from "../utils/sendNotification.js";
 
 export default (io, socket) => {
 	return async ({ content, to }) => {
 		const userData = socket.handshake["authData"].user;
+		const lang = socket.handshake.headers.query.lang;
 
 		console.log(content, to);
 		if (content.length === 0) return socket.emit("error", "Empty content");
@@ -114,6 +116,18 @@ export default (io, socket) => {
 							reader: message.reader,
 						});
 					}
+					if (reciver.notifications.token) {
+						const notificationMsg = generateMessageNotification(
+							userData.avatar.path,
+							content,
+							userData,
+							roomData._id,
+							lang,
+						);
+
+						notificationMsg.message.token = reciver.notifications.token;
+						sendFcmMessage(notificationMsg);
+					}
 					io.in(newTo).emit("message", {
 						_id: message._id,
 						content: message.content,
@@ -139,7 +153,6 @@ export default (io, socket) => {
 				creator: toId,
 				activation: true,
 			});
-			console.log(reciverRoom);
 
 			if (reciverRoom) {
 				const message = await Message.create({
@@ -189,6 +202,18 @@ export default (io, socket) => {
 						reader: message.reader,
 					});
 				} else {
+					if (reciver.notifications.token) {
+						const notificationMsg = generateMessageNotification(
+							userData.avatar.path,
+							content,
+							userData,
+							roomData._id,
+							lang,
+						);
+
+						notificationMsg.message.token = reciver.notifications.token;
+						sendFcmMessage(notificationMsg);
+					}
 					io.in(roomData.roomId).emit("message", {
 						_id: message._id,
 						content: message.content,
