@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface UserInterface {
-	_id: string;
+	_id: Schema.Types.ObjectId;
 	name: string;
 	email: string;
 	password: string;
@@ -15,6 +15,9 @@ export interface UserInterface {
 	chat: {
 		connection: boolean;
 		socketId: string;
+	};
+	notifications: {
+		token: string;
 	};
 }
 
@@ -56,17 +59,28 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 			type: [Schema.Types.ObjectId],
 			ref: "Book",
 		},
-		bookReads: {
-			type: [Schema.Types.ObjectId],
-			// todo:
-		},
 		bio: {
 			type: String,
 			default: "",
 		},
 		chat: {
-			type: { connection: Boolean, socketId: String },
+			type: {
+				connection: {
+					type: Boolean,
+				},
+				socketId: {
+					type: String,
+				},
+			},
 			default: { connection: false, socketId: "" },
+		},
+		notifications: {
+			type: {
+				token: {
+					type: String,
+				},
+			},
+			default: { token: "" },
 		},
 	},
 	{

@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Book, { BookInterface } from "../../../../models/book.js";
 import { auth } from "../../../../middleware/general/auth.js";
+import User from "../../../../models/user.js";
+import { generateNewBookNotification, sendFcmMessage } from "../../../../utils/sendNotification.js";
 
 const reviewBookResolve = async (_, args, context) => {
 	try {
@@ -61,6 +63,21 @@ const reviewBookResolve = async (_, args, context) => {
 				status: status === "approved"? "published" : "rejected",
 				publishionDate: new Date().toISOString(),
 				reviewer: auth.admin._id
+			});
+
+			const reviewerFollowes = await User.find({
+				following: { $in: [bookData.author] },
+				"notifications.token": { $ne: "" },
+			});
+
+			reviewerFollowes.forEach((u) => {
+				const notificationMsg = generateNewBookNotification(
+					bookData,
+					lang
+				);
+
+				notificationMsg.message.token = u.notifications.token;
+				sendFcmMessage(notificationMsg);
 			});
 
 			return { success: true, message: "reviewed successfully" };
