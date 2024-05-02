@@ -120,7 +120,7 @@ export default (io, socket) => {
 							reader: message.reader,
 						});
 					}
-					if (reciver.notifications.token) {
+					if (reciver.notifications.token && reciver.notifications.messageing) {
 						const notificationMsg = generateMessageNotification(
 							userData.avatar.path,
 							content,
@@ -135,7 +135,7 @@ export default (io, socket) => {
 							title: notificationMsg.message.notification.title,
 							body: notificationMsg.message.notification.body,
 							image: notificationMsg.message.notification.image,
-							type: "messageing notifcation",
+							type: "messageing",
 							user: reciver._id,
 							data: notificationMsg.message.data,
 						});
@@ -214,7 +214,7 @@ export default (io, socket) => {
 						reader: message.reader,
 					});
 				} else {
-					if (reciver.notifications.token) {
+					if (reciver.notifications.token && reciver.notifications.messageing) {
 						const notificationMsg = generateMessageNotification(
 							userData.avatar.path,
 							content,
@@ -229,7 +229,7 @@ export default (io, socket) => {
 							title: notificationMsg.message.notification.title,
 							body: notificationMsg.message.notification.body,
 							image: notificationMsg.message.notification.image,
-							type: "messageing notifcation",
+							type: "messageing",
 							user: reciver._id,
 							data: notificationMsg.message.data,
 						});

@@ -63,6 +63,7 @@ export default async function resolve(_, args, context) {
 
 		if (
 			requiredUser.notifications.token &&
+			requiredUser.notifications.following &&
 			!requiredUser.followers.includes(user._id)
 		) {
 			const notificationMsg = generateFollowingMessage(user, lang);
@@ -73,7 +74,7 @@ export default async function resolve(_, args, context) {
 				title: notificationMsg.message.notification.title,
 				body: notificationMsg.message.notification.body,
 				image: notificationMsg.message.notification.image,
-				type: "following notifcation",
+				type: "following",
 				user: requiredUser._id,
 				data: notificationMsg.message.data,
 			});

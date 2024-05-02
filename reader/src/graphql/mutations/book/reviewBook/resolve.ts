@@ -65,6 +65,7 @@ const reviewBookResolve = async (_, args, context) => {
 			const reviewerFollowes = await User.find({
 				following: { $in: [user._id] },
 				"notifications.token": { $ne: "" },
+				"notifications.reviewingBook": { $eq: true },
 			});
 
 			reviewerFollowes.forEach((u) => {
@@ -80,7 +81,7 @@ const reviewBookResolve = async (_, args, context) => {
 					title: notificationMsg.message.notification.title,
 					body: notificationMsg.message.notification.body,
 					image: notificationMsg.message.notification.image,
-					type: "reviewing book notifcation",
+					type: "reviewing book",
 					user: u._id,
 					data: notificationMsg.message.data,
 				});

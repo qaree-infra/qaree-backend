@@ -83,7 +83,7 @@ const reviewBookResolve = async (_, args, context) => {
 					title: notificationMsg.message.notification.title,
 					body: notificationMsg.message.notification.body,
 					image: notificationMsg.message.notification.image,
-					type: "new book notifcation",
+					type: "new book",
 					user: u._id,
 					data: notificationMsg.message.data,
 				});

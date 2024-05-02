@@ -96,7 +96,13 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 					type: Boolean,
 				},
 			},
-			default: { token: "" },
+			default: {
+				token: "",
+				following: true,
+				reviewingBook: true,
+				messageing: true,
+				newBook: true,
+			},
 		},
 	},
 	{
