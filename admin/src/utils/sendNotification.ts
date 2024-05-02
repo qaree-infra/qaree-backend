@@ -93,9 +93,9 @@ export function generateMessageNotification(
 			/* add token to message object */ token: "REGISTERETION_TOKEN",
 			notification: {
 				title:
-				lang === "ar"
-				? `رسالة جديدة من ${sender.name}`
-				: `New message from ${sender.name}`,
+					lang === "ar"
+						? `رسالة جديدة من ${sender.name}`
+						: `New message from ${sender.name}`,
 				body: content,
 				image: image,
 			},

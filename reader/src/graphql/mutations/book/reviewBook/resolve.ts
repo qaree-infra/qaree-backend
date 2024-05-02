@@ -1,7 +1,11 @@
 import { auth } from "../../../../middleware/general/auth.js";
 import BookReview from "../../../../models/bookReview.js";
+import Notification from "../../../../models/notification.js";
 import User from "../../../../models/user.js";
-import { generateNewReviewNotification, sendFcmMessage } from "../../../../utils/sendNotification.js";
+import {
+	generateNewReviewNotification,
+	sendFcmMessage,
+} from "../../../../utils/sendNotification.js";
 import verifyBook from "../../../middleware/verifyBook.js";
 
 interface ArgsInterface {
@@ -67,11 +71,19 @@ const reviewBookResolve = async (_, args, context) => {
 				const notificationMsg = generateNewReviewNotification(
 					{ user, _id: review._id },
 					bookVerification.bookData,
-					lang
+					lang,
 				);
 
 				notificationMsg.message.token = u.notifications.token;
 				sendFcmMessage(notificationMsg);
+				Notification.create({
+					title: notificationMsg.message.notification.title,
+					body: notificationMsg.message.notification.body,
+					image: notificationMsg.message.notification.image,
+					type: "reviewing book notifcation",
+					user: u._id,
+					data: notificationMsg.message.data,
+				});
 			});
 
 			return {

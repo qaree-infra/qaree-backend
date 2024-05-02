@@ -3,6 +3,7 @@ import Book, { BookInterface } from "../../../../models/book.js";
 import { auth } from "../../../../middleware/general/auth.js";
 import User from "../../../../models/user.js";
 import { generateNewBookNotification, sendFcmMessage } from "../../../../utils/sendNotification.js";
+import Notification from "../../../../models/notification.js";
 
 const reviewBookResolve = async (_, args, context) => {
 	try {
@@ -78,6 +79,14 @@ const reviewBookResolve = async (_, args, context) => {
 
 				notificationMsg.message.token = u.notifications.token;
 				sendFcmMessage(notificationMsg);
+				Notification.create({
+					title: notificationMsg.message.notification.title,
+					body: notificationMsg.message.notification.body,
+					image: notificationMsg.message.notification.image,
+					type: "new book notifcation",
+					user: u._id,
+					data: notificationMsg.message.data,
+				});
 			});
 
 			return { success: true, message: "reviewed successfully" };

@@ -1,7 +1,11 @@
 import User from "../../../../models/user.js";
 import { auth } from "../../../../middleware/general/auth.js";
 import mongoose from "mongoose";
-import { generateFollowingMessage, sendFcmMessage } from "../../../../utils/sendNotification.js";
+import {
+	generateFollowingMessage,
+	sendFcmMessage,
+} from "../../../../utils/sendNotification.js";
+import Notification from "../../../../models/notification.js";
 
 function generateMsg(lang: string, followed: boolean): string {
 	return lang === "ar"
@@ -57,11 +61,22 @@ export default async function resolve(_, args, context) {
 			following: following,
 		});
 
-		if (requiredUser.notifications.token && !requiredUser.followers.includes(user._id)) {
+		if (
+			requiredUser.notifications.token &&
+			!requiredUser.followers.includes(user._id)
+		) {
 			const notificationMsg = generateFollowingMessage(user, lang);
 
 			notificationMsg.message.token = requiredUser.notifications.token;
 			sendFcmMessage(notificationMsg);
+			await Notification.create({
+				title: notificationMsg.message.notification.title,
+				body: notificationMsg.message.notification.body,
+				image: notificationMsg.message.notification.image,
+				type: "following notifcation",
+				user: requiredUser._id,
+				data: notificationMsg.message.data,
+			});
 		}
 
 		return {

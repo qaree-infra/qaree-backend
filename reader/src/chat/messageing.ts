@@ -1,7 +1,11 @@
 import User from "../models/user.js";
 import Message from "../models/message.js";
 import Room from "../models/chatRoom.js";
-import { generateMessageNotification, sendFcmMessage } from "../utils/sendNotification.js";
+import {
+	generateMessageNotification,
+	sendFcmMessage,
+} from "../utils/sendNotification.js";
+import Notification from "../models/notification.js";
 
 export default (io, socket) => {
 	return async ({ content, to }) => {
@@ -127,6 +131,14 @@ export default (io, socket) => {
 
 						notificationMsg.message.token = reciver.notifications.token;
 						sendFcmMessage(notificationMsg);
+						Notification.create({
+							title: notificationMsg.message.notification.title,
+							body: notificationMsg.message.notification.body,
+							image: notificationMsg.message.notification.image,
+							type: "reviewing book notifcation",
+							user: reciver._id,
+							data: notificationMsg.message.data,
+						});
 					}
 					io.in(newTo).emit("message", {
 						_id: message._id,
@@ -213,6 +225,14 @@ export default (io, socket) => {
 
 						notificationMsg.message.token = reciver.notifications.token;
 						sendFcmMessage(notificationMsg);
+						Notification.create({
+							title: notificationMsg.message.notification.title,
+							body: notificationMsg.message.notification.body,
+							image: notificationMsg.message.notification.image,
+							type: "reviewing book notifcation",
+							user: reciver._id,
+							data: notificationMsg.message.data,
+						});
 					}
 					io.in(roomData.roomId).emit("message", {
 						_id: message._id,
