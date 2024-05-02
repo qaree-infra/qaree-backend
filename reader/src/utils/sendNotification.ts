@@ -75,7 +75,7 @@ export function generateFollowingMessage(user: UserInterface, lang: string) {
 				image: user.avatar.path,
 			},
 			data: {
-				user_id: user._id,
+				userId: user._id,
 			},
 		},
 	};
@@ -122,7 +122,7 @@ export function generateNewBookNotification(book, lang: string) {
 				image: book.cover.path,
 			},
 			data: {
-				book_id: book._id,
+				bookId: book._id,
 			},
 		},
 	};
@@ -145,8 +145,8 @@ export function generateNewReviewNotification(review, book, lang: string) {
 				image: book.cover.path,
 			},
 			data: {
-				book_id: book._id,
-				review_id: review._id,
+				bookId: book._id,
+				reviewId: review._id,
 			},
 		},
 	};

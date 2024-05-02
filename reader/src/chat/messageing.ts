@@ -135,7 +135,7 @@ export default (io, socket) => {
 							title: notificationMsg.message.notification.title,
 							body: notificationMsg.message.notification.body,
 							image: notificationMsg.message.notification.image,
-							type: "reviewing book notifcation",
+							type: "messageing notifcation",
 							user: reciver._id,
 							data: notificationMsg.message.data,
 						});
@@ -229,7 +229,7 @@ export default (io, socket) => {
 							title: notificationMsg.message.notification.title,
 							body: notificationMsg.message.notification.body,
 							image: notificationMsg.message.notification.image,
-							type: "reviewing book notifcation",
+							type: "messageing notifcation",
 							user: reciver._id,
 							data: notificationMsg.message.data,
 						});

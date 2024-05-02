@@ -18,6 +18,10 @@ export interface UserInterface {
 	};
 	notifications: {
 		token: string;
+		newBook: boolean;
+		following: boolean;
+		reviewingBook: boolean;
+		messageing: boolean;
 	};
 }
 
@@ -78,6 +82,18 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 			type: {
 				token: {
 					type: String,
+				},
+				newBook: {
+					type: Boolean,
+				},
+				following: {
+					type: Boolean,
+				},
+				reviewingBook: {
+					type: Boolean,
+				},
+				messageing: {
+					type: Boolean,
 				},
 			},
 			default: { token: "" },
