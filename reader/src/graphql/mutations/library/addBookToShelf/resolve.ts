@@ -9,6 +9,7 @@ import {
 } from "../../../../utils/consts.js";
 import BookRead from "../../../../models/bookRead.js";
 import { isCurrentShelf } from "../../../../utils/helper.js";
+import Offer, { OfferInterface } from "../../../../models/offer.js";
 
 const addBookDetailsResolve = async (_, args, context) => {
 	try {
@@ -67,13 +68,16 @@ const addBookDetailsResolve = async (_, args, context) => {
 
 			const validateCurrentShelf = isCurrentShelf(shelfData);
 
-			if (validateCurrentShelf)
+			if (validateCurrentShelf) {
+				const bookOffer: OfferInterface = await Offer.findOne({ book: bookId });
+				const bookPrice =
+					(100 - bookOffer.percent) * bookVerification.bookData.price;
 				await BookRead.create({
 					book: bookVerification.bookData._id,
-					status:
-						bookVerification.bookData.price === 0 ? "purchased" : "sample",
+					status: bookPrice === 0 ? "purchased" : "sample",
 					user: auth.user._id,
 				});
+			}
 
 			// await Shelf.findByIdAndUpdate(bookShelf._id, {
 			// 	books: bookShelf.books.filter(

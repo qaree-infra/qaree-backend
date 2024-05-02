@@ -3,6 +3,7 @@ import { auth } from "../../../../middleware/general/auth.js";
 import verifyBook from "../../../../middleware/general/verifyBook.js";
 import BookRead from "../../../../models/bookRead.js";
 import Room from "../../../../models/chatRoom.js";
+import Offer, { OfferInterface } from "../../../../models/offer.js";
 
 export default async function resolve(_, args: { bookId: string }, context) {
 	try {
@@ -21,7 +22,11 @@ export default async function resolve(_, args: { bookId: string }, context) {
 			book: bookVerification.bookData._id,
 		});
 
-		if (bookVerification.bookData.price === 0) {
+		const bookOffer: OfferInterface = await Offer.findOne({ book: bookId });
+		const bookPrice =
+			(100 - bookOffer.percent) * bookVerification.bookData.price;
+
+		if (bookPrice === 0) {
 			if (bookCommunity) {
 				await Room.findByIdAndUpdate(
 					bookCommunity._id,

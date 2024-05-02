@@ -3,6 +3,7 @@ import verifyBook from "../../../../../middleware/general/verifyBook.js";
 import { capturePayment } from "../../../../../utils/paypal/paypal-api.js";
 import { CapturedOrder } from "../../../../../utils/paypal/order-type.js";
 import BookRead, { BookReadInterface } from "../../../../../models/bookRead.js";
+import Offer, { OfferInterface } from "../../../../../models/offer.js";
 
 const resolve = async (
 	_,
@@ -21,7 +22,11 @@ const resolve = async (
 		const bookVerification = await verifyBook(bookId, context);
 		if (bookVerification.error) throw new Error(bookVerification.error);
 
-		if (bookVerification.bookData.price === 0)
+		const bookOffer: OfferInterface = await Offer.findOne({ book: bookId });
+		const bookPrice =
+			(100 - bookOffer.percent) * bookVerification.bookData.price;
+
+		if (bookPrice === 0)
 			throw new Error(lang === "ar" ? "هذا الكتاب مجانى" : "This is free book");
 
 		const userBookRead = await BookRead.findOne({
