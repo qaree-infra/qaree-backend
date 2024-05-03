@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 type bookStatus = "draft" | "inReview" | "publised" | "rejected";
 
 export interface BookInterface {
-	_id: string;
+	_id: Schema.Types.ObjectId | string;
 	name: string;
 	description: string;
 	isbn: string;

@@ -6,6 +6,8 @@ import { ShelfData } from "../../../types/shelf-type.js";
 import {
 	FINISHED_READING_SHELF,
 	FINISHED_READING_SHELF_AR,
+	CURRENT_READING_SHELF,
+	CURRENT_READING_SHELF_AR,
 } from "../../../../utils/consts.js";
 import BookRead from "../../../../models/bookRead.js";
 import { isCurrentShelf } from "../../../../utils/helper.js";
@@ -77,6 +79,30 @@ const addBookDetailsResolve = async (_, args, context) => {
 					status: bookPrice === 0 ? "purchased" : "sample",
 					user: auth.user._id,
 				});
+				const currentReadingShelf = await Shelf.findOne({
+					name_ar: CURRENT_READING_SHELF_AR,
+					name_en: CURRENT_READING_SHELF,
+					userId: auth.user._id,
+				});
+
+				if (currentReadingShelf)
+					await Shelf.findByIdAndUpdate(
+						currentReadingShelf._id,
+						{
+							books: [bookVerification.bookData._id].concat(
+								currentReadingShelf.books,
+							),
+						},
+						{ new: true },
+					);
+				else {
+					await Shelf.create({
+						name_ar: CURRENT_READING_SHELF_AR,
+						name_en: CURRENT_READING_SHELF,
+						userId: auth.user._id,
+						books: [bookVerification.bookData._id],
+					});
+				}
 			}
 
 			// await Shelf.findByIdAndUpdate(bookShelf._id, {

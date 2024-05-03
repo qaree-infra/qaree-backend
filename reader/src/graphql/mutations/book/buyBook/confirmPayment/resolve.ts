@@ -4,6 +4,12 @@ import { capturePayment } from "../../../../../utils/paypal/paypal-api.js";
 import { CapturedOrder } from "../../../../../utils/paypal/order-type.js";
 import BookRead, { BookReadInterface } from "../../../../../models/bookRead.js";
 import Offer, { OfferInterface } from "../../../../../models/offer.js";
+import Shelf from "../../../../../models/shelf.js";
+import {
+	CURRENT_READING_SHELF,
+	CURRENT_READING_SHELF_AR,
+} from "../../../../../utils/consts.js";
+import mongoose from "mongoose";
 
 const resolve = async (
 	_,
@@ -58,6 +64,30 @@ const resolve = async (
 			user: auth.user._id,
 		});
 		console.log(purchasedBook);
+		const currentReadingShelf = await Shelf.findOne({
+			name_ar: CURRENT_READING_SHELF_AR,
+			name_en: CURRENT_READING_SHELF,
+			userId: auth.user._id,
+		});
+
+		if (currentReadingShelf)
+			await Shelf.findByIdAndUpdate(
+				currentReadingShelf._id,
+				{
+					books: [bookVerification.bookData._id].concat(
+						currentReadingShelf.books,
+					),
+				},
+				{ new: true },
+			);
+		else {
+			await Shelf.create({
+				name_ar: CURRENT_READING_SHELF_AR,
+				name_en: CURRENT_READING_SHELF,
+				userId: auth.user._id,
+				books: [bookVerification.bookData._id],
+			});
+		}
 
 		return { capturedOrder, purchasedBook: purchasedBook };
 	} catch (error) {
