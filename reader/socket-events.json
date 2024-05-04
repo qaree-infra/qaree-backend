@@ -1,0 +1,165 @@
+{
+  "message": {
+    "input": {
+      "content": "string",
+      "to": "string(roomId, room._id, bookId, or user-{uId})"
+    },
+    "output": {
+      "_id": "string",
+      "content": "string",
+      "sender": "User",
+      "room": "roomId",
+      "reader": "[users]"
+    }
+  },
+  "typeing": {
+    "input": {
+      "room": "string(roomId, room._id, or bookId)",
+      "isTypeing": "boolean"
+    },
+    "output": {
+      "user": {
+        "_id": "string",
+        "name": "string",
+        "avatar": "File",
+        "bio": "string"
+      },
+      "room": "string(roomId, room._id, or bookId)",
+      "roomData": {
+        "_id": "string",
+        "lastMessage": {
+          "_id": "string",
+          "content": "string",
+          "sender": "User",
+          "room": "roomId",
+          "reader": "[users]"
+        },
+        "activation": "boolean",
+        "creator": "user",
+        "partner": "user",
+        "book": "bookId",
+        "members": [
+          "User"
+        ],
+        "roomId": "string"
+      },
+      "isTypeing": "boolean"
+    }
+  },
+  "read": {
+    "input": {
+      "msgId": "string"
+    },
+    "output": {
+      "_id": "string",
+      "content": "string",
+      "sender": "User",
+      "room": "roomId",
+      "reader": "[users or userIds]"
+    }
+  },
+  "message-list": {
+    "input": {
+      "room": "string(roomId, room._id, or bookId)",
+      "limit": "number",
+      "page": "number",
+      "type": "read or unread"
+    },
+    "output": {
+      "messages": {
+        "messages": [
+          {
+            "_id": "string",
+            "content": "string",
+            "sender": "User",
+            "room": "roomId",
+            "reader": "[users or userIds]"
+          }
+        ],
+        "totalMessages": "number",
+        "currentPage": "number",
+        "numberOfPages": "number"
+      },
+      "userId": "userId"
+    }
+  },
+  "get-room": {
+    "input": {
+      "room": "string(roomId, room._id, or bookId)"
+    },
+    "output": {
+      "_id": "string",
+      "lastMessage": {
+        "_id": "string",
+        "content": "string",
+        "sender": "User",
+        "room": "roomId",
+        "reader": "[users]"
+      },
+      "activation": "boolean",
+      "creator": "user",
+      "partner": "user",
+      "book": "bookId",
+      "members": [
+        "User"
+      ],
+      "roomId": "string"
+    }
+  },
+  "get-rooms": {
+    "input": {
+      "limit": "number",
+      "page": "number",
+      "keyword": "string"
+    },
+    "output": {
+      "rooms": [
+        {
+          "_id": "string",
+          "lastMessage": {
+            "_id": "string",
+            "content": "string",
+            "sender": "User",
+            "room": "roomId",
+            "reader": "[users]"
+          },
+          "activation": "boolean",
+          "creator": "user",
+          "partner": "user",
+          "book": "bookId",
+          "members": [
+            "User"
+          ],
+          "roomId": "string"
+        }
+      ],
+      "totalRooms": "number",
+      "currentPage": "number",
+      "numberOfPages": "number"
+    }
+  },
+  "get-room-members": {
+    "input": {
+      "room": "string(roomId, room._id, or bookId)",
+      "limitMembers": "number",
+      "page": "number"
+    },
+    "output": {
+      "members": [
+        "User"
+      ],
+      "totalMembers": "number",
+      "currentPage": "number",
+      "numberOfPages": "number"
+    }
+  },
+  "delete-chat": {
+    "input": {
+      "room": "string(roomId, room._id, or bookId)"
+    },
+    "output": {
+      "success": "boolean",
+      "message": "string"
+    }
+  }
+}
