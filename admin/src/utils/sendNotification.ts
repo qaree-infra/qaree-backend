@@ -110,6 +110,7 @@ export function generateNewBookNotification(book, lang: string) {
 	return {
 		message: {
 			/* add token to message object */
+			token: "",
 			notification: {
 				title:
 					lang === "ar"
