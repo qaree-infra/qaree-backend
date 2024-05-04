@@ -2,7 +2,7 @@ import Book from "../../../../models/book.js";
 import { auth } from "../../../../middleware/general/auth.js";
 
 const filterByValues = ["inReview", "published", "rejected"];
-const sortByValues = ["updatedAt", "name", "price"];
+const sortByValues = { price: 1, updatedAt: -1, name: 1, publishionDate: -1 };
 
 const getBooks = async (_, args, context) => {
 	try {
@@ -25,7 +25,7 @@ const getBooks = async (_, args, context) => {
 			);
 		}
 
-		if (sortBy && !sortByValues.includes(sortBy)) {
+		if (sortBy && !sortByValues[sortBy]) {
 			throw new Error(
 				lang === "ar"
 					? "نأسف لا نستطيع ان نرتب بيانات الكتب حسب هذه القيمة"
