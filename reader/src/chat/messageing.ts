@@ -10,7 +10,8 @@ import Notification from "../models/notification.js";
 export default (io, socket) => {
 	return async ({ content, to }) => {
 		const userData = socket.handshake["authData"].user;
-		const lang = socket.handshake.headers.query.lang;
+		const lang = socket.handshake.query?.lang;
+		console.log("lang", lang);
 
 		console.log(content, to);
 		if (content.length === 0) return socket.emit("error", "Empty content");
