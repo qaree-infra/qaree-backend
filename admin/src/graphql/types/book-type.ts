@@ -10,24 +10,7 @@ import {
 import adminType from "./admin-type.js";
 import categoryType from "./category-type.js";
 import fileType from "./file-type.js";
-
-export const authorType = new GraphQLObjectType({
-	name: "Author",
-	description: "this is book author type",
-	fields: {
-		_id: {
-			type: GraphQLID,
-		},
-		name: {
-			type: GraphQLString,
-			description: "",
-		},
-		avatar: {
-			type: GraphQLString,
-			description: "",
-		},
-	},
-});
+import userType from "./user-type.js";
 
 const bookType = new GraphQLObjectType({
 	name: "BookType",
@@ -73,7 +56,7 @@ const bookType = new GraphQLObjectType({
 			description: "",
 		},
 		author: {
-			type: authorType,
+			type: userType,
 			description: "",
 		},
 		sample: {

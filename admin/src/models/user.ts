@@ -12,12 +12,17 @@ export interface UserInterface {
 	books?: Array<Schema.Types.ObjectId>;
 	bookReads: Array<Schema.Types.ObjectId>;
 	bio: string;
+	merchantId: string;
 	chat: {
 		connection: boolean;
 		socketId: string;
 	};
 	notifications: {
 		token: string;
+		newBook: boolean;
+		following: boolean;
+		reviewingBook: boolean;
+		messageing: boolean;
 	};
 }
 
@@ -79,8 +84,26 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 				token: {
 					type: String,
 				},
+				newBook: {
+					type: Boolean,
+				},
+				following: {
+					type: Boolean,
+				},
+				reviewingBook: {
+					type: Boolean,
+				},
+				messageing: {
+					type: Boolean,
+				},
 			},
-			default: { token: "" },
+			default: {
+				token: "",
+				following: true,
+				reviewingBook: true,
+				messageing: true,
+				newBook: true,
+			},
 		},
 	},
 	{
