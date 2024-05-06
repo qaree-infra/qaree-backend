@@ -10,10 +10,12 @@ import getClientData from "./buy/getClientData/query.js";
 import getBookStatus from "./activities/getBookStatus/query.js";
 import getBookCommunity from "./community/getCommunityInfo/mutation.js";
 import getCommunityMembers from "./community/getCommunityMembers/mutation.js";
+import getAuthorBooks from "./getAuthorBooks/query.js";
 
 export default {
 	getBooks: getBooks,
 	getBook: getBook,
+	getAuthorBooks: getAuthorBooks,
 	getBookReviews: getBookReviews,
 	getBookReview: getBookReview,
 	search: search,
