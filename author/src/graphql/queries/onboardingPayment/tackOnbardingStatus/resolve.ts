@@ -1,6 +1,7 @@
 import { auth } from "../../../../middleware/general/auth.js";
 import { trackOnboardingStatus } from "../../../../utils/paypal-api.js";
 import User from "../../../../models/user.js";
+import { convertKeys } from "../../../../utils/helper.js";
 
 const resolve = async (_, args, context) => {
 	try {
@@ -30,7 +31,7 @@ const resolve = async (_, args, context) => {
 			throw new Error("invalid resource id");
 		}
 
-		return statusData;
+		return convertKeys(statusData);
 	} catch (error) {
 		throw new Error(error);
 	}

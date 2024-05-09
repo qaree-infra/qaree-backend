@@ -38,3 +38,18 @@ export const createRefrishToken = (payload) => {
 		expiresIn: "30d",
 	});
 };
+
+export function convertKeys<T>(obj) {
+  if (typeof obj !== 'object' || obj === null) return obj;
+
+  if (Array.isArray(obj)) {
+    return obj.map(convertKeys);
+  }
+
+  const newObj = {};
+  for (const key in obj) {
+    const newKey = key.replace(/(_([a-z]))/g, (_, firstChar) => firstChar.toUpperCase());
+    newObj[newKey] = convertKeys(obj[key]);
+  }
+  return newObj;
+}

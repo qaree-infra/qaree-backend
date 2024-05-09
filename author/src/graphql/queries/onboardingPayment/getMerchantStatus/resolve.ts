@@ -4,6 +4,7 @@ import {
 	getFullStatus,
 	trackOnboardingStatus,
 } from "../../../../utils/paypal-api.js";
+import { convertKeys } from "../../../../utils/helper.js";
 
 const resolve = async (_, args, context) => {
 	try {
@@ -16,7 +17,7 @@ const resolve = async (_, args, context) => {
 			const merchantStatusData = await getFullStatus(auth.user?.merchantId);
 			console.log(merchantStatusData);
 
-			return merchantStatusData;
+			return convertKeys(merchantStatusData);
 		} else {
 			const statusData = await trackOnboardingStatus(String(auth.user._id));
 
@@ -32,7 +33,7 @@ const resolve = async (_, args, context) => {
 			const merchantStatusData = await getFullStatus(statusData.merchant_id);
 			console.log(merchantStatusData);
 
-			return merchantStatusData;
+			return convertKeys(merchantStatusData);
 		}
 	} catch (error) {
 		throw new Error(error?.message || error);
