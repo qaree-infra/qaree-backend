@@ -49,7 +49,7 @@ export const generateActionURL = async (user: UserInterface, lang: string) => {
 		partner_config_override: {
 			partner_logo_url:
 				"https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg",
-			return_url: "http://localhost:8888/author",
+			return_url: "http://localhost:8888/author", // change it
 			return_url_description:
 				"the url to return the merchant after the paypal onboarding process.",
 			show_add_credit_card: true,
@@ -94,6 +94,8 @@ export const generateActionURL = async (user: UserInterface, lang: string) => {
 export async function trackOnboardingStatus(tracking_id: string) {
 	const url = `${base}/v1/customer/partners/${PARTNER_MERCHANT_ID}/merchant-integrations?tracking_id=${tracking_id}`;
 
+	console.log(url);
+
 	const accessToken = await generateAccessToken();
 
 	const response = await fetch(url, {
@@ -103,6 +105,8 @@ export async function trackOnboardingStatus(tracking_id: string) {
 			Authorization: `Bearer ${accessToken}`,
 		},
 	});
+
+	console.log(response);
 
 	return handleResponse(response);
 }
@@ -119,6 +123,8 @@ export async function getFullStatus(seller_merchant_id: string) {
 			Authorization: `Bearer ${accessToken}`,
 		},
 	});
+
+	console.log("full status", response);
 
 	return handleResponse(response);
 }
