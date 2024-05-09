@@ -19,7 +19,6 @@ const resolve = async (_, args, context) => {
 			auth.user,
 			lang,
 		);
-		console.log(generatedActionUrl);
 
 		const url: Link = generatedActionUrl.links.filter(
 			(l: Link) => l.rel === "action_url",

@@ -19,8 +19,6 @@ const resolve = async (_, args, context) => {
 
 		const statusData = await trackOnboardingStatus(trackingId);
 
-		console.log(statusData);
-
 		if (statusData.merchant_id)
 			await User.findByIdAndUpdate(
 				auth.user._id,

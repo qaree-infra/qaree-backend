@@ -15,13 +15,10 @@ const resolve = async (_, args, context) => {
 
 		if (auth.user.merchantId) {
 			const merchantStatusData = await getFullStatus(auth.user?.merchantId);
-			console.log(merchantStatusData);
 
 			return convertKeys(merchantStatusData);
 		} else {
 			const statusData = await trackOnboardingStatus(String(auth.user._id));
-
-			console.log(statusData);
 
 			if (statusData.merchant_id)
 				await User.findByIdAndUpdate(
