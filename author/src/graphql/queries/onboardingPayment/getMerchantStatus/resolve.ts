@@ -14,10 +14,13 @@ const resolve = async (_, args, context) => {
 
 		if (auth.user.merchantId) {
 			const merchantStatusData = await getFullStatus(auth.user?.merchantId);
+			console.log(merchantStatusData);
 
 			return merchantStatusData;
 		} else {
-			const statusData = await trackOnboardingStatus(auth.user._id);
+			const statusData = await trackOnboardingStatus(String(auth.user._id));
+
+			console.log(statusData);
 
 			if (statusData.merchant_id)
 				await User.findByIdAndUpdate(
@@ -27,6 +30,7 @@ const resolve = async (_, args, context) => {
 				);
 
 			const merchantStatusData = await getFullStatus(statusData.merchant_id);
+			console.log(merchantStatusData);
 
 			return merchantStatusData;
 		}
