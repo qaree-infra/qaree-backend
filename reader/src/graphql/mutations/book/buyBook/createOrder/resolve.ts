@@ -19,7 +19,7 @@ const resolve = async (_, args: { bookId: string }, context) => {
 		if (bookVerification.error) throw new Error(bookVerification.error);
 		const bookOffer: OfferInterface = await Offer.findOne({ book: bookId });
 		const bookPrice =
-			(100 - bookOffer.percent) * bookVerification.bookData.price;
+			(100 - Number(bookOffer?.percent || 0)) * bookVerification.bookData.price;
 
 		if (bookPrice === 0)
 			throw new Error(lang === "ar" ? "هذا الكتاب مجانى" : "This is free book");

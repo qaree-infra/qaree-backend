@@ -73,7 +73,7 @@ const addBookDetailsResolve = async (_, args, context) => {
 			if (validateCurrentShelf) {
 				const bookOffer: OfferInterface = await Offer.findOne({ book: bookId });
 				const bookPrice =
-					(100 - bookOffer.percent) * bookVerification.bookData.price;
+					(100 - Number(bookOffer?.percent || 0)) * bookVerification.bookData.price;
 				await BookRead.create({
 					book: bookVerification.bookData._id,
 					status: bookPrice === 0 ? "purchased" : "sample",
