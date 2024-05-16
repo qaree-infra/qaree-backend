@@ -42,7 +42,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		const bookOffer: OfferInterface = await Offer.findOne({
 			book: bookData._id,
 		});
-		const bookPrice = (100 - bookOffer.percent) * bookData.price;
+		const bookPrice = (100 - Number(bookOffer?.percent || 0)) * bookData.price;
 
 		if (
 			bookPrice > 0 &&
