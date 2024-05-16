@@ -2,8 +2,7 @@ import {
   GraphQLObjectType,
   GraphQLID,
   GraphQLString,
-  GraphQLScalarType,
-  GraphQLList,
+  GraphQLBoolean,
 } from 'graphql';
 import fileType from './file-type.js';
 
@@ -32,11 +31,8 @@ const userType = new GraphQLObjectType({
     createdAt: {
       type: GraphQLString
     },
-    followers: {
-      type: new GraphQLList(GraphQLString),
-    },
-    following: {
-      type: new GraphQLList(GraphQLString),
+    isFollowed: {
+      type: GraphQLBoolean,
     }
 	},
 })
