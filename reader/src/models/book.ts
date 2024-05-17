@@ -121,7 +121,7 @@ bookSchema.index(
 	{ updatedAt: 1 },
 	{
 		partialFilterExpression: { deleted: true },
-		expireAfterSeconds: 300, // real value: 2592000, The TTL index expireAfterSeconds value must be within 0 and 2147483647 inclusive.
+		expireAfterSeconds: 2592000, // real value: 2592000, The TTL index expireAfterSeconds value must be within 0 and 2147483647 inclusive.
 	},
 );
 
