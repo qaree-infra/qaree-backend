@@ -53,11 +53,13 @@ const getMyBooksResolve = async (_, args, context) => {
 			const totalBooks = await Book.countDocuments({
 				author: auth.user._id,
 				status: filterBy,
+				deleted: false,
 				$or: [{ name: { $in: keys } }],
 			});
 			const books = await Book.find({
 				author: auth.user._id,
 				status: filterBy,
+				deleted: false,
 				$or: [{ name: { $in: keys } }],
 			})
 				.sort(sortFields)
@@ -76,10 +78,12 @@ const getMyBooksResolve = async (_, args, context) => {
 			};
 		} else {
 			const totalBooks = await Book.countDocuments({
+				deleted: false,
 				author: auth.user._id,
 				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
 			});
 			const books = await Book.find({
+				deleted: false,
 				author: auth.user._id,
 				$or: [{ name: { $in: keys } }, { status: { $in: keys } }],
 			})
