@@ -68,6 +68,10 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 			type: String,
 			default: "",
 		},
+		merchantId: {
+			type: String,
+			default: "",
+		},
 		chat: {
 			type: {
 				connection: {
@@ -115,7 +119,7 @@ userSchema.index(
 	{ createdAt: 1 },
 	{
 		partialFilterExpression: { valid: true },
-		expireAfterSeconds: 300,
+		expireAfterSeconds: 2592000,
 	},
 );
 

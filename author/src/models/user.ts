@@ -115,7 +115,7 @@ userSchema.index(
 	{ createdAt: 1 },
 	{
 		partialFilterExpression: { valid: true },
-		expireAfterSeconds: 300,
+		expireAfterSeconds: 600,
 	},
 );
 
