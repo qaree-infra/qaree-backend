@@ -267,9 +267,12 @@ export const parseManifest = (allAssets, rootFile: string, manifest) => {
 					const fromAssets = allAssets.find((asset) =>
 						asset.toLowerCase().includes(element.href),
 					);
-					element.href = fromAssets
-						? fromAssets
-						: path.concat([element.href]).join("/");
+
+					if (!element.href.includes(path.slice(0, 6).join("/"))) {
+						element.href = fromAssets
+							? fromAssets
+							: path.concat([element.href]).join("/");
+					}
 				}
 
 				result[manifest.item[i]["@"].id] = element;

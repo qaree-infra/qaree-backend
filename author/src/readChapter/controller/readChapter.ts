@@ -17,27 +17,35 @@ const readChapterForAuthor = async (req: RequestWithBookData, res) => {
 
 		const bookData = req.bookData;
 		const allAssets = await getBookFiles(bookData);
+		console.log(allAssets);
 
 		const bookContainerURL = allAssets.find((asset: string) =>
 			asset.toLowerCase().includes("meta-inf/container.xml"),
 		);
+		console.log(bookContainerURL);
 
 		const { filename } = await getEPubRootFile(bookContainerURL);
+		console.log(filename);
 
 		const contentFileURL = allAssets.find((asset) =>
 			asset.toLowerCase().includes(filename),
 		);
+		console.log(contentFileURL);
 
 		const { parsedData } = await readFile(contentFileURL);
+		console.log(parsedData);
+		console.log(parsedData.manifest.item);
 
 		const manifest = parseManifest(
 			allAssets,
 			bookContainerURL,
 			parsedData.manifest,
 		);
+		console.log(manifest);
 
 		const fileData = manifest[chId];
 		const extention = "application/xhtml+xml";
+		console.log(fileData);
 
 		if (!fileData)
 			res.status(404).json({
@@ -63,30 +71,30 @@ const readChapterForAuthor = async (req: RequestWithBookData, res) => {
 		const manifestArray: Array<{ id: string; href: string }> =
 			Object.values(manifest);
 
-		// todo: replace all hrefs with real hrefs from manifest
-		const srcRegex = /src="([^"]*)"/g;
-		const hrefRegex = /href="([^"]*)"/g;
-		let srcValue;
-		while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
-			const manifestData = manifestArray.find((f) =>
-				f?.href?.endsWith(srcValue[1]),
-			);
-			htmlContent.content = htmlContent.content.replaceAll(
-				srcValue[1],
-				manifestData?.href || srcValue[1],
-			);
-		}
+		// // todo: replace all hrefs with real hrefs from manifest
+		// const srcRegex = /src="([^"]*)"/g;
+		// const hrefRegex = /href="([^"]*)"/g;
+		// let srcValue;
+		// while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
+		// 	const manifestData = manifestArray.find((f) =>
+		// 		f?.href?.endsWith(srcValue[1]),
+		// 	);
+		// 	htmlContent.content = htmlContent.content.replaceAll(
+		// 		srcValue[1],
+		// 		manifestData?.href || srcValue[1],
+		// 	);
+		// }
 
-		let hrefValue;
-		while ((hrefValue = hrefRegex.exec(htmlContent.content)) !== null) {
-			const manifestData = manifestArray.find((f) =>
-				f?.href?.endsWith(hrefValue[1]),
-			);
-			htmlContent.content = htmlContent.content.replaceAll(
-				hrefValue[1],
-				manifestData?.href || hrefValue[1],
-			);
-		}
+		// let hrefValue;
+		// while ((hrefValue = hrefRegex.exec(htmlContent.content)) !== null) {
+		// 	const manifestData = manifestArray.find((f) =>
+		// 		f?.href?.endsWith(hrefValue[1]),
+		// 	);
+		// 	htmlContent.content = htmlContent.content.replaceAll(
+		// 		hrefValue[1],
+		// 		manifestData?.href || hrefValue[1],
+		// 	);
+		// }
 
 		res.send(htmlContent.content);
 	} catch (error) {
