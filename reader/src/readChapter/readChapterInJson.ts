@@ -63,6 +63,10 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		const hrefRegex = /href="([^"]*)"/g;
 		let srcValue;
 		while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
+			if (srcValue[1].includes(bookData._id)) {
+				break;
+			}
+
 			const manifestData = manifestArray.find(
 				(f) =>
 					f?.href?.split("/")[f?.href?.split("/").length - 1] ===
@@ -77,6 +81,10 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 
 		let hrefValue;
 		while ((hrefValue = hrefRegex.exec(htmlContent.content)) !== null) {
+			if (hrefValue[1].includes(bookData._id)) {
+				break;
+			}
+
 			const manifestData = manifestArray.find(
 				(f) =>
 					f?.href?.split("/")[f?.href?.split("/").length - 1] ===
