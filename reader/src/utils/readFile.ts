@@ -270,9 +270,12 @@ export const parseManifest = (allAssets, rootFile: string, manifest) => {
 					const fromAssets = allAssets.find((asset) =>
 						asset.toLowerCase().includes(element.href),
 					);
-					element.href = fromAssets
-						? fromAssets
-						: path.concat([element.href]).join("/");
+
+					if (!element.href.includes(path.slice(0, 6).join("/"))) {
+						element.href = fromAssets
+							? fromAssets
+							: path.concat([element.href]).join("/");
+					}
 				}
 
 				result[manifest.item[i]["@"].id] = element;
@@ -440,7 +443,9 @@ const walkNavMap = (manifest, branch, path, id_list, level?: number) => {
 			};
 
 			if (href) {
-				href = path.concat([href]).join("/");
+				href = !href.includes(path.slice(0, 6).join("/"))
+					? path.concat([href]).join("/")
+					: href;
 				element.href = href;
 
 				if (id_list[element.href]) {
