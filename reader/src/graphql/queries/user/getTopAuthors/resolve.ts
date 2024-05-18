@@ -1,4 +1,3 @@
-import User, { UserInterface } from "../../../../models/user.js";
 import BookRead from "../../../../models/bookRead.js";
 
 const resolve = async (_, args, context) => {
@@ -33,13 +32,19 @@ const resolve = async (_, args, context) => {
 					totalReads: { $sum: 1 },
 				},
 			},
+			// {
+			// 	$group: {
+			// 		_id: null,
+			// 		count: { $sum: 1 }, // count the number of authors with 1 book read
+			// 	},
+			// },
 			{
 				$sort: {
 					totalReads: -1,
 				},
 			},
 			{
-				$limit: 10,
+				$limit: 25,
 			},
 			{
 				$lookup: {
@@ -77,6 +82,9 @@ const resolve = async (_, args, context) => {
 		]);
 
 		console.log(authors);
+
+		const authorCount = await BookRead.distinct("book").distinct("author");
+		console.log(authorCount);
 
 		const total =
 			authors.length > 0 && authors[0].totalAuthors !== undefined
