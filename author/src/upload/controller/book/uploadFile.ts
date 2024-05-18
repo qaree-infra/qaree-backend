@@ -6,7 +6,6 @@ import cloudinarySdk, { UploadApiOptions } from "cloudinary";
 import Book, { BookInterface } from "../../../models/book.js";
 import File, { FileInterface } from "../../../models/file.js";
 import { UserInterface } from "../../../models/user.js";
-import { Readable } from "stream";
 import { getBookFiles } from "../../../utils/readFile.js";
 
 const cloudinary = cloudinarySdk.v2;
@@ -32,7 +31,79 @@ interface UploadRequest extends Request {
 	auth: auth;
 }
 
-const unextractAndUpload = (file, folder, epub, newFileData) => {
+const replaceAllLinks = (
+	content: Buffer | string,
+	epub: EPub,
+	bookId: string,
+	epubURL: string,
+) => {
+	// const text = Buffer.from(content).toString("utf-8");
+
+	content = Buffer.from(content).toString("utf-8");
+
+	const srcRegex = /src="([^"]*)"/g;
+	const hrefRegex = /href="([^"]*)"/g;
+	let srcValue;
+	while ((srcValue = srcRegex.exec(content as string)) !== null) {
+		const manifestData: {
+			href?: string;
+			mediaType?: string;
+			"media-type"?: string;
+		} = Object.values(epub.manifest).find(
+			(f: { href?: string; mediaType?: string; "media-type"?: string }) =>
+				f?.href?.split("/")[f?.href?.split("/").length - 1] ===
+				srcValue[1]
+					?.split("/")
+					[srcValue[1]?.split("/").length - 1].split("#")[0],
+		);
+
+		const replacer = manifestData
+			? epubURL.split("/").slice(0, 10).join("/") + "/" + manifestData.href
+			: srcValue[1];
+		// console.log(srcValue[1]);
+		// console.log(replacer);
+		content = content.replace(new RegExp(srcValue[1], "g"), replacer);
+	}
+
+	let hrefValue;
+	while ((hrefValue = hrefRegex.exec(content as string)) !== null) {
+		const manifestData: {
+			href?: string;
+			mediaType?: string;
+			"media-type"?: string;
+		} = Object.values(epub.manifest).find(
+			(f: { href?: string; mediaType?: string; "media-type"?: string }) =>
+				f?.href?.split("/")[f?.href?.split("/").length - 1] ===
+				hrefValue[1]
+					?.split("/")
+					[hrefValue[1]?.split("/").length - 1].split("#")[0],
+		);
+		// const replacer = manifestData
+		// 	? manifestData?.href + hrefValue[1].split("#")[1]
+		// 	: hrefValue[1];
+		const replacer = manifestData
+			? epubURL.split("/").slice(0, 10).join("/") + "/" + manifestData.href
+			: hrefValue[1];
+		// console.log(hrefValue[1]);
+		// console.log(replacer);
+		content = (content as string).replace(
+			new RegExp(hrefValue[1], "g"),
+			replacer,
+		);
+	}
+
+	// console.log(content);
+	return Buffer.from(content as string, "utf-8");
+};
+
+const unextractAndUpload = (
+	file,
+	folder,
+	epub,
+	newFileData,
+	bookId,
+	epubURL,
+) => {
 	return new Promise(async (res, rej) => {
 		const unzipFile = fs.createReadStream(file.path);
 		const assets = [];
@@ -113,7 +184,7 @@ const unextractAndUpload = (file, folder, epub, newFileData) => {
 									}
 									// console.log("assets: ", assets);
 								})
-								.end(content); // Upload the extracted file content
+								.end(replaceAllLinks(content, epub, bookId, epubURL)); // Upload the extracted file content
 
 							entry.pipe(uploadStream); // Stream content directly
 						});
@@ -137,8 +208,8 @@ const unextractAndUpload = (file, folder, epub, newFileData) => {
 						{ new: true },
 					);
 
-					await console.log(totalFiles);
-					await console.log(allUploaded);
+					// await console.log(totalFiles);
+					// await console.log(allUploaded);
 
 					await console.log("All uploads completed");
 
@@ -169,9 +240,9 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 		};
 
 		const epub = await EPub.createAsync(file.path, "", "");
-		console.log("start manifest");
-		console.log(epub.manifest);
-		console.log("end manifest");
+		// console.log("start manifest");
+		// console.log(epub.manifest);
+		// console.log("end manifest");
 
 		const book: BookInterface = await Book.findById(id);
 
@@ -206,90 +277,13 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 			{ new: true },
 		);
 
-		// const unzipFile = fs.createReadStream(file.path);
-		// const assets = [];
-		// const uploadPromises = [];
-
-		// await unzipFile
-		// 	.pipe(unzipper.Parse())
-		// 	.on("entry", async (entry) => {
-		// 		const fileName = entry.path;
-		// 		const entryType = entry.type;
-
-		// 		if (entryType === "File") {
-		// 			await entry.buffer().then(async (content) => {
-		// 				await cloudinary.uploader
-		// 					.upload_stream(
-		// 						{
-		// 							resource_type: fileName.endsWith(
-		// 								".apng" ||
-		// 									".avif" ||
-		// 									".bmp" ||
-		// 									".gif" ||
-		// 									".ico" ||
-		// 									".jpeg" ||
-		// 									".jpg" ||
-		// 									".png" ||
-		// 									".svg" ||
-		// 									".tif" ||
-		// 									".tiff" ||
-		// 									".webp",
-		// 							)
-		// 								? "image"
-		// 								: "raw",
-		// 							public_id: fileName,
-		// 							folder: folder,
-		// 						},
-		// 						async (err, result) => {
-		// 							const file: {
-		// 								href?: string;
-		// 								mediaType?: string;
-		// 								"media-type"?: string;
-		// 							} = Object.values(epub.manifest).find(
-		// 								(e: {
-		// 									href: string;
-		// 									mediaType?: string;
-		// 									"media-type"?: string;
-		// 								}) => e?.href?.includes(fileName),
-		// 							);
-		// 							console.log(file?.href);
-		// 							console.log(result?.secure_url);
-		// 							if (
-		// 								file?.mediaType === "application/xhtml+xml" ||
-		// 								file?.["media-type"] === "application/xhtml+xml"
-		// 							) {
-		// 								const text = await Buffer.from(content)
-		// 									.toString("utf-8")
-		// 									.replace(/<[^>]*>/g, " ");
-		// 								await assets.push({
-		// 									path: result.secure_url,
-		// 									length: text.trim().split(/\s+/).length,
-		// 								});
-		// 								await File.findByIdAndUpdate(
-		// 									newFileData._id,
-		// 									{
-		// 										assets: assets,
-		// 									},
-		// 									{ new: true },
-		// 								);
-		// 							}
-		// 						},
-		// 					)
-		// 					.end(content);
-		// 			});
-		// 		} else {
-		// 			entry.autodrain();
-		// 		}
-		// 	})
-		// 	.on("finish", () => {
-		// 		console.log("Unzip and upload completed");
-		// 	});
-
 		const uploadFilesResult = await unextractAndUpload(
 			file,
 			folder,
 			epub,
 			newFileData,
+			id,
+			result.secure_url,
 		);
 
 		if (uploadFilesResult) {
