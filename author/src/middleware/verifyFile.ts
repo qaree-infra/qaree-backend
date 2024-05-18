@@ -38,7 +38,12 @@ const VerifyFile = async (req: Request, res: Response, next: NextFunction) => {
 
 			const rate: number = dimentions.height / dimentions.width;
 
-			if (parseFloat(rate.toFixed(1)) > 1.3 && parseFloat(rate.toFixed(1)) <= 1.6) {
+			if (
+				!(
+					parseFloat(rate.toFixed(1)) > 1.3 &&
+					parseFloat(rate.toFixed(1)) <= 1.6
+				)
+			) {
 				return res.status(400).json({
 					message:
 						lang === "ar"
