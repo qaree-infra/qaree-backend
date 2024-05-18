@@ -26,7 +26,7 @@ export const generateOTPCode = () => {
 
 export const createAcessToken = (payload) => {
 	return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-		expiresIn: "24h",
+		expiresIn: "30d", // default expires in 24 days
 	});
 };
 
