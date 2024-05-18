@@ -60,33 +60,33 @@ const readChapterForAdmin = async (req: RequestWithBookData, res) => {
 
 		const htmlContent = await readFile(fileData.href);
 
-		const manifestArray: Array<{ id: string; href: string }> =
-			Object.values(manifest);
+		// const manifestArray: Array<{ id: string; href: string }> =
+		// 	Object.values(manifest);
+		// 
+		// // todo: replace all hrefs with real hrefs from manifest
+		// const srcRegex = /src="([^"]*)"/g;
+		// const hrefRegex = /href="([^"]*)"/g;
+		// let srcValue;
+		// while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
+		// 	const manifestData = manifestArray.find((f) =>
+		// 		f?.href?.endsWith(srcValue[1]),
+		// 	);
+		// 	htmlContent.content = htmlContent.content.replaceAll(
+		// 		srcValue[1],
+		// 		manifestData?.href || srcValue[1],
+		// 	);
+		// }
 
-		// todo: replace all hrefs with real hrefs from manifest
-		const srcRegex = /src="([^"]*)"/g;
-		const hrefRegex = /href="([^"]*)"/g;
-		let srcValue;
-		while ((srcValue = srcRegex.exec(htmlContent.content)) !== null) {
-			const manifestData = manifestArray.find((f) =>
-				f?.href?.endsWith(srcValue[1]),
-			);
-			htmlContent.content = htmlContent.content.replaceAll(
-				srcValue[1],
-				manifestData?.href || srcValue[1],
-			);
-		}
-
-		let hrefValue;
-		while ((hrefValue = hrefRegex.exec(htmlContent.content)) !== null) {
-			const manifestData = manifestArray.find((f) =>
-				f?.href?.endsWith(hrefValue[1]),
-			);
-			htmlContent.content = htmlContent.content.replaceAll(
-				hrefValue[1],
-				manifestData?.href || hrefValue[1],
-			);
-		}
+		// let hrefValue;
+		// while ((hrefValue = hrefRegex.exec(htmlContent.content)) !== null) {
+		// 	const manifestData = manifestArray.find((f) =>
+		// 		f?.href?.endsWith(hrefValue[1]),
+		// 	);
+		// 	htmlContent.content = htmlContent.content.replaceAll(
+		// 		hrefValue[1],
+		// 		manifestData?.href || hrefValue[1],
+		// 	);
+		// }
 
 		res.send(htmlContent.content);
 	} catch (error) {
