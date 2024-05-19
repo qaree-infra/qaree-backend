@@ -5,10 +5,14 @@ const signinInputs = {
 		type: GraphQLString,
 		description: "",
 	},
-  password: {
-    type: GraphQLString,
-    description: "",
-  }
+	password: {
+		type: GraphQLString,
+		description: "",
+	},
+	regestrationToken: {
+		type: GraphQLString,
+		description: "",
+	},
 };
 
 export default signinInputs;

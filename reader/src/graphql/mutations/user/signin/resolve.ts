@@ -5,7 +5,7 @@ import { validateEmail, createAcessToken } from "../../../../utils/helper.js";
 const signIn = async (parent, args, context) => {
 	const { lang } = context.query;
 	try {
-		const { email, password } = args;
+		const { email, password, regestrationToken } = args;
 
 		if (!email && !password)
 			throw new Error(
@@ -48,6 +48,19 @@ const signIn = async (parent, args, context) => {
 			email: existingUser.email,
 			id: existingUser._id,
 		});
+
+		if (regestrationToken) {
+			await User.findByIdAndUpdate(
+				existingUser._id,
+				{
+					notifications: {
+						...existingUser.notifications,
+						token: regestrationToken,
+					},
+				},
+				{ new: true },
+			);
+		}
 
 		return {
 			access_token: token,
