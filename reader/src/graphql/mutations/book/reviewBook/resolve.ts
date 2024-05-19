@@ -1,4 +1,5 @@
 import { auth } from "../../../../middleware/general/auth.js";
+import Book from "../../../../models/book.js";
 import BookReview from "../../../../models/bookReview.js";
 import Notification from "../../../../models/notification.js";
 import User from "../../../../models/user.js";
@@ -14,7 +15,7 @@ interface ArgsInterface {
 	rate: number;
 }
 
-const reviewBookResolve = async (_, args, context) => {
+const reviewBookResolve = async (_, args: ArgsInterface, context) => {
 	try {
 		const { lang } = context.query;
 		const { error, user }: auth = context.auth;
@@ -47,6 +48,21 @@ const reviewBookResolve = async (_, args, context) => {
 				content,
 			});
 
+			const avgRate = await BookReview.aggregate([
+				{ $match: { bookId: { $eq: bookId } } },
+				{
+					$group: {
+						_id: null,
+						totalReviews: { $sum: 1 },
+						avgRate: { $avg: "$rate" },
+					},
+				},
+			]);
+			// console.log(avgRate);
+			await Book.findByIdAndUpdate(bookId, {
+				avgRate: avgRate[0].avgRate,
+			});
+
 			return {
 				message:
 					lang === "ar"
@@ -60,6 +76,21 @@ const reviewBookResolve = async (_, args, context) => {
 				rate,
 				content,
 				bookId,
+			});
+
+			const avgRate = await BookReview.aggregate([
+				{ $match: { bookId: { $eq: bookId } } },
+				{
+					$group: {
+						_id: null,
+						totalReviews: { $sum: 1 },
+						avgRate: { $avg: "$rate" },
+					},
+				},
+			]);
+			// console.log(avgRate);
+			await Book.findByIdAndUpdate(bookId, {
+				avgRate: avgRate[0].avgRate,
 			});
 
 			const reviewerFollowes = await User.find({
@@ -86,6 +117,8 @@ const reviewBookResolve = async (_, args, context) => {
 					data: notificationMsg.message.data,
 				});
 			});
+
+			// await Book.findByIdAndUpdate(bookId, {avgRate: }, { new: true });
 
 			return {
 				message:
