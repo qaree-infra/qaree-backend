@@ -44,7 +44,7 @@ const bookType = new GraphQLObjectType({
 			description: "",
 		},
 		avgRate: {
-			type: GraphQLInt,
+			type: GraphQLFloat,
 			description: "",
 		},
 		price: {
