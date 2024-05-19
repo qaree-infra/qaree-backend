@@ -2,6 +2,7 @@ import axios from "axios";
 import xml2js from "xml2js";
 import cloudinarySdk from "cloudinary";
 import { BookInterface } from "../models/book.js";
+import { parseURL } from "./helper.js";
 
 const cloudinary = cloudinarySdk.v2;
 cloudinary.config({
@@ -268,7 +269,7 @@ export const parseManifest = (allAssets, rootFile: string, manifest) => {
 					element.href.substr(0, path_str.length) != path_str
 				) {
 					const fromAssets = allAssets.find((asset) =>
-						asset.toLowerCase().includes(element.href),
+						asset.toLowerCase().includes(parseURL(element.href)),
 					);
 					if (!element.href.includes(path.slice(0, 6).join("/"))) {
 						element.href = fromAssets
