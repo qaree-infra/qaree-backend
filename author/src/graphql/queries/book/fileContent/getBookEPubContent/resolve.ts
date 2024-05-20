@@ -30,17 +30,17 @@ const resolve = async (_, args, context) => {
 		if (!bookData?.file) throw new Error("Book file didn't found");
 
 		const allAssets = await getBookFiles(bookData);
-		console.log(allAssets);
+		// console.log(allAssets);
 		if (!allAssets?.length) throw new Error("Extarcted files didn't found");
 
 		const bookContainerURL = allAssets.find((asset) =>
 			asset.toLowerCase().includes("meta-inf/container.xml"),
 		);
-		console.log(bookContainerURL);
+		// console.log(bookContainerURL);
 		
 		if (!bookContainerURL) throw new Error("Container file didn't found");
 		const { filename } = await getEPubRootFile(bookContainerURL);
-		console.log(filename);
+		// console.log(filename);
 
 		if (!filename) throw new Error("Content file didn't found");
 

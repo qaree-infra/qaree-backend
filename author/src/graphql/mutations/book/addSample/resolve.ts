@@ -6,6 +6,8 @@ import readFile, {
 	getBookFiles,
 	getEPubRootFile,
 	parseManifest,
+	parseSpain,
+	parseTOC,
 } from "../../../../utils/readFile.js";
 
 const resolve = async (_, args, context) => {
@@ -40,17 +42,21 @@ const resolve = async (_, args, context) => {
 			parsedData.manifest,
 		);
 
-		const extention = "application/xhtml+xml";
-
-		const allHTML = Object.values(manifest).filter(
-			(f) => f?.["media-type"] === extention || f?.["mediaType"] === extention,
+		const { contents, toc } = await parseSpain(
+			parsedData.spine,
+			bookContainerURL,
+			manifest,
 		);
+
+		const realTOC = await parseTOC({ toc, contents }, manifest);
 
 		const allAtHTMLFiles = sample.every((e) => {
 			return (
-				allHTML.find((html: { id: string }) => {
-					return html.id === e;
-				}) !== undefined
+				realTOC
+					.filter((c) => c.level === 0)
+					.find((html: { id: string }) => {
+						return html.id === e;
+					}) !== undefined
 			);
 		});
 
