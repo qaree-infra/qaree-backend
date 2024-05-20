@@ -37,6 +37,8 @@ const VerifyFile = async (req: Request, res: Response, next: NextFunction) => {
 			const dimentions = imageSize(file.path);
 
 			const rate: number = dimentions.height / dimentions.width;
+			console.log(dimentions);
+			console.log(rate);
 
 			if (
 				!(
