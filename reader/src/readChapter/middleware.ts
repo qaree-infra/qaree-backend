@@ -6,12 +6,15 @@ import readFile, {
 	getBookFiles,
 	getEPubRootFile,
 	parseManifest,
+	parseSpain,
+	parseTOC,
 } from "../utils/readFile.js";
 
 interface BookReadRequest extends Request {
 	bookData: BookInterface;
 	chapterData: { id?: string; href?: string };
 	bookManifest;
+	content;
 }
 
 const verifyBookMiddleware = async (
@@ -106,6 +109,14 @@ const verifyBookMiddleware = async (
 						: "Sorry, this id isn't for the book chapter",
 			});
 
+		const { contents, toc } = await parseSpain(
+			parsedData.spine,
+			bookContainerURL,
+			manifest,
+		);
+
+		const realTOC = await parseTOC({ toc, contents }, manifest);
+		req.content = realTOC;
 		req.chapterData = fileData;
 		req.bookManifest = manifest;
 

@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { BookInterface } from "../models/book.js";
-import readFile from "../utils/readFile.js";
+import readFile, { parseSpain, parseTOC } from "../utils/readFile.js";
 import File from "../models/file.js";
 import BookRead from "../models/bookRead.js";
 import { auth } from "../middleware/general/auth.js";
@@ -23,13 +23,14 @@ interface ReadRequest extends Request {
 	chapterData: { id?: string; href?: string };
 	bookManifest;
 	auth: auth;
+	content;
 }
 
 const readChapter = async (req: ReadRequest, res: Response) => {
 	try {
 		const { lang } = req.query;
 		const { chId } = req.params;
-		const { chapterData, bookData, bookManifest, auth } = req;
+		const { chapterData, bookData, bookManifest, auth, content } = req;
 		const user = auth.user;
 
 		const bookRead = await BookRead.findOne({
@@ -42,11 +43,14 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			book: bookData._id,
 		});
 		const bookPrice = (100 - Number(bookOffer?.percent || 0)) * bookData.price;
+		const sample = Object.values(content).filter(
+			(c: { id: string; href: string }) => bookData.sample.includes(c.id),
+		);
 
 		if (
 			bookPrice > 0 &&
 			bookRead?.status !== "purchased" &&
-			!bookData.sample.includes(chId)
+			sample.findIndex((c: { id: string; href: string }) => c.id === chId) > -1
 		)
 			return res.status(400).json({
 				message:
