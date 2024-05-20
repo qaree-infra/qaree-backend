@@ -2,8 +2,16 @@ import Room from "../models/chatRoom.js";
 import Message from "../models/message.js";
 // type read for read messages, unread for new messages
 export default (io, socket) => {
-	return async ({ room, limit, page, type }) => {
+	return async (args) => {
+		const { room } = args;
+		const limit = Number(args.limit) || 10;
+		const page = Number(args.page) || 1;
+		const type = args.type || "unread";
+
 		const userData = socket.handshake["authData"].user;
+
+		if (!room || room.trim().length === 0)
+			return socket.emit("error", "Invalid recipient ID format");
 
 		const orOptions =
 			room.split("-").length !== 2
