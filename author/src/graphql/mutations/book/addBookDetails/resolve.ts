@@ -60,7 +60,7 @@ const addBookDetails = async (_, args, context) => {
 			);
 		}
 
-		if (edition && edition > 1)
+		if (edition !== undefined && edition < 1)
 			throw new Error(
 				lang === "ar"
 					? "من فضلك ادخل اصدار صالح"
