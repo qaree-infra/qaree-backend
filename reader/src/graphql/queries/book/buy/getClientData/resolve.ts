@@ -18,7 +18,7 @@ const resolve = async (_, args, context) => {
 
 		const clientId = process.env.PAYPAL_CLIENT_ID;
 		const clientToken = await generateClientToken(
-			bookVerification.bookData.author.merchant_id,
+			bookVerification.bookData.author.merchantId,
 		);
 
 		return { clientId, clientToken };

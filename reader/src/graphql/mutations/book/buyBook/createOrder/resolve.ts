@@ -4,6 +4,7 @@ import { createOrder } from "../../../../../utils/paypal/paypal-api.js";
 import { CreatedOrder } from "../../../../../utils/paypal/order-type.js";
 import BookRead from "../../../../../models/bookRead.js";
 import Offer, { OfferInterface } from "../../../../../models/offer.js";
+import { getAuthorPaymentStatus } from "../../../../../utils/paypal/seller-paypal-api.js";
 
 const resolve = async (_, args: { bookId: string }, context) => {
 	try {
@@ -24,6 +25,30 @@ const resolve = async (_, args: { bookId: string }, context) => {
 		if (bookPrice === 0)
 			throw new Error(lang === "ar" ? "هذا الكتاب مجانى" : "This is free book");
 
+		if (!bookVerification.bookData.author.merchantId) {
+			// todo: send email to ask the author to connect paypal with it's account
+
+			throw new Error(
+				lang === "ar"
+					? "نأسف، هذا الكاتب لا يمكنه استقبال مدفوعاتك الان"
+					: "Sorry, this author does not have ability to accept your payment now",
+			);
+		}
+
+		const paymentStatus = await getAuthorPaymentStatus(
+			bookVerification.bookData.author,
+		);
+
+		if (!paymentStatus.payments_receivable) {
+			// todo: send email to ask the author to connect paypal with it's account
+
+			throw new Error(
+				lang === "ar"
+					? "نأسف، هذا الكاتب لا يمكنه استقبال مدفوعاتك الان"
+					: "Sorry, this author does not have ability to accept your payment now",
+			);
+		}
+
 		const userBookRead = await BookRead.findOne({
 			book: bookId,
 			status: "purchased",
@@ -39,7 +64,7 @@ const resolve = async (_, args: { bookId: string }, context) => {
 
 		const createdOrder: CreatedOrder = await createOrder(
 			bookPrice,
-			bookVerification.bookData.author.merchant_id,
+			bookVerification.bookData.author.merchantId,
 		);
 		console.log(createdOrder);
 
@@ -48,7 +73,7 @@ const resolve = async (_, args: { bookId: string }, context) => {
 
 		return createdOrder;
 	} catch (error) {
-		throw new Error(error);
+		throw new Error(error.message);
 	}
 };
 
