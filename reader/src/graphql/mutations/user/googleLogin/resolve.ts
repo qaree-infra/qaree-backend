@@ -12,11 +12,11 @@ const { MAILING_SERVICE_CLIENT_ID, GOOGLE_SECRET } = process.env;
 const { OAuth2 } = google.auth;
 const client = new OAuth2(MAILING_SERVICE_CLIENT_ID);
 
-const googleLogin = async (_, { google_token }, context) => {
+const googleLogin = async (_, { token }, context) => {
 	const { lang } = context.query;
 	try {
 		const verify = await client.verifyIdToken({
-			idToken: google_token,
+			idToken: token,
 			audience: MAILING_SERVICE_CLIENT_ID,
 		});
 

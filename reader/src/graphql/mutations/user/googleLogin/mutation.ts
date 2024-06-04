@@ -1,31 +1,32 @@
-import { 
-  GraphQLObjectType, 
-  GraphQLString
-} from 'graphql';
-import googleLoginResolve from './resolve.js';
+import { GraphQLObjectType, GraphQLString } from "graphql";
+import googleLoginResolve from "./resolve.js";
 
 const googleLoginType = new GraphQLObjectType({
-  name: "GoogleLoginType",
-  description: "",
-  fields: {
-    message: {
+	name: "GoogleLoginType",
+	description: "",
+	fields: {
+		message: {
 			type: GraphQLString,
 		},
 		access_token: {
-      type: GraphQLString,
+			type: GraphQLString,
 		},
-  }
+	},
 });
 
 const googleLoginArgs = {
-  google_token: {
-    type: GraphQLString,
+	token: {
+		type: GraphQLString,
 		description: "",
-  }
-}
+	},
+	regestrationToken: {
+		type: GraphQLString,
+		description: "",
+	},
+};
 
 export default {
-  type: googleLoginType,
-  args: googleLoginArgs,
-  resolve: googleLoginResolve
-}
+	type: googleLoginType,
+	args: googleLoginArgs,
+	resolve: googleLoginResolve,
+};
