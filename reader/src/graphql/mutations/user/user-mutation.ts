@@ -10,6 +10,7 @@ import updateAccountMutation from "./updateAccountInfo/mutation.js";
 import deleteAccountMutation from "./deleteUser/mutation.js";
 import googleLoginMutation from "./googleLogin/mutation.js";
 import followUserMutation from "./follow/mutation.js";
+import facebookLogin from "./facebookLogin/mutation.js";
 
 export default {
 	signup: signupMutation,
@@ -23,5 +24,6 @@ export default {
 	updateUser: updateAccountMutation,
 	deleteAccount: deleteAccountMutation,
 	googleLogin: googleLoginMutation,
+	facebookLogin: facebookLogin,
 	followUser: followUserMutation,
 };
