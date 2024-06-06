@@ -110,8 +110,17 @@ const unextractAndUpload = (
 		const uploadPromises = [];
 
 		let uploadedCount = 0,
-			allUploaded,
 			totalFiles = [];
+
+		const addQareeSrcId = (content: string, qareeSrcId = 0) => {
+			return content.replace(/<([a-zA-Z0-9]+)(\s[^>]*)?>/g, (match, p1, p2) => {
+				if (p2 && p2.includes("qaree-src-id")) {
+					return match;
+				}
+				return `<${p1}${p2 ? p2 : ""} qaree-src-id="${qareeSrcId++}">`;
+			});
+		};
+
 		await unzipFile
 			.pipe(unzipper.Parse())
 			.on("entry", async (entry) => {
@@ -120,73 +129,67 @@ const unextractAndUpload = (
 
 				if (entryType === "File") {
 					await entry.buffer().then(async (content) => {
+						const file: {
+							href?: string;
+							mediaType?: string;
+							"media-type"?: string;
+						} = Object.values(epub.manifest).find(
+							(e: {
+								href: string;
+								mediaType?: string;
+								"media-type"?: string;
+							}) => e?.href?.includes(fileName),
+						);
+
 						const uploadPromise = new Promise(async (resolve, reject) => {
-							const uploadStream = await cloudinary.uploader
-								.upload_stream(
-									{
-										resource_type: fileName.endsWith(
-											".apng" ||
-												".avif" ||
-												".bmp" ||
-												".gif" ||
-												".ico" ||
-												".jpeg" ||
-												".jpg" ||
-												".png" ||
-												".svg" ||
-												".tif" ||
-												".tiff" ||
-												".webp",
-										)
-											? "image"
-											: "raw",
-										public_id: fileName,
-										folder,
-									},
-									async (err, result) => {
-										if (err) reject(err);
+							const uploadStream = await cloudinary.uploader.upload_stream(
+								{
+									resource_type: "raw",
+									public_id: fileName,
+									folder,
+								},
+								async (err, result) => {
+									if (err) reject(err);
 
-										const file: {
-											href?: string;
-											mediaType?: string;
-											"media-type"?: string;
-										} = Object.values(epub.manifest).find(
-											(e: {
-												href: string;
-												mediaType?: string;
-												"media-type"?: string;
-											}) => e?.href?.includes(fileName),
-										);
-										totalFiles.push(file);
-										if (
-											file?.mediaType === "application/xhtml+xml" ||
-											file?.["media-type"] === "application/xhtml+xml"
-										) {
-											const text = Buffer.from(content)
-												.toString("utf-8")
-												.replace(/<[^>]*>/g, " ");
-											await assets.push({
-												path: result?.secure_url
-													? result?.secure_url
-													: fileName,
-												length: text.trim().split(/\s+/).length,
-											});
-										}
-
-										resolve(assets);
-									},
-								)
-								.on("finish", () => {
-									uploadedCount++;
-									if (uploadedCount === totalFiles.length) {
-										// Check if all files uploaded
-										allUploaded = true;
+									totalFiles.push(file);
+									if (
+										file?.mediaType === "application/xhtml+xml" ||
+										file?.["media-type"] === "application/xhtml+xml"
+									) {
+										const text = Buffer.from(content)
+											.toString("utf-8")
+											.replace(/<[^>]*>/g, " ");
+										await assets.push({
+											path: result?.secure_url ? result?.secure_url : fileName,
+											length: text.trim().split(/\s+/).length,
+										});
 									}
-									// console.log("assets: ", assets);
-								})
-								.end(replaceAllLinks(content, epub, bookId, epubURL)); // Upload the extracted file content
 
-							entry.pipe(uploadStream); // Stream content directly
+									resolve(assets);
+								},
+							);
+
+							uploadStream.on("finish", () => {
+								uploadedCount++;
+							});
+
+							if (
+								file?.mediaType === "application/xhtml+xml" ||
+								file?.["media-type"] === "application/xhtml+xml"
+							) {
+								// Modify HTML content using regex
+								const modifiedContent = addQareeSrcId(
+									content.toString("utf-8"),
+								);
+
+								// Replace content with modified HTML
+								content = Buffer.from(modifiedContent, "utf-8");
+
+								content = replaceAllLinks(content, epub, bookId, epubURL);
+							}
+
+							uploadStream.end(content);
+							entry.pipe(uploadStream);
 						});
 
 						uploadPromises.push(uploadPromise);
@@ -197,8 +200,6 @@ const unextractAndUpload = (
 			})
 			.on("finish", async () => {
 				console.log("Unzip and upload completed");
-				console.log(assets.length);
-				console.log(uploadPromises.length);
 				try {
 					await Promise.all(uploadPromises);
 
@@ -208,13 +209,7 @@ const unextractAndUpload = (
 						{ new: true },
 					);
 
-					// await console.log(totalFiles);
-					// await console.log(allUploaded);
-
-					await console.log("All uploads completed");
-
 					await res(true);
-					// ... (existing code for updating File and sending response)
 				} catch (error) {
 					console.error("Error uploading files:", error);
 					rej("Error uploading files");
