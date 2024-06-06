@@ -15,12 +15,15 @@ const client = new OAuth2(MAILING_SERVICE_CLIENT_ID);
 const googleLogin = async (_, { token }, context) => {
 	const { lang } = context.query;
 	try {
+		console.log(token);
 		const verify = await client.verifyIdToken({
 			idToken: token,
 			audience: MAILING_SERVICE_CLIENT_ID,
 		});
+		console.log(verify);
 
 		const { email_verified, email, name, picture } = verify.getPayload();
+		console.log(verify.getPayload());
 
 		if (!email_verified)
 			throw new Error(
