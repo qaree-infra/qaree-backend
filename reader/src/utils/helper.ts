@@ -76,7 +76,7 @@ export const parseURL = (url: string) => {
 
 	try {
 		const result = url.replace(regex, (match) => symbolMap[match]);
-		console.log(result);
+		console.log("parseUrl: ", result);
 		return result;
 	} catch (error) {
 		console.error("Error decoding URL:", error, url);

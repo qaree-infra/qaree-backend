@@ -23,7 +23,7 @@ export const getBookFiles = async (bookData: BookInterface) => {
 			resource_type: "raw",
 			max_results: 500,
 		});
-		console.log(allAssets.resources.map((resource) => resource.secure_url));
+		// console.log(allAssets.resources.map((resource) => resource.secure_url));
 		// .then((res) => res.resources.map((resource) => resource.secure_url));
 
 		return allAssets.resources.map((resource) => resource.secure_url);
@@ -34,7 +34,7 @@ export const getBookFiles = async (bookData: BookInterface) => {
 };
 
 const readFile = async (fileUrl: string, lower?: boolean) => {
-	console.log(fileUrl);
+	// console.log(fileUrl);
 	try {
 		const { data } = await axios.get(fileUrl);
 		// console.log(fileUrl, data)
@@ -263,13 +263,14 @@ export const parseManifest = (allAssets, rootFile: string, manifest) => {
 		for (let i = 0, len = manifest.item.length; i < len; i++) {
 			if (manifest.item[i]["@"]) {
 				const element = manifest.item[i]["@"];
+				element.href = parseURL(element.href);
 
 				if (
 					element.href &&
 					element.href.substr(0, path_str.length) != path_str
 				) {
 					const fromAssets = allAssets.find((asset) =>
-						asset.toLowerCase().includes(parseURL(element.href)),
+						asset.toLowerCase().includes(element.href),
 					);
 
 					// if (!element.href.includes(path.slice(0, 6).join("/"))) {
@@ -278,7 +279,7 @@ export const parseManifest = (allAssets, rootFile: string, manifest) => {
 						: !element.href.includes(path.slice(0, 6).join("/"))
 						? path.concat([element.href]).join("/")
 						: element.href;
-					console.log(element.href);
+					// console.log(element.href);
 					// }
 				}
 

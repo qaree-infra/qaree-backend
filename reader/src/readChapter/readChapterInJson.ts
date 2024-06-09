@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { BookInterface } from "../models/book.js";
-import readFile, { parseSpain, parseTOC } from "../utils/readFile.js";
+import readFile from "../utils/readFile.js";
 import File from "../models/file.js";
 import BookRead from "../models/bookRead.js";
 import { auth } from "../middleware/general/auth.js";
@@ -37,7 +37,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			book: bookData._id,
 			user: user._id,
 		});
-		console.log(bookRead);
+		console.log("bookRead: ", bookRead);
 
 		const bookOffer: OfferInterface = await Offer.findOne({
 			book: bookData._id,
@@ -106,14 +106,14 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			(p, c) => p + (c?.length || 0),
 			0,
 		);
-		console.log(bookLength);
+		console.log("bookLength: ", bookLength);
 
 		let chapter: { path: string; length: number } = bookFile.assets.find(
 			(f: { path: string; length: number }) =>
 				f?.path.split("/")[f?.path.split("/").length - 1] ===
 				chapterData.href.split("/")[chapterData.href.split("/").length - 1],
 		);
-		console.log(chapter);
+		console.log("chapter: ", chapter);
 
 		if (!chapter) {
 			chapter = {
@@ -139,9 +139,8 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		});
 
 		if (bookRead) {
-			const chapterAtBookRead = bookRead.content.find(
-				(e) => e?.chId === chapterData?.id,
-			);
+			const bookReadContent = new Set(bookRead.content.map((e) => e.chId));
+			const chapterAtBookRead = bookReadContent.has(chapterData?.id as string);
 			console.log("chAtBookRead for book read: ", chapterAtBookRead);
 			if (!chapterAtBookRead) {
 				const content = bookRead.content.concat([
@@ -185,7 +184,6 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			}
 		} else {
 			const content = [{ chId: chapterData.id, length: chapter.length }];
-			console.log("content: ");
 			console.log("content: ", content);
 			const progerss: number =
 				content?.length === 0
