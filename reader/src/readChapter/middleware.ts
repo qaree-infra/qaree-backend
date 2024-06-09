@@ -9,12 +9,17 @@ import readFile, {
 	parseSpain,
 	parseTOC,
 } from "../utils/readFile.js";
+import BookRead, { BookReadInterface } from "../models/bookRead.js";
+import { auth } from "../middleware/general/auth.js";
 
 interface BookReadRequest extends Request {
 	bookData: BookInterface;
 	chapterData: { id?: string; href?: string };
 	bookManifest;
 	content;
+	bookRead: null | BookReadInterface;
+	auth: auth;
+	allHTML;
 }
 
 const verifyBookMiddleware = async (
@@ -24,6 +29,8 @@ const verifyBookMiddleware = async (
 ) => {
 	try {
 		const { bookId, chId } = req.params;
+		const { auth } = req;
+		const user = auth.user;
 
 		const { lang } = req.query;
 
@@ -45,10 +52,7 @@ const verifyBookMiddleware = async (
 		const bookData: BookInterface | null = await Book.findOne({
 			_id: bookId,
 			status: "published",
-		})
-			.populate("categories")
-			.populate("author")
-			.populate("cover");
+		});
 
 		if (bookData === null) {
 			res
@@ -87,38 +91,93 @@ const verifyBookMiddleware = async (
 		);
 
 		const extention = "application/xhtml+xml";
-
-		const fileData = manifest[chId];
-
-		if (!fileData)
-			res.status(404).json({
-				message:
-					lang === "ar"
-						? "عفواً هذا الفصل غير موجود"
-						: "Sorry, this chapter didn't found",
-			});
-
-		if (
-			fileData?.mediaType !== extention &&
-			fileData?.["media-type"] !== extention
-		)
-			res.status(404).json({
-				message:
-					lang === "ar"
-						? "عفواً هذا المعرف ليس لفصل من الكتاب"
-						: "Sorry, this id isn't for the book chapter",
-			});
-
-		const { contents, toc } = await parseSpain(
-			parsedData.spine,
-			bookContainerURL,
-			manifest,
+		const allHTML = Object.entries(manifest).filter(
+			(f) =>
+				f[1]?.["media-type"] === extention || f[1]?.["mediaType"] === extention,
 		);
+		console.log("allHTML: ", allHTML);
 
-		const realTOC = await parseTOC({ toc, contents }, manifest);
-		req.content = realTOC;
-		req.chapterData = fileData;
-		req.bookManifest = manifest;
+		if (chId !== "start" && chId !== "continue") {
+			const fileData = manifest[chId];
+
+			if (!fileData)
+				res.status(404).json({
+					message:
+						lang === "ar"
+							? "عفواً هذا الفصل غير موجود"
+							: "Sorry, this chapter didn't found",
+				});
+
+			if (
+				fileData?.mediaType !== extention &&
+				fileData?.["media-type"] !== extention
+			)
+				res.status(404).json({
+					message:
+						lang === "ar"
+							? "عفواً هذا المعرف ليس لفصل من الكتاب"
+							: "Sorry, this id isn't for the book chapter",
+				});
+
+			const { contents, toc } = await parseSpain(
+				parsedData.spine,
+				bookContainerURL,
+				manifest,
+			);
+
+			const realTOC = await parseTOC({ toc, contents }, manifest);
+			req.content = realTOC;
+			req.chapterData = fileData;
+			req.bookManifest = manifest;
+			req.bookRead = await BookRead.findOne({
+				book: bookData._id,
+				user: user._id,
+			});
+			req.allHTML = allHTML.map((e) => e[1]);
+		} else {
+			const bookRead = await BookRead.findOne({
+				book: bookData._id,
+				user: user._id,
+			});
+			console.log("Book read: ", bookRead);
+
+			const chIdx =
+				chId === "start"
+					? 0
+					: allHTML.length === bookRead.content.length
+					? allHTML.length - 1
+					: allHTML.findIndex(
+							([chIdx, chIData]) => chIdx === bookRead.content.at(-1).chId,
+					  ) + 1;
+			console.log("chIdx: ", chIdx);
+
+			const chData: [
+				string,
+				{
+					href?: string;
+					mediaType?: string;
+					"media-type"?: string;
+				},
+			] = allHTML[chIdx];
+			console.log("chData: ", chData);
+
+			const { contents, toc } = await parseSpain(
+				parsedData.spine,
+				bookContainerURL,
+				manifest,
+			);
+			console.log("contents: ", contents);
+
+			const realTOC = await parseTOC({ toc, contents }, manifest);
+
+			req.params.chId = chData[0];
+
+			req.content = realTOC;
+			req.chapterData = chData[1];
+			req.bookManifest = manifest;
+			req.bookRead = bookRead;
+			req.allHTML = allHTML.map((e) => e[1]);
+		}
 
 		next();
 	} catch (error) {

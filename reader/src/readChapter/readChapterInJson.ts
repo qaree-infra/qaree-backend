@@ -24,13 +24,14 @@ interface ReadRequest extends Request {
 	bookManifest;
 	auth: auth;
 	content;
+	allHTML;
 }
 
 const readChapter = async (req: ReadRequest, res: Response) => {
 	try {
 		const { lang } = req.query;
 		const { chId } = req.params;
-		const { chapterData, bookData, bookManifest, auth, content } = req;
+		const { chapterData, bookData, bookManifest, auth, content, allHTML } = req;
 		const user = auth.user;
 
 		const bookRead = await BookRead.findOne({
@@ -220,6 +221,8 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 
 		return res.json({
 			content: htmlContent.content,
+			BookAllHTML: allHTML,
+			BookContent: content,
 		});
 	} catch (error) {
 		console.log(error);
