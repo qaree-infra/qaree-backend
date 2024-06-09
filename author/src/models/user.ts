@@ -79,6 +79,10 @@ const userSchema: Schema = new mongoose.Schema<UserInterface>(
 			},
 			default: { connection: false, socketId: "" },
 		},
+		merchantId: {
+			type: String,
+      default: "",
+		},
 		notifications: {
 			type: {
 				token: {
