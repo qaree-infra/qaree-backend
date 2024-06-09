@@ -147,7 +147,7 @@ const verifyBookMiddleware = async (
 					: allHTML.length === bookRead.content.length
 					? allHTML.length - 1
 					: allHTML.findIndex(
-							([chIdx, chIData]) => chIdx === bookRead.content.at(-1).chId,
+							([chIdx, chIData]) => chIdx === bookRead.content[bookRead.content.length - 1].chId,
 					  ) + 1;
 			console.log("chIdx: ", chIdx);
 
