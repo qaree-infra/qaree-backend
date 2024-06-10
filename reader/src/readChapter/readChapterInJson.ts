@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import { BookInterface } from "../models/book.js";
 import readFile from "../utils/readFile.js";
 import File from "../models/file.js";
-import BookRead from "../models/bookRead.js";
+import BookRead, {BookReadInterface} from "../models/bookRead.js";
 import { auth } from "../middleware/general/auth.js";
 import Offer, { OfferInterface } from "../models/offer.js";
 import Shelf, { ShelfInterface } from "../models/shelf.js";
@@ -25,19 +25,16 @@ interface ReadRequest extends Request {
 	auth: auth;
 	content;
 	allHTML;
+	bookRead: BookReadInterface | null;
 }
 
 const readChapter = async (req: ReadRequest, res: Response) => {
 	try {
 		const { lang } = req.query;
 		const { chId } = req.params;
-		const { chapterData, bookData, bookManifest, auth, content, allHTML } = req;
+		const { chapterData, bookData, bookManifest, auth, content, allHTML, bookRead } = req;
 		const user = auth.user;
 
-		const bookRead = await BookRead.findOne({
-			book: bookData._id,
-			user: user._id,
-		});
 		console.log("bookRead: ", bookRead);
 
 		const bookOffer: OfferInterface = await Offer.findOne({
@@ -51,7 +48,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 		if (
 			bookPrice > 0 &&
 			bookRead?.status !== "purchased" &&
-			sample.findIndex((c: { id: string; href: string }) => c.id === chId) > -1
+			sample.findIndex((c: { id: string; href: string }) => c.id === chId) === -1
 		)
 			return res.status(400).json({
 				message:

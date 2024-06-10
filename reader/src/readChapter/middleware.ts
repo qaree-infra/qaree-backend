@@ -11,6 +11,7 @@ import readFile, {
 } from "../utils/readFile.js";
 import BookRead, { BookReadInterface } from "../models/bookRead.js";
 import { auth } from "../middleware/general/auth.js";
+import { allowedNodeEnvironmentFlags } from "process";
 
 interface BookReadRequest extends Request {
 	bookData: BookInterface;
@@ -141,15 +142,38 @@ const verifyBookMiddleware = async (
 			});
 			console.log("Book read: ", bookRead);
 
+			const bookReadContent = new Set(bookRead.content.map((e) => e.chId));
+
+			console.log("book Sample: ", bookData.sample);
+			if (
+				bookRead &&
+				bookData.price > 0 &&
+				bookRead?.status !== "purchased" &&
+				bookData.sample.every((s: string) => bookReadContent.has(s))
+			) {
+				res.status(400).json({
+					message:
+						lang === "ar"
+							? "عفواَ لا يمكنك الوصل الى هذا الفصل"
+							: "Sorry, you can't read this chapter",
+				});
+			}
+
 			const chIdx =
 				chId === "start"
 					? 0
 					: allHTML.length === bookRead.content.length
-					? allHTML.length - 1
+					? -1
 					: allHTML.findIndex(
-							([chIdx, chIData]) => chIdx === bookRead.content[bookRead.content.length - 1].chId,
+							([chIdx, chIData]) =>
+								chIdx === bookRead.content[bookRead.content.length - 1].chId,
 					  ) + 1;
-			console.log("chIdx: ", chIdx);
+
+			if (chIdx === -1) {
+				res.status(200).json({
+					content: "",
+				});
+			}
 
 			const chData: [
 				string,
