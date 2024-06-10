@@ -22,14 +22,15 @@ const oAuth2Client = new OAuth2(
 
 oAuth2Client.setCredentials({ refresh_token: MAILING_SERVICE_REFRESH_TOKEN });
 
-const headers = [
-  "Comfirm the account registeration",
-  "Reset your password",
-]
+const headers = ["Comfirm the account registeration", "Reset your password"];
 
-export function generateNumberMail(type: string, number: string, name: string): {content: string; subject: string} {
-  return {
-content: `<div 
+export function generateNumberMail(
+	type: string,
+	number: string,
+	name: string,
+): { content: string; subject: string } {
+	return {
+		content: `<div 
 class='container' 
 style="max-width: 1200px; padding-inline: 15px; margin-inline: auto;"
 >
@@ -45,7 +46,7 @@ style="max-width: 1200px; padding-inline: 15px; margin-inline: auto;"
   <tr>
     <td>
       <h2>
-        ${type === 'validate' ? headers[0] : headers[1]}
+        ${type === "validate" ? headers[0] : headers[1]}
       </h2>
     </td>
   </tr>
@@ -57,7 +58,9 @@ style="max-width: 1200px; padding-inline: 15px; margin-inline: auto;"
   <tr>
     <td>
       <p>
-        Enter the following code to ${type === 'validate' ? headers[0] : headers[1]}
+        Enter the following code to ${
+					type === "validate" ? headers[0] : headers[1]
+				}
       </p>
     </td>
   </tr>
@@ -69,13 +72,71 @@ style="max-width: 1200px; padding-inline: 15px; margin-inline: auto;"
 </tbody>
 </table>
 </div>`,
-subject: `${type === 'validate' ? headers[0] : headers[1]} at Qaree`
-  }
+		subject: `${type === "validate" ? headers[0] : headers[1]} at Qaree`,
+	};
+}
+
+export function generateConnectPaypalMail(name: string): {
+	content: string;
+	subject: string;
+} {
+	return {
+		content: `<div  class='container' style="max-width: 1200px; padding-inline: 15px; margin-inline: auto;">
+    <table style="font-family: sans-serif; text-align: center;">
+      <tbody>
+        <tr>
+          <td>
+            <h2 style="text-align: center; font-family: sans-serif;">
+              Welcome to the <span style="color: #2099ff;">Qaree</span>
+            </h2>        
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <h2>
+              Connect your account with paypal
+            </h2>
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: left; font-weight: 600;">
+            <p>Hi ${name},</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              Click the following button to go to royalties page
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <a href="https://qaree-publish-service.vercel.app/dashboard/royalties" style="margin-top: 20px; background: #2099ff; padding: 16px; color: #fff; border-radius: 10px; font-size: 18px; text-decoration: none; box-shadow: 0 0 5px #00000050;">Connect with PayPal</a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              If the previous button didn't work use the following link
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="https://qaree-publish-service.vercel.app/dashboard/royalties" style="margin-top: 20px; font-size: 16px;">https://qaree-publish-service.vercel.app/dashboard/royalties</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>`,
+		subject: "Connect your paypal account to accept payments from Qaree",
+	};
 }
 
 const sendMail = async (
 	to: string,
-  email: {content: string, subject: string}
+	email: { content: string; subject: string },
 ): Promise<any> => {
 	try {
 		const accessToken = await oAuth2Client.getAccessToken();

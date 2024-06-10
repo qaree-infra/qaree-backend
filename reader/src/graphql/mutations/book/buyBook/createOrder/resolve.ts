@@ -5,6 +5,9 @@ import { CreatedOrder } from "../../../../../utils/paypal/order-type.js";
 import BookRead from "../../../../../models/bookRead.js";
 import Offer, { OfferInterface } from "../../../../../models/offer.js";
 import { getAuthorPaymentStatus } from "../../../../../utils/paypal/seller-paypal-api.js";
+import sendMail, {
+	generateConnectPaypalMail,
+} from "../../../../../utils/sendMail.js";
 
 const resolve = async (_, args: { bookId: string }, context) => {
 	try {
@@ -26,7 +29,10 @@ const resolve = async (_, args: { bookId: string }, context) => {
 			throw new Error(lang === "ar" ? "هذا الكتاب مجانى" : "This is free book");
 
 		if (!bookVerification.bookData.author.merchantId) {
-			// todo: send email to ask the author to connect paypal with it's account
+			await sendMail(
+				bookVerification.bookData.author.email,
+				generateConnectPaypalMail(bookVerification.bookData.author.name),
+			);
 
 			throw new Error(
 				lang === "ar"
@@ -40,7 +46,10 @@ const resolve = async (_, args: { bookId: string }, context) => {
 		);
 
 		if (!paymentStatus.payments_receivable) {
-			// todo: send email to ask the author to connect paypal with it's account
+			await sendMail(
+				bookVerification.bookData.author.email,
+				generateConnectPaypalMail(bookVerification.bookData.author.name),
+			);
 
 			throw new Error(
 				lang === "ar"
