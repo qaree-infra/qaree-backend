@@ -30,10 +30,6 @@ const addOfferResolve = async (_, args, context) => {
 			);
 		}
 
-		const bookVerification = await verifyBook(bookId, context);
-
-		if (bookVerification?.error) throw new Error(bookVerification?.error);
-
 		if (!expireAt)
 			throw new Error(
 				lang == "ar"
@@ -56,6 +52,32 @@ const addOfferResolve = async (_, args, context) => {
 					? "اسف هذا العرض سوف ينتهى فى اقل من ربع ساعة"
 					: "Sorry, this offer will expire in less than one hour",
 			);
+
+		const bookVerification = await verifyBook(bookId, context);
+
+		if (bookVerification?.error) throw new Error(bookVerification?.error);
+
+		if (bookVerification.bookData.status === "inReview")
+			throw new Error(
+				lang === "ar"
+					? "عفواً، لا يمكن اضافة عرض على كتاب لم ينشر"
+					: "Sorry, can't add offer to in review book",
+			);
+
+		if (bookVerification.bookData.status === "rejected")
+			throw new Error(
+				lang === "ar"
+					? "عفواً، لا يمكن اضافة عرض على كتاب تم رفضه"
+					: "Sorry, can't add offer to rejectd book",
+			);
+
+		if (bookVerification.bookData.price === 0) {
+			throw new Error(
+				lang == "ar"
+					? "هذا الكتاب لا يمكن اضافته عرضا"
+					: "this book can't have an offer",
+			);
+		}
 
 		const oldOffer = await Offer.findOne({ book: bookId });
 
@@ -85,7 +107,7 @@ const addOfferResolve = async (_, args, context) => {
 		}
 	} catch (error) {
 		console.log(error);
-		throw new Error(error);
+		throw new Error(error.message);
 	}
 };
 
