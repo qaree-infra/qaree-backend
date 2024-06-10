@@ -28,7 +28,7 @@ export default async function resolve(_, args, context) {
 
 		const { userId } = args;
 
-		if (user._id === userId)
+		if (user._id.toString() === userId)
 			throw new Error(
 				lang === "ar"
 					? "آسف، انت لا تستطيع ان تتابع نفسك"
