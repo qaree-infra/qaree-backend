@@ -45,7 +45,6 @@ const uploadFileController = async (req: UploadRequest, res: Response) => {
 		});
 
 		if (book["file"]) {
-			// todo: delete all assets
 			cloudinary.api.delete_resources([fileData?.name]);
 
 			await File.findByIdAndDelete(fileData?._id);

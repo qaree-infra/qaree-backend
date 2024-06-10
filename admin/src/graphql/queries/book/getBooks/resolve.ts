@@ -47,7 +47,6 @@ const getBooks = async (_, args, context) => {
 			.map((e: string) => new RegExp(e, "gi"));
 
 		if (filterBy) {
-			/* todo: use status for filtering using status */
 			const totalBooks = await Book.countDocuments({
 				status: filterBy,
 				$or: [{ name: { $in: keys } }],

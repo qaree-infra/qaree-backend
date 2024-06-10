@@ -21,7 +21,6 @@ const addBookDetails = async (_, args, context) => {
 			previousPublishingData,
 		} = args;
 
-		// todo: fix it
 		if (
 			!name &&
 			!description &&

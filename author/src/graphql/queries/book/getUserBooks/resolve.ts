@@ -49,7 +49,6 @@ const getMyBooksResolve = async (_, args, context) => {
 			.map((e: string) => new RegExp(e, "gi"));
 
 		if (filterBy) {
-			/* todo: use status for filtering using status */
 			const totalBooks = await Book.countDocuments({
 				author: auth.user._id,
 				status: filterBy,
