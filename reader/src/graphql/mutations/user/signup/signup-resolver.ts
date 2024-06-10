@@ -3,7 +3,7 @@ import OTPCode from "../../../../models/otpcode.js";
 import bcrypt from "bcrypt";
 
 import { validateEmail, generateOTPCode } from "../../../../utils/helper.js";
-import sendMail from "../../../../utils/sendMail.js";
+import sendMail, { generateNumberMail } from "../../../../utils/sendMail.js";
 
 const signUpResolve = async (parent, { userData }, context) => {
 	const { lang } = context.query;
@@ -55,12 +55,12 @@ const signUpResolve = async (parent, { userData }, context) => {
 
 		// send email with random number
 		const randomOPT = Math.ceil(generateOTPCode());
-		const emailResult = await sendMail(
-			email,
+		const mail = await generateNumberMail(
+			"validate",
 			randomOPT.toString(),
 			name,
-			"validate",
 		);
+		const emailResult = await sendMail(email, mail);
 
 		if (emailResult?.accepted[0] === email) {
 			await OTPCode.create({

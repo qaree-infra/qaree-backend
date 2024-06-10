@@ -1,6 +1,6 @@
 import OTPCode from "../../../../models/otpcode.js";
 import User from "../../../../models/user.js";
-import sendMail from "../../../../utils/sendMail.js";
+import sendMail, { generateNumberMail } from "../../../../utils/sendMail.js";
 
 import { generateOTPCode, validateEmail } from "../../../../utils/helper.js";
 
@@ -23,12 +23,13 @@ const resendValidingOTP = async (parent, { email }, context) => {
 			);
 
 		const randomOPT = Math.ceil(generateOTPCode());
-		const emailResult = await sendMail(
-			email,
+
+		const mail = await generateNumberMail(
+			"reset password",
 			randomOPT.toString(),
 			user.name,
-			"reset password",
 		);
+		const emailResult = await sendMail(email, mail);
 
 		if (emailResult?.accepted[0] === email) {
 			await OTPCode.deleteMany({

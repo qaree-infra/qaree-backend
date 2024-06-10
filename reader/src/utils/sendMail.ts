@@ -27,11 +27,55 @@ const headers = [
   "Reset your password",
 ]
 
+export function generateNumberMail(type: string, number: string, name: string): {content: string; subject: string} {
+  return {
+content: `<div 
+class='container' 
+style="max-width: 1200px; padding-inline: 15px; margin-inline: auto;"
+>
+<table style="font-family: sans-serif; text-align: center;">
+<tbody>
+  <tr>
+    <td>
+      <h2 style="text-align: center; font-family: sans-serif;">
+        Welcome to the <span style="color: #2099ff;">Qaree</span>
+      </h2>        
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h2>
+        ${type === 'validate' ? headers[0] : headers[1]}
+      </h2>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: left; font-weight: 600;">
+      <p>Hi ${name},</p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <p>
+        Enter the following code to ${type === 'validate' ? headers[0] : headers[1]}
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="font-size: 24px; padding: 10px; background: #f2f2f2; letter-spacing: 10px;">
+      ${number}
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>`,
+subject: `${type === 'validate' ? headers[0] : headers[1]} at Qaree`
+  }
+}
+
 const sendMail = async (
 	to: string,
-	number: string,
-	name: string,
-	type: string,
+  email: {content: string, subject: string}
 ): Promise<any> => {
 	try {
 		const accessToken = await oAuth2Client.getAccessToken();
@@ -51,47 +95,8 @@ const sendMail = async (
 		const mailOptions = {
 			from: GOOGLE_EMAIL,
 			to: to,
-			subject: `${type === 'validate' ? headers[0] : headers[1]} at Quraa`,
-			html: `<div 
-            class='container' 
-            style="max-width: 1200px; padding-inline: 15px; margin-inline: auto;"
-          >
-          <table style="font-family: sans-serif; text-align: center;">
-            <tbody>
-              <tr>
-                <td>
-                  <h2 style="text-align: center; font-family: sans-serif;">
-                    Welcome to the <span style="color: rgb(255, 0, 47);">Quraa</span>
-                  </h2>        
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <h2>
-                    ${type === 'validate' ? headers[0] : headers[1]}
-                  </h2>
-                </td>
-              </tr>
-              <tr>
-                <td style="text-align: left; font-weight: 600;">
-                  <p>Hi ${name},</p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p>
-                    Enter the following code to ${type === 'validate' ? headers[0] : headers[1]}
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td style="font-size: 24px; padding: 10px; background: #f2f2f2; letter-spacing: 10px;">
-                  ${number}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>`,
+			subject: email.subject,
+			html: email.content,
 		};
 
 		const result = await smtpTransport.sendMail(mailOptions);

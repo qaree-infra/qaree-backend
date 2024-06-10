@@ -1,7 +1,7 @@
 import User from "../../../../models/user.js";
 import OTPCode from "../../../../models/otpcode.js";
 import { validateEmail, generateOTPCode } from "../../../../utils/helper.js";
-import sendMail from "../../../../utils/sendMail.js";
+import sendMail, { generateNumberMail } from "../../../../utils/sendMail.js";
 
 const forgetPassword = async (parent, { email }, context) => {
 	const { lang } = context.query;
@@ -22,12 +22,12 @@ const forgetPassword = async (parent, { email }, context) => {
 			);
 
 		const randomOPT = Math.ceil(generateOTPCode());
-		const emailResult = await sendMail(
-			email,
+		const mail = await generateNumberMail(
+			"reset password",
 			randomOPT.toString(),
 			user.name,
-			"reset password",
 		);
+		const emailResult = await sendMail(email, mail);
 
 		if (emailResult?.accepted[0] === email) {
 			await OTPCode.create({
