@@ -45,11 +45,11 @@ export const generateActionURL = async (user: UserInterface, lang: string) => {
 		email: user.email, // take it from user data
 		preferred_language_code: lang, // take it from client side
 		tracking_id: user._id,
-		/* Todo: change partner_logo_url and return_url */
 		partner_config_override: {
 			partner_logo_url:
-				"https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg",
-			return_url: "http://localhost:8888/author", // change it
+				"https://res.cloudinary.com/dgg86hhf3/image/upload/v1718043377/qaree-logo.png",
+			return_url:
+				"https://qaree-publish-service.vercel.app/dashboard/royalties", // change it
 			return_url_description:
 				"the url to return the merchant after the paypal onboarding process.",
 			show_add_credit_card: true,
