@@ -30,10 +30,7 @@ const verifyBook = async (bookId: string, context: ContextInterface) => {
 		const bookData: BookInterface | null = await Book.findOne({
 			_id: bookId,
 			status: "published",
-		})
-			.populate("categories")
-			.populate("author")
-			.populate("cover");
+		});
 
 		if (bookData === null) {
 			return {
