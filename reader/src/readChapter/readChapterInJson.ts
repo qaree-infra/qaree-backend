@@ -108,42 +108,6 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			);
 		}
 
-		htmlContent.content = htmlContent.content.replace(
-			/<\/body>/,
-			`<div id="context-menu">
-    <ul>
-      <li>
-        <button onclick="highlightSelection()" id="highlight-btn" type="button">
-          <i class="fas fa-highlighter icon"></i>
-        </button>
-      </li>
-      <li>
-        <button onclick="handleComment()">
-          <i class="fas fa-comment icon"></i>
-        </button>
-      </li>
-      <!-- <li onclick="alert('Share')"><i class="fas fa-share icon"></i></li> -->
-    </ul>
-  </div>
-  <div id="note-container">
-    <div id="note">
-      <textarea name="note" id="note-text" placeholder="Take a note..."></textarea>
-      <div class="btns-container">
-        <button type="button" id="save-btn" onclick="handleSaveComment()">
-          save
-        </button>
-        <button type="button" id="cancel-btn" onclick="handleCancelComment()">
-          cancel
-        </button>
-      </div>
-    </div>\n</div>\n<script type="text/javascript" src="https://cdn.jsdelivr.net/gh//qaree-infra/qaree-reading-view-scripts/js-script.js"></script>\n</body>`,
-		);
-
-		htmlContent.content = htmlContent.content.replace(
-			/<\/head>/,
-			`<link rel="stylesheet" href="reader/src/readChapter/readChapterInJson.ts">\n</head>`,
-		);
-
 		const bookFile = await File.findById(bookData.file);
 		const bookLength = bookFile?.assets?.reduce(
 			(p, c) => p + (c?.length || 0),
