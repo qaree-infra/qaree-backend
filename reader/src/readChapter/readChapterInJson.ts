@@ -108,6 +108,22 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 			);
 		}
 
+		htmlContent.content = htmlContent.content.replace('</head>', `<style type="text/css">
+		*,
+		*::after,
+		*::before {
+			box-sizing: border-box;
+			max-width: 100%;
+			max-height: 100%;
+		}
+		
+		body {
+			font-family: Arial, sans-serif;
+			padding: 20px;
+		}
+		</style>
+		</head>`);
+
 		const bookFile = await File.findById(bookData.file);
 		const bookLength = bookFile?.assets?.reduce(
 			(p, c) => p + (c?.length || 0),
