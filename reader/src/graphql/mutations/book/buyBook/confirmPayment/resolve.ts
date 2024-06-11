@@ -31,6 +31,17 @@ const resolve = async (
 		const bookVerification = await verifyBook(bookId, context);
 		if (bookVerification.error) throw new Error(bookVerification.error);
 
+		if (
+			bookVerification.bookData.author._id.toString() ===
+			auth.user._id.toString()
+		) {
+			throw new Error(
+				lang === "ar"
+					? "لا يمكنك شراء هذا الكتاب لانه كتابك"
+					: "You can't buy this book because it's your book",
+			);
+		}
+
 		const bookOffer: OfferInterface = await Offer.findOne({ book: bookId });
 		const bookPrice =
 			(100 - Number(bookOffer?.percent || 0)) * bookVerification.bookData.price;
