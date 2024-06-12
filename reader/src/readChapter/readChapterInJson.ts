@@ -141,7 +141,7 @@ const readChapter = async (req: ReadRequest, res: Response) => {
 
 		htmlContent.content = htmlContent.content.replace(
 			/<\/head>/,
-			`<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh//qaree-infra/qaree-reading-view-scripts/style.css">\n</head>`,
+			`<link rel="stylesheet" href="reader/src/readChapter/readChapterInJson.ts">\n</head>`,
 		);
 
 		const bookFile = await File.findById(bookData.file);
